@@ -1,23 +1,40 @@
-import logo from './logo.svg';
+// 여기서부터 시작
 import './App.css';
+
+// const API_URL = 'http://18.219.127.156:5000';
+
+function Login(props) {
+  return (
+    <div>
+      <h2>Share Item</h2>
+      <form>
+        <div>
+          <label>ID</label>
+          <br/>
+          <input type="text" name="username" />
+        </div>
+        <div>
+          <label>Password</label>
+          <br/>
+          <input type="password" name="password" />
+        </div>
+        <div>
+          <button type="submit">로그인</button>
+        </div>
+        <div>
+          <button type="button">회원가입</button>
+        </div>
+      </form>
+    </div>
+  )
+}
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <div>
+        <Login />
+      </div>
     </div>
   );
 }
