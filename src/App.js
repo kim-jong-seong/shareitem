@@ -1,40 +1,44 @@
-// 여기서부터 시작
+import { useState } from 'react';
 import './App.css';
+import Login from './components/Login'
+import Signup from './components/Signup'
+import Dashboard from './components/Dashboard'
 
 // const API_URL = 'http://18.219.127.156:5000';
 
-function Login(props) {
-  return (
-    <div>
-      <h2>Share Item</h2>
-      <form>
-        <div>
-          <label>ID</label>
-          <br/>
-          <input type="text" name="username" />
-        </div>
-        <div>
-          <label>Password</label>
-          <br/>
-          <input type="password" name="password" />
-        </div>
-        <div>
-          <button type="submit">로그인</button>
-        </div>
-        <div>
-          <button type="button">회원가입</button>
-        </div>
-      </form>
-    </div>
-  )
-}
 
 function App() {
+  const [currentView, setCurrentView] = useState('login');
+  const [user, setUser] = useState(null);
+
+  const onSwitchToSignup = (e) => 
+  {
+    setCurrentView('signup');
+  };
+
+  const onSwitchToLogin = (e) => 
+  {
+    setCurrentView('login');
+  }
+
+  const handleLoginSuccess = (userData) =>
+  {
+    setUser(userData);
+    setCurrentView('dashboard');
+  }
+
+  const onLogout = (e) =>
+  {
+    setUser(null);
+    setCurrentView('login');
+  }
+
   return (
     <div>
-      <div>
-        <Login />
-      </div>
+        {currentView === "login" && <Login onSwitchToSignup={onSwitchToSignup}
+                                           onLoginSuccess={handleLoginSuccess} />}
+        {currentView === "signup" && <Signup onSwitchToLogin={onSwitchToLogin} />}
+        {currentView === "dashboard" && <Dashboard user={user} onLogout={onLogout}/>}
     </div>
   );
 }
