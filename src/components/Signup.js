@@ -87,7 +87,7 @@ function Signup(props)
                     </button>
                 </div>
                 <div>
-                    <button type="button" onClick={props.onSwitchToLogin}>홈으로</button>
+                    <button type="button" disabled={loading} onClick={props.onSwitchToLogin}>홈으로</button>
                 </div>
             </form>
         </div>

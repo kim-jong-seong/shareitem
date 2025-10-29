@@ -84,7 +84,7 @@ function Login(props)
                     </button>
                 </div>
                 <div>
-                    <button type="button" onClick={props.onSwitchToSignup}>회원가입</button>
+                    <button type="button" disabled={loading} onClick={props.onSwitchToSignup}>회원가입</button>
                 </div>
             </form>
         </div>
