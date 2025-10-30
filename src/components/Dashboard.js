@@ -18,7 +18,7 @@ function Dashboard() {
   const fetchHouses = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`${API_URL}/houses`, {
+      const response = await axios.get(`${API_URL}/api/houses`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setHouses(response.data.houses);
@@ -42,7 +42,7 @@ function Dashboard() {
     try {
       const token = localStorage.getItem('token');
       await axios.post(
-        `${API_URL}/houses`,
+        `${API_URL}/api/houses`,
         { name: newHouseName },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -65,7 +65,7 @@ function Dashboard() {
 
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`${API_URL}/houses/${houseId}`, {
+      await axios.delete(`${API_URL}/api/houses/${houseId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       
