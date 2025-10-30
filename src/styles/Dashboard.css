@@ -1,0 +1,296 @@
+/* Dashboard.css - 행정시스템 스타일 */
+
+.dashboard-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* 고정 핀 공지사항 */
+.info-box {
+    background-color: #e3f2fd;
+    border-left: 4px solid #1976d2;
+    padding: 16px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.info-box .pin-icon {
+    font-size: 16px;
+    color: #1976d2;
+}
+
+.info-box p {
+    margin: 0;
+    font-size: 14px;
+    color: #333;
+}
+
+/* 헤더 */
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.header-left h2 {
+    margin: 0 0 8px 0;
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+}
+
+.header-left p {
+    margin: 0;
+    font-size: 14px;
+    color: #666;
+}
+
+.create-button {
+    padding: 10px 20px;
+    background-color: #1976d2;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.create-button:hover {
+    background-color: #1565c0;
+}
+
+/* 테이블 */
+.table-container {
+    background-color: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.house-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.house-table thead {
+    background-color: #f5f5f5;
+}
+
+.house-table th {
+    padding: 16px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.house-table th:first-child {
+    width: 40%;
+}
+
+.house-table th:nth-child(2) {
+    width: 20%;
+}
+
+.house-table th:nth-child(3) {
+    width: 40%;
+}
+
+.house-table tbody tr {
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.house-table tbody tr:hover {
+    background-color: #fafafa;
+}
+
+.house-table td {
+    padding: 16px;
+    font-size: 14px;
+    color: #555;
+    text-align: center;
+}
+
+.empty-cell {
+    padding: 60px 16px;
+    text-align: center;
+    color: #999;
+    font-size: 14px;
+}
+
+/* 역할 뱃지 */
+.badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.admin-badge {
+    background-color: #e3f2fd;
+    color: #1976d2;
+}
+
+.member-badge {
+    background-color: #f5f5f5;
+    color: #666;
+}
+
+/* 버튼 그룹 */
+.button-group {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.view-button {
+    padding: 8px 20px;
+    background-color: white;
+    color: #1976d2;
+    border: 1px solid #1976d2;
+    border-radius: 4px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+    min-width: 70px;
+}
+
+.view-button:hover {
+    background-color: #e3f2fd;
+}
+
+.delete-button {
+    padding: 8px 20px;
+    background-color: white;
+    color: #d32f2f;
+    border: 1px solid #d32f2f;
+    border-radius: 4px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+    min-width: 70px;
+}
+
+.delete-button:hover {
+    background-color: #ffebee;
+}
+
+/* 로딩 */
+.loading-box {
+    padding: 60px;
+    text-align: center;
+    color: #999;
+    font-size: 14px;
+}
+
+/* 에러 메시지 */
+.error-box {
+    padding: 16px;
+    background-color: #ffebee;
+    color: #c62828;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+/* 모달 */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal {
+    background-color: white;
+    border-radius: 4px;
+    padding: 30px;
+    width: 400px;
+    max-width: 90%;
+}
+
+.modal-title {
+    margin: 0 0 24px 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+}
+
+.form-group {
+    margin-bottom: 24px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #1976d2;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.cancel-button {
+    padding: 10px 20px;
+    background-color: white;
+    color: #666;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.cancel-button:hover {
+    background-color: #f5f5f5;
+}
+
+.submit-button {
+    padding: 10px 20px;
+    background-color: #1976d2;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.submit-button:hover {
+    background-color: #1565c0;
+}
