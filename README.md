@@ -8,8 +8,7 @@
 - pkill -f "npm start"
 
 ## 2. 재시작
-cd ~/shareitem
- - nohup npm start > react.log 2>&1 &
+ - pkill -f "npm start" && cd ~/shareitem && nohup npm start > react.log 2>&1 &
 
 ## 3. 확인
  - tail -f react.log
