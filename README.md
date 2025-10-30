@@ -8,3 +8,6 @@
 
 ## 3. 확인
  - tail -f react.log
+
+# 포트 열려있는지 체크
+ - https://portchecker.co/check-v0
