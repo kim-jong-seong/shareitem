@@ -26,4 +26,5 @@ serve -s build -l 4000
 
 # 백그라운드 실행
 nohup serve -s build -l 4000 > serve.log 2>&1 &
+
 pm2 start "serve -s build -l 4000" --name "shareitem-frontend"
