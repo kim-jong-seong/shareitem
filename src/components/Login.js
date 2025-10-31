@@ -24,6 +24,8 @@ function Login(props) {
         setLoading(true);
         setMessage('');
 
+        let responseSuccess = false; // 로그인 성공 시 로딩 프로그레스 바가 계속 도는 것으로 보이게 함
+
         try {
             const response = await fetch(`${API_URL}/api/login`, {
                 method: 'POST',
@@ -36,8 +38,9 @@ function Login(props) {
             const data = await response.json();
 
             if(response.ok) {
-                setMessage("로그인 성공!");
-                setMessageType('success');
+                responseSuccess = true;
+                // setMessage("로그인 성공!");
+                // setMessageType('success');
                 localStorage.setItem('token', data.token);
                 setTimeout(() => {
                     props.onLoginSuccess(data.user);
@@ -50,7 +53,9 @@ function Login(props) {
             setMessage('서버 연결 실패');
             setMessageType('error');
         } finally {
-            setLoading(false);
+            if(!responseSuccess) {
+                setLoading(false);
+            }
         }
     };
 
