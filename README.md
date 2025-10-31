@@ -1,3 +1,7 @@
+# ★
+npm run build
+pm2 restart "shareitem-frontend"
+
 # npm 서버 실행
 
 ## 1. 종료
