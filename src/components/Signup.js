@@ -100,12 +100,6 @@ function Signup(props) {
                         />
                     </div>
 
-                    {message && (
-                        <div className={`message-box ${messageType}`}>
-                            {message}
-                        </div>
-                    )}
-
                     <div className="auth-buttons">
                         <button 
                             type="submit" 
@@ -115,6 +109,12 @@ function Signup(props) {
                             {loading ? '가입 중...' : '가입하기'}
                         </button>
                     </div>
+
+                    {message && (
+                        <div className={`message-box ${messageType}`}>
+                            {message}
+                        </div>
+                    )}
                 </form>
 
                 <div className="auth-footer">

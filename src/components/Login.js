@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { API_URL } from '../config';
 import '../styles/Login.css';
 
@@ -11,6 +11,16 @@ function Login(props) {
     const [message, setMessage] = useState('');
     const [messageType, setMessageType] = useState(''); // 'success' or 'error'
     const [loading, setLoading] = useState(false);
+    const [saveEmail, setSaveEmail] = useState(false);
+
+    // 컴포넌트 마운트 시 저장된 이메일 불러오기
+    useEffect(() => {
+        const savedEmail = localStorage.getItem('savedEmail');
+        if (savedEmail) {
+            setFormData(prev => ({ ...prev, email: savedEmail }));
+            setSaveEmail(true);
+        }
+    }, []);
 
     const handleChange = (e) => {
         setFormData({
@@ -42,6 +52,14 @@ function Login(props) {
                 // setMessage("로그인 성공!");
                 // setMessageType('success');
                 localStorage.setItem('token', data.token);
+                
+                // 아이디 저장 처리
+                if (saveEmail) {
+                    localStorage.setItem('savedEmail', formData.email);
+                } else {
+                    localStorage.removeItem('savedEmail');
+                }
+                
                 setTimeout(() => {
                     props.onLoginSuccess(data.user);
                 }, 500);
@@ -92,11 +110,16 @@ function Login(props) {
                         />
                     </div>
 
-                    {message && (
-                        <div className={`message-box ${messageType}`}>
-                            {message}
-                        </div>
-                    )}
+                    <div className="save-email-box">
+                        <label className="checkbox-label">
+                            <input 
+                                type="checkbox" 
+                                checked={saveEmail}
+                                onChange={(e) => setSaveEmail(e.target.checked)}
+                            />
+                            <span>아이디 저장</span>
+                        </label>
+                    </div>
 
                     <div className="auth-buttons">
                         <button 
@@ -107,6 +130,13 @@ function Login(props) {
                             {loading ? '로그인 중...' : '로그인'}
                         </button>
                     </div>
+
+                    {message && (
+                        <div className={`message-box ${messageType}`}>
+                            {message}
+                        </div>
+                    )}
+                    
                 </form>
 
                 <div className="auth-footer">
