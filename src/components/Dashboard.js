@@ -84,11 +84,6 @@ function Dashboard() {
     console.log('View house:', houseId);
   };
 
-  // 역할명 변환
-  const getRoleName = (roleCode) => {
-    return roleCode === 'COM1100001' ? '관리자' : '멤버';
-  };
-
   // 로딩 중
   if (loading) {
     return (
@@ -149,7 +144,7 @@ function Dashboard() {
                   </td>
                   <td>
                     <span className={house.role_cd === 'COM1100001' ? 'badge admin-badge' : 'badge member-badge'}>
-                      {getRoleName(house.role_cd)}
+                      {house.role_nm}
                     </span>
                   </td>
                   <td>
