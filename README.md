@@ -11,3 +11,15 @@
 
 # 포트 열려있는지 체크
  - https://portchecker.co/check-v0
+
+# 빌드
+## 1. 개발 서버 종료
+pkill -f "react-scripts"
+
+## 2. 프로덕션 빌드 생성
+cd /home/ec2-user/shareitem
+npm run build
+
+## 3. serve로 배포
+npm install -g serve
+serve -s build -l 4000
