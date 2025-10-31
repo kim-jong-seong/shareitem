@@ -23,3 +23,6 @@ npm run build
 ## 3. serve로 배포
 npm install -g serve
 serve -s build -l 4000
+
+# 백그라운드 실행
+nohup serve -s build -l 4000 > serve.log 2>&1 &
