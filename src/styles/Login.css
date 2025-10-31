@@ -4,7 +4,6 @@
   justify-content: center;
   align-items: center;
   background: #4a90e2;
-  padding: 20px;
 }
 
 .auth-card {
@@ -48,13 +47,11 @@
 .auth-form {
   display: flex;
   flex-direction: column;
-  gap: 8px;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 6px;
 }
 
 .form-group label {
