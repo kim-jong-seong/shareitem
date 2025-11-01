@@ -3,6 +3,8 @@ import './App.css';
 import Login from './components/Login'
 import Signup from './components/Signup'
 import Dashboard from './components/Dashboard'
+import InfoBox from './components/InfoBox'
+import ProfileCard from './components/ProfileCard'
 
 function App() {
   const [currentView, setCurrentView] = useState('login');
@@ -79,7 +81,15 @@ function App() {
         {currentView === "login" && <Login onSwitchToSignup={onSwitchToSignup}
                                            onLoginSuccess={handleLoginSuccess} />}
         {currentView === "signup" && <Signup onSwitchToLogin={onSwitchToLogin} />}
-        {currentView === "dashboard" && <Dashboard user={user} onLogout={onLogout}/>}
+        
+        {/* 로그인 후 항상 표시되는 영역 */}
+        {currentView === "dashboard" && (
+          <div className="dashboard-wrapper">
+            <InfoBox />
+            <ProfileCard user={user} onLogout={onLogout} />
+            <Dashboard />
+          </div>
+        )}
     </div>
   );
 }

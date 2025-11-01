@@ -84,21 +84,6 @@ function Dashboard(props) {
     console.log('View house:', houseId);
   };
 
-  // 로그아웃 처리
-  const handleLogout = () => {
-    if (window.confirm('로그아웃 하시겠습니까?')) {
-      props.onLogout();
-    }
-  };
-
-  // 사용자 이름의 첫 글자 추출
-  const getUserInitial = () => {
-    if (props.user && props.user.name) {
-      return props.user.name.charAt(0).toUpperCase();
-    }
-    return '?';
-  };
-
   // 로딩 중
   if (loading) {
     return (
@@ -110,26 +95,6 @@ function Dashboard(props) {
 
   return (
     <div className="dashboard-container">
-      {/* 고정 핀 공지사항 */}
-      <div className="info-box">
-        <span className="pin-icon">📌</span>
-        <p>Share Item에서 물품을 관리해보세요</p>
-      </div>
-
-      {/* 프로필 카드 (로그인 정보) */}
-      <div className="profile-card">
-        <div className="profile-info">
-          <div className="profile-avatar">{getUserInitial()}</div>
-          <div className="profile-text">
-            <h3>{props.user ? `${props.user.name}님` : '사용자님'}</h3>
-            <p>{props.user ? props.user.email : 'guest@shareitem.com'}</p>
-          </div>
-        </div>
-        <button className="logout-btn" onClick={handleLogout}>
-          로그아웃
-        </button>
-      </div>
-
       {/* 헤더 */}
       <div className="dashboard-header">
         <div className="header-left">

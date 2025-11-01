@@ -1,0 +1,24 @@
+/* 고정 핀 공지사항 */
+.info-box {
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: #e3f2fd;
+    border-left: 4px solid #1976d2;
+    padding: 16px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.info-box .pin-icon {
+    font-size: 16px;
+    color: #1976d2;
+}
+
+.info-box p {
+    margin: 0;
+    font-size: 14px;
+    color: #333;
+}
