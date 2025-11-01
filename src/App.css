@@ -79,3 +79,8 @@ ul, ol {
     transform: rotate(360deg);
   }
 }
+
+/* App.css */
+.dashboard-wrapper {
+  padding: 40px 20px;  /* 전체 좌우상하 여백 */
+}
