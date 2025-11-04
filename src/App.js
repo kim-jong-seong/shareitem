@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import axios from 'axios';
 import './App.css';
 import Login from './components/Login'
 import Signup from './components/Signup'
@@ -10,6 +11,30 @@ function App() {
   const [currentView, setCurrentView] = useState('login');
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+
+  // JWT 토큰 만료 처리를 위한 axios 인터셉터
+  useEffect(() => {
+    const interceptor = axios.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        // 401 에러 = 토큰 만료 or 인증 실패
+        if (error.response?.status === 401) {
+          // 로그아웃 처리
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
+          setUser(null);
+          setCurrentView('login');
+          alert('세션이 만료되었습니다. 다시 로그인해주세요.');
+        }
+        return Promise.reject(error);
+      }
+    );
+
+    // 컴포넌트 언마운트 시 인터셉터 제거
+    return () => {
+      axios.interceptors.response.eject(interceptor);
+    };
+  }, []);
 
   // 초기 로드 시 토큰 확인 (자동 로그인)
   useEffect(() => {
