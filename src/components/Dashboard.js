@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { API_URL } from '../config';
+import InviteModal from './InviteModal';
 import '../styles/Dashboard.css';
 
 function Dashboard(props) {
@@ -8,6 +9,7 @@ function Dashboard(props) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showInviteModal, setShowInviteModal] = useState(false);
   const [newHouseName, setNewHouseName] = useState('');
 
   // 집 목록 조회
@@ -101,9 +103,14 @@ function Dashboard(props) {
           <h2>집 관리</h2>
           <p>내가 속한 집 목록을 관리합니다</p>
         </div>
-        <button className="create-button" onClick={() => setShowCreateModal(true)}>
-          + 새 집 등록
-        </button>
+        <div className="header-buttons">
+          <button className="invite-button" onClick={() => setShowInviteModal(true)}>
+            👤 인원 초대
+          </button>
+          <button className="create-button" onClick={() => setShowCreateModal(true)}>
+            + 새 집 등록
+          </button>
+        </div>
       </div>
 
       {/* 에러 메시지 */}
@@ -197,6 +204,15 @@ function Dashboard(props) {
             </form>
           </div>
         </div>
+      )}
+
+      {/* 인원 초대 모달 */}
+      {showInviteModal && (
+        <InviteModal
+          houses={houses}
+          onClose={() => setShowInviteModal(false)}
+          onSuccess={fetchHouses}
+        />
       )}
     </div>
   );
