@@ -180,19 +180,23 @@
 }
 
 .house-table th:first-child {
-    width: 30%;  /* 집 이름 */
+    width: 25%;  /* 집 이름 */
 }
 
 .house-table th:nth-child(2) {
-    width: 20%;  /* 관리자 */
+    width: 15%;  /* 관리자 */
 }
 
 .house-table th:nth-child(3) {
-    width: 15%;  /* 나의 역할 */
+    width: 12%;  /* 나의 역할 */
 }
 
 .house-table th:nth-child(4) {
-    width: 35%;  /* 관리 */
+    width: 15%;  /* 구성원 */
+}
+
+.house-table th:nth-child(5) {
+    width: 22%;  /* 관리 */
 }
 
 .house-table tbody tr {
@@ -442,4 +446,49 @@
     }
 }
 
-/* 기존 스타일은 그대로 유지 */
+/* 클릭 가능한 셀 */
+.clickable {
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.member-count-cell {
+    user-select: none;
+}
+
+/* 구성원 수 배지 */
+.member-count-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    background-color: #f5f5f5;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    font-size: 13px;
+    color: #666;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.clickable:hover .member-count-badge {
+    border-color: #1976d2;
+    color: #1976d2;
+}
+
+/* 관리 버튼 */
+.manage-button {
+    padding: 8px 16px;
+    background-color: #1976d2;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.manage-button:hover {
+    background-color: #1565c0;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(25, 118, 210, 0.3);
+}

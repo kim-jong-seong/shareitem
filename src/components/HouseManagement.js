@@ -2,14 +2,15 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { API_URL } from '../config';
 import CreateHouseModal from './CreateHouseModal';
-import InviteModal from './InviteModal';
+import MemberManagementModal from './MemberManagementModal';
 
 function HouseManagement() {
   const [houses, setHouses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [showInviteModal, setShowInviteModal] = useState(false);
+  const [showMemberModal, setShowMemberModal] = useState(false);
+  const [selectedHouse, setSelectedHouse] = useState(null);
 
   // 집 목록 조회
   useEffect(() => {
@@ -78,6 +79,12 @@ function HouseManagement() {
     console.log('View house:', houseId);
   };
 
+  // 구성원 관리 모달 열기
+  const handleManageMembers = (house) => {
+    setSelectedHouse(house);
+    setShowMemberModal(true);
+  };
+
   // 로딩 중
   if (loading) {
     return <div className="loading-box">데이터를 불러오는 중...</div>;
@@ -92,9 +99,6 @@ function HouseManagement() {
           <p>내가 속한 집 목록을 관리합니다</p>
         </div>
         <div className="header-buttons">
-          <button className="invite-button" onClick={() => setShowInviteModal(true)}>
-            + 인원 초대
-          </button>
           <button className="create-button" onClick={() => setShowCreateModal(true)}>
             + 새 집 등록
           </button>
@@ -116,13 +120,14 @@ function HouseManagement() {
               <th>집 이름</th>
               <th>관리자</th>
               <th>나의 역할</th>
+              <th>구성원</th>
               <th>관리</th>
             </tr>
           </thead>
           <tbody>
             {houses.length === 0 ? (
               <tr>
-                <td colSpan="4" className="empty-cell">
+                <td colSpan="5" className="empty-cell">
                   등록된 집이 없습니다. 새 집을 등록해주세요.
                 </td>
               </tr>
@@ -138,6 +143,15 @@ function HouseManagement() {
                   <td>
                     <span className={house.role_cd === 'COM1100001' ? 'badge admin-badge' : 'badge member-badge'}>
                       {house.role_nm}
+                    </span>
+                  </td>
+                  <td 
+                    className="member-count-cell clickable"
+                    onClick={() => handleManageMembers(house)}
+                    title="클릭하여 구성원 관리"
+                  >
+                    <span className="member-count-badge">
+                      👥 {house.member_count || 0}명
                     </span>
                   </td>
                   <td>
@@ -175,11 +189,15 @@ function HouseManagement() {
         />
       )}
 
-      {/* 인원 초대 모달 */}
-      {showInviteModal && (
-        <InviteModal
-          houses={houses}
-          onClose={() => setShowInviteModal(false)}
+      {/* 구성원 관리 모달 */}
+      {showMemberModal && selectedHouse && (
+        <MemberManagementModal
+          houseId={selectedHouse.id}
+          houseName={selectedHouse.name}
+          onClose={() => {
+            setShowMemberModal(false);
+            setSelectedHouse(null);
+          }}
           onSuccess={fetchHouses}
         />
       )}
