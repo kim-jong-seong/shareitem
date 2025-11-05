@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { API_URL } from '../config';
 import InviteModal from './InviteModal';
+import CreateHouseModal from './CreateHouseModal';
 import '../styles/Dashboard.css';
 
 function Dashboard(props) {
@@ -10,7 +11,6 @@ function Dashboard(props) {
   const [error, setError] = useState('');
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showInviteModal, setShowInviteModal] = useState(false);
-  const [newHouseName, setNewHouseName] = useState('');
 
   // 집 목록 조회
   useEffect(() => {
@@ -28,33 +28,6 @@ function Dashboard(props) {
     } catch (err) {
       setError('집 목록을 불러오는데 실패했습니다');
       setLoading(false);
-      console.error(err);
-    }
-  };
-
-  // 집 생성
-  const handleCreateHouse = async (e) => {
-    e.preventDefault();
-    
-    if (!newHouseName.trim()) {
-      alert('집 이름을 입력해주세요');
-      return;
-    }
-
-    try {
-      const token = localStorage.getItem('token');
-      await axios.post(
-        `${API_URL}/api/houses`,
-        { name: newHouseName },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      
-      alert('집이 생성되었습니다');
-      setNewHouseName('');
-      setShowCreateModal(false);
-      fetchHouses(); // 목록 새로고침
-    } catch (err) {
-      alert('집 생성에 실패했습니다: ' + (err.response?.data?.error || err.message));
       console.error(err);
     }
   };
@@ -175,35 +148,10 @@ function Dashboard(props) {
 
       {/* 집 생성 모달 */}
       {showCreateModal && (
-        <div className="modal-overlay" onClick={() => setShowCreateModal(false)}>
-          <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <h3 className="modal-title">새 집 등록</h3>
-            <form onSubmit={handleCreateHouse}>
-              <div className="form-group">
-                <label>집 이름</label>
-                <input
-                  type="text"
-                  value={newHouseName}
-                  onChange={(e) => setNewHouseName(e.target.value)}
-                  placeholder="예: 우리집, 부모님집"
-                  autoFocus
-                />
-              </div>
-              <div className="modal-buttons">
-                <button 
-                  type="button" 
-                  className="cancel-button" 
-                  onClick={() => setShowCreateModal(false)}
-                >
-                  취소
-                </button>
-                <button type="submit" className="submit-button">
-                  등록
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
+        <CreateHouseModal
+          onClose={() => setShowCreateModal(false)}
+          onSuccess={fetchHouses}
+        />
       )}
 
       {/* 인원 초대 모달 */}

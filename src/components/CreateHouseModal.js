@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { API_URL } from '../config';
-import '../styles/InviteModal.css';
+import '../styles/CreateHouseModal.css';
 
-function InviteModal({ houses, onClose, onSuccess }) {
-  const [selectedHouseId, setSelectedHouseId] = useState('');
-  const [inviteeEmail, setInviteeEmail] = useState('');
+function CreateHouseModal({ onClose, onSuccess }) {
+  const [houseName, setHouseName] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   
@@ -16,20 +15,8 @@ function InviteModal({ houses, onClose, onSuccess }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (!selectedHouseId) {
-      setError('집을 선택해주세요');
-      return;
-    }
-    
-    if (!inviteeEmail.trim()) {
-      setError('초대할 사용자의 이메일을 입력해주세요');
-      return;
-    }
-
-    // 이메일 형식 검증
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(inviteeEmail)) {
-      setError('올바른 이메일 형식이 아닙니다');
+    if (!houseName.trim()) {
+      setError('집 이름을 입력해주세요');
       return;
     }
 
@@ -39,16 +26,16 @@ function InviteModal({ houses, onClose, onSuccess }) {
     try {
       const token = localStorage.getItem('token');
       await axios.post(
-        `${API_URL}/api/houses/${selectedHouseId}/invitations`,
-        { invitee_email: inviteeEmail },
+        `${API_URL}/api/houses`,
+        { name: houseName },
         { headers: { Authorization: `Bearer ${token}` } }
       );
       
-      alert('초대를 보냈습니다');
+      alert('집이 생성되었습니다');
       onSuccess();
       onClose();
     } catch (err) {
-      setError(err.response?.data?.error || '초대 전송에 실패했습니다');
+      setError(err.response?.data?.error || '집 생성에 실패했습니다');
       setLoading(false);
     }
   };
@@ -57,7 +44,6 @@ function InviteModal({ houses, onClose, onSuccess }) {
     <div 
       className="modal-overlay" 
       onMouseDown={(e) => {
-        // overlay를 직접 클릭했을 때만 기록
         if (e.target === e.currentTarget) {
           setMouseDownTarget(e.currentTarget);
         } else {
@@ -65,7 +51,6 @@ function InviteModal({ houses, onClose, onSuccess }) {
         }
       }}
       onMouseUp={(e) => {
-        // overlay를 직접 클릭했을 때만 기록
         if (e.target === e.currentTarget) {
           setMouseUpTarget(e.currentTarget);
         } else {
@@ -73,7 +58,6 @@ function InviteModal({ houses, onClose, onSuccess }) {
         }
       }}
       onClick={(e) => {
-        // mousedown과 mouseup 둘 다 overlay에서 발생했을 때만 닫기
         if (e.target === e.currentTarget && 
             mouseDownTarget === e.currentTarget && 
             mouseUpTarget === e.currentTarget) {
@@ -81,36 +65,20 @@ function InviteModal({ houses, onClose, onSuccess }) {
         }
       }}
     >
-      <div className="modal invite-modal" onClick={(e) => e.stopPropagation()}>
-        <h3 className="modal-title">인원 초대</h3>
+      <div className="modal create-house-modal" onClick={(e) => e.stopPropagation()}>
+        <h3 className="modal-title">새 집 등록</h3>
         
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label>집 선택</label>
-            <select
-              value={selectedHouseId}
-              onChange={(e) => setSelectedHouseId(e.target.value)}
-              required
-            >
-              <option value="">집을 선택하세요</option>
-              {houses.map((house) => (
-                <option key={house.id} value={house.id}>
-                  {house.name}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="form-group">
-            <label>초대할 사용자 이메일</label>
+            <label>집 이름</label>
             <input
-              type="email"
-              value={inviteeEmail}
-              onChange={(e) => setInviteeEmail(e.target.value)}
-              placeholder="example@email.com"
+              type="text"
+              value={houseName}
+              onChange={(e) => setHouseName(e.target.value)}
+              placeholder="예: 우리집, 부모님집"
+              autoFocus
               required
             />
-            <p className="input-hint">가입된 이메일 주소를 입력하세요</p>
           </div>
 
           {error && (
@@ -133,7 +101,7 @@ function InviteModal({ houses, onClose, onSuccess }) {
               className="submit-button"
               disabled={loading}
             >
-              {loading ? '전송 중...' : '초대 보내기'}
+              {loading ? '생성 중...' : '등록'}
             </button>
           </div>
         </form>
@@ -142,4 +110,4 @@ function InviteModal({ houses, onClose, onSuccess }) {
   );
 }
 
-export default InviteModal;
+export default CreateHouseModal;
