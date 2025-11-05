@@ -31,7 +31,7 @@ function HouseManagement() {
     }
   };
 
-  // 집 삭제
+  // 집 삭제 (관리자)
   const handleDeleteHouse = async (houseId, houseName) => {
     if (!window.confirm(`"${houseName}"을(를) 정말 삭제하시겠습니까?\n\n관련된 모든 데이터가 삭제됩니다.`)) {
       return;
@@ -47,6 +47,26 @@ function HouseManagement() {
       fetchHouses(); // 목록 새로고침
     } catch (err) {
       alert('집 삭제에 실패했습니다: ' + (err.response?.data?.error || err.message));
+      console.error(err);
+    }
+  };
+
+  // 집 나가기 (멤버)
+  const handleLeaveHouse = async (houseId, houseName) => {
+    if (!window.confirm(`"${houseName}"에서 정말 나가시겠습니까?`)) {
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem('token');
+      await axios.delete(`${API_URL}/api/houses/${houseId}/leave`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      alert('집에서 나갔습니다');
+      fetchHouses(); // 목록 새로고침
+    } catch (err) {
+      alert('나가기에 실패했습니다: ' + (err.response?.data?.error || err.message));
       console.error(err);
     }
   };
@@ -94,6 +114,7 @@ function HouseManagement() {
           <thead>
             <tr>
               <th>집 이름</th>
+              <th>관리자</th>
               <th>나의 역할</th>
               <th>관리</th>
             </tr>
@@ -101,7 +122,7 @@ function HouseManagement() {
           <tbody>
             {houses.length === 0 ? (
               <tr>
-                <td colSpan="3" className="empty-cell">
+                <td colSpan="4" className="empty-cell">
                   등록된 집이 없습니다. 새 집을 등록해주세요.
                 </td>
               </tr>
@@ -110,6 +131,9 @@ function HouseManagement() {
                 <tr key={house.id}>
                   <td>
                     <strong>{house.name}</strong>
+                  </td>
+                  <td>
+                    {house.admin_name || '-'}
                   </td>
                   <td>
                     <span className={house.role_cd === 'COM1100001' ? 'badge admin-badge' : 'badge member-badge'}>
@@ -124,14 +148,16 @@ function HouseManagement() {
                       >
                         조회
                       </button>
-                      {house.role_cd === 'COM1100001' && (
-                        <button 
-                          className="delete-button"
-                          onClick={() => handleDeleteHouse(house.id, house.name)}
-                        >
-                          삭제
-                        </button>
-                      )}
+                      <button 
+                        className="delete-button"
+                        onClick={() => 
+                          house.role_cd === 'COM1100001' 
+                            ? handleDeleteHouse(house.id, house.name)
+                            : handleLeaveHouse(house.id, house.name)
+                        }
+                      >
+                        삭제
+                      </button>
                     </div>
                   </td>
                 </tr>
