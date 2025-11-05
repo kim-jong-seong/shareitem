@@ -105,7 +105,7 @@ function Dashboard(props) {
         </div>
         <div className="header-buttons">
           <button className="invite-button" onClick={() => setShowInviteModal(true)}>
-            👤 인원 초대
+            + 인원 초대
           </button>
           <button className="create-button" onClick={() => setShowCreateModal(true)}>
             + 새 집 등록

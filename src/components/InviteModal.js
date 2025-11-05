@@ -52,7 +52,7 @@ function InviteModal({ houses, onClose, onSuccess }) {
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal invite-modal" onClick={(e) => e.stopPropagation()}>
-        <h3 className="modal-title">집원 초대</h3>
+        <h3 className="modal-title">인원 초대</h3>
         
         <form onSubmit={handleSubmit}>
           <div className="form-group">
