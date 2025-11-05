@@ -68,7 +68,7 @@ function HouseManagement() {
       {/* 헤더 */}
       <div className="dashboard-header">
         <div className="header-left">
-          <h2>집 관리</h2>
+          <h2>집 목록</h2>
           <p>내가 속한 집 목록을 관리합니다</p>
         </div>
         <div className="header-buttons">
