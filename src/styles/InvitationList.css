@@ -1,0 +1,190 @@
+.invitation-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* 헤더 */
+.invitation-header {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.invitation-header h2 {
+    margin: 0 0 8px 0;
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+}
+
+.invitation-header p {
+    margin: 0;
+    font-size: 14px;
+    color: #666;
+}
+
+/* 섹션 */
+.invitation-section {
+    margin-bottom: 40px;
+}
+
+.invitation-section:last-child {
+    margin-bottom: 0;
+}
+
+.section-title {
+    margin: 0 0 16px 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.section-count {
+    font-size: 16px;
+    color: #1976d2;
+    font-weight: 600;
+}
+
+/* 초대 목록 */
+.invitation-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* 빈 상태 */
+.empty-invitation {
+    text-align: center;
+    padding: 60px 20px;
+    background-color: #fafafa;
+    border-radius: 8px;
+    border: 1px dashed #ddd;
+}
+
+.empty-invitation p {
+    margin: 0;
+    font-size: 16px;
+    color: #999;
+}
+
+/* 초대 카드 */
+.invitation-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px;
+    background-color: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    transition: all 0.2s;
+}
+
+.invitation-card:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-color: #1976d2;
+}
+
+/* 아이콘 */
+.invitation-icon {
+    font-size: 32px;
+    flex-shrink: 0;
+}
+
+/* 내용 */
+.invitation-content {
+    flex: 1;
+}
+
+.invitation-text {
+    margin: 0;
+    font-size: 15px;
+    color: #333;
+    line-height: 1.5;
+}
+
+.invitation-text strong {
+    color: #1976d2;
+    font-weight: 600;
+}
+
+.invitation-email {
+    display: inline-block;
+    margin-left: 8px;
+    font-size: 13px;
+    color: #999;
+}
+
+/* 액션 버튼 */
+.invitation-actions {
+    display: flex;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.accept-button,
+.reject-button,
+.cancel-button-inv {
+    padding: 10px 24px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    min-width: 80px;
+}
+
+.accept-button {
+    background-color: #1976d2;
+    color: white;
+}
+
+.accept-button:hover {
+    background-color: #1565c0;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(25, 118, 210, 0.3);
+}
+
+.reject-button {
+    background-color: white;
+    color: #d32f2f;
+    border: 2px solid #d32f2f;
+}
+
+.reject-button:hover {
+    background-color: #ffebee;
+    transform: translateY(-1px);
+}
+
+.cancel-button-inv {
+    background-color: white;
+    color: #f57c00;
+    border: 2px solid #f57c00;
+}
+
+.cancel-button-inv:hover {
+    background-color: #fff3e0;
+    transform: translateY(-1px);
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+    .invitation-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .invitation-actions {
+        width: 100%;
+        justify-content: stretch;
+    }
+
+    .accept-button,
+    .reject-button,
+    .cancel-button-inv {
+        flex: 1;
+    }
+}
