@@ -5,7 +5,7 @@ import '../styles/InviteModal.css';
 
 function InviteModal({ houses, onClose, onSuccess }) {
   const [selectedHouseId, setSelectedHouseId] = useState('');
-  const [inviteeUserId, setInviteeUserId] = useState('');
+  const [inviteeEmail, setInviteeEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -17,8 +17,15 @@ function InviteModal({ houses, onClose, onSuccess }) {
       return;
     }
     
-    if (!inviteeUserId.trim()) {
-      setError('초대할 사용자 ID를 입력해주세요');
+    if (!inviteeEmail.trim()) {
+      setError('초대할 사용자의 이메일을 입력해주세요');
+      return;
+    }
+
+    // 이메일 형식 검증
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(inviteeEmail)) {
+      setError('올바른 이메일 형식이 아닙니다');
       return;
     }
 
@@ -29,7 +36,7 @@ function InviteModal({ houses, onClose, onSuccess }) {
       const token = localStorage.getItem('token');
       await axios.post(
         `${API_URL}/api/houses/${selectedHouseId}/invitations`,
-        { invitee_user_id: inviteeUserId },
+        { invitee_email: inviteeEmail },
         { headers: { Authorization: `Bearer ${token}` } }
       );
       
@@ -65,16 +72,15 @@ function InviteModal({ houses, onClose, onSuccess }) {
           </div>
 
           <div className="form-group">
-            <label>초대할 사용자 ID</label>
+            <label>초대할 사용자 이메일</label>
             <input
-              type="text"
-              value={inviteeUserId}
-              onChange={(e) => setInviteeUserId(e.target.value)}
-              placeholder="예: 0000000002"
-              maxLength="10"
+              type="email"
+              value={inviteeEmail}
+              onChange={(e) => setInviteeEmail(e.target.value)}
+              placeholder="example@email.com"
               required
             />
-            <p className="input-hint">10자리 사용자 ID를 입력하세요</p>
+            <p className="input-hint">가입된 이메일 주소를 입력하세요</p>
           </div>
 
           {error && (
