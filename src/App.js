@@ -110,8 +110,8 @@ function App() {
         {/* 로그인 후 항상 표시되는 영역 */}
         {currentView === "dashboard" && (
           <div className="dashboard-wrapper">
-            <InfoBox />
             <ProfileCard user={user} onLogout={onLogout} />
+            <InfoBox />
             <Dashboard />
           </div>
         )}
