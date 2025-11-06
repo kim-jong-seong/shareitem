@@ -1,3 +1,75 @@
+/* 상세 정보 헤더 */
+.detail-header {
+    padding: 20px;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    background: white;
+}
+
+.detail-title-section {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    flex: 1;
+}
+
+.detail-icon {
+    font-size: 48px;
+    flex-shrink: 0;
+}
+
+.detail-title-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.detail-title {
+    margin: 0 0 8px 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+}
+
+.detail-subtitle {
+    margin: 0;
+    font-size: 13px;
+    color: #999;
+}
+
+.detail-actions {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.action-button {
+    padding: 8px 16px;
+    background: white;
+    color: #666;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.action-button:hover {
+    background: #f5f5f5;
+}
+
+.action-button.primary {
+    background: #1976d2;
+    color: white;
+    border-color: #1976d2;
+}
+
+.action-button.primary:hover {
+    background: #1565c0;
+}
+
 /* 탭 스타일 - 작고 심플한 스타일 */
 .detail-tabs {
     display: flex;

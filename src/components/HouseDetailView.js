@@ -130,6 +130,13 @@ function HouseDetailView(props) {
     setSelectedItem(container);
     // 이미 목록에서 가져온 데이터를 즉시 표시
     setDetailInfo(container);
+    
+    // pathNames의 마지막 항목을 현재 선택한 항목으로 업데이트
+    if (pathNames.length > 0) {
+      const newPathNames = [...pathNames];
+      newPathNames[newPathNames.length - 1] = container.name;
+      setPathNames(newPathNames);
+    }
   };
 
   // 형제 더블클릭 (왼쪽 패널) - 드릴다운
@@ -497,7 +504,9 @@ function HouseDetailView(props) {
             </span>
           </div>
           <div className="panel-content">
-            {currentPath.length === 0 ? (
+            {loading ? (
+              <div className="loading-box">로딩 중...</div>
+            ) : currentPath.length === 0 ? (
               <div className="item-card active">
                 <div className="item-icon">🏠</div>
                 <div className="item-info">

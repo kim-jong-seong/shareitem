@@ -33,14 +33,11 @@ function HistoryTab(props) {
 
   const formatLogMessage = (log) => {
     switch(log.act_cd) {
-      case 'COM1300001': // 반입
+      case 'COM1300001': // 생성
         return {
           icon: '📝',
-          action: '반입',
-          detail: [
-            `생성: ${log.log_remk || ''}`,
-            log.to_container_name && `위치: ${log.to_container_name}`
-          ].filter(Boolean).join('\n')
+          action: '생성',
+          detail: log.log_remk || ''
         };
       
       case 'COM1300002': // 반출
@@ -57,25 +54,11 @@ function HistoryTab(props) {
           detail: `${log.from_container_name || '최상위'} → ${log.to_container_name || '최상위'}`
         };
       
-      case 'COM1300004': // 수정
+      case 'COM1300004': // 수정 (통합)
         return {
           icon: '✏️',
           action: '수정',
           detail: log.log_remk || '정보 수정'
-        };
-      
-      case 'COM1300005': // 수량변경
-        return {
-          icon: '🔢',
-          action: '수량변경',
-          detail: `${log.from_quantity || 0}개 → ${log.to_quantity || 0}개`
-        };
-      
-      case 'COM1300006': // 소유자변경
-        return {
-          icon: '👤',
-          action: '소유자변경',
-          detail: `${log.from_owner_name || '없음'} → ${log.to_owner_name || '없음'}`
         };
       
       default:
@@ -88,7 +71,10 @@ function HistoryTab(props) {
   };
 
   const formatDate = (dateString) => {
+    // 백엔드에서 "2025-11-06 23:15:26" 형식의 문자열로 받음 (시간대 정보 없음)
+    // 그대로 Date 객체로 변환하면 로컬 시간으로 인식됨
     const date = new Date(dateString);
+    
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
