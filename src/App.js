@@ -6,11 +6,13 @@ import Signup from './components/Signup'
 import Dashboard from './components/Dashboard'
 import InfoBox from './components/InfoBox'
 import ProfileCard from './components/ProfileCard'
+import HouseDetailView from './components/HouseDetailView'
 
 function App() {
   const [currentView, setCurrentView] = useState('login');
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedHouse, setSelectedHouse] = useState(null); // 선택된 집 정보
 
   // JWT 토큰 만료 처리를 위한 axios 인터셉터
   useEffect(() => {
@@ -78,10 +80,23 @@ function App() {
   const onLogout = (e) =>
   {
     setUser(null);
+    setSelectedHouse(null);
     // 로그아웃 시 토큰과 user 정보 삭제
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     setCurrentView('login');
+  }
+
+  // 집 조회 버튼 클릭
+  const handleViewHouse = (house) => {
+    setSelectedHouse(house);
+    setCurrentView('houseDetail');
+  }
+
+  // 집 목록으로 돌아가기
+  const handleBackToDashboard = () => {
+    setSelectedHouse(null);
+    setCurrentView('dashboard');
   }
 
   // 로딩 중일 때 표시
@@ -107,13 +122,22 @@ function App() {
                                            onLoginSuccess={handleLoginSuccess} />}
         {currentView === "signup" && <Signup onSwitchToLogin={onSwitchToLogin} />}
         
-        {/* 로그인 후 항상 표시되는 영역 */}
+        {/* 대시보드 (집 목록) */}
         {currentView === "dashboard" && (
           <div className="dashboard-wrapper">
             <ProfileCard user={user} onLogout={onLogout} />
             <InfoBox />
-            <Dashboard />
+            <Dashboard onViewHouse={handleViewHouse} />
           </div>
+        )}
+
+        {/* 집 상세 조회 */}
+        {currentView === "houseDetail" && selectedHouse && (
+          <HouseDetailView 
+            houseId={selectedHouse.id}
+            houseName={selectedHouse.name}
+            onBack={handleBackToDashboard}
+          />
         )}
     </div>
   );

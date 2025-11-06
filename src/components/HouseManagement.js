@@ -4,7 +4,7 @@ import { API_URL } from '../config';
 import CreateHouseModal from './CreateHouseModal';
 import MemberManagementModal from './MemberManagementModal';
 
-function HouseManagement() {
+function HouseManagement(props) {
   const [houses, setHouses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -72,11 +72,9 @@ function HouseManagement() {
     }
   };
 
-  // 집 조회 (상세 페이지로 이동 등)
-  const handleViewHouse = (houseId, houseName) => {
-    // TODO: 집 상세 페이지로 이동하거나 상세 정보 표시
-    alert(`"${houseName}" 조회 기능은 추후 구현 예정입니다`);
-    console.log('View house:', houseId);
+  // 집 조회 (HouseDetailView로 이동)
+  const handleViewHouse = (house) => {
+    props.onViewHouse(house);
   };
 
   // 구성원 관리 모달 열기
@@ -158,7 +156,7 @@ function HouseManagement() {
                     <div className="button-group">
                       <button 
                         className="view-button"
-                        onClick={() => handleViewHouse(house.id, house.name)}
+                        onClick={() => handleViewHouse(house)}
                       >
                         조회
                       </button>

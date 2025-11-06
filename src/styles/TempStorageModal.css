@@ -1,0 +1,102 @@
+/* 임시보관함 - 오른쪽 패널 하단에 표시 */
+.temp-storage {
+    background: #fff3e0;
+    border: 2px dashed #ff9800;
+    border-radius: 8px;
+    padding: 16px;
+    margin-top: 24px;
+}
+
+.temp-storage-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.temp-storage-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #f57c00;
+}
+
+.temp-item {
+    background: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    font-size: 13px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.temp-item:last-child {
+    margin-bottom: 0;
+}
+
+/* 임시보관함 모달 스타일 */
+.temp-item-modal {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    background: #fff3e0;
+    border: 1px solid #ff9800;
+    border-radius: 8px;
+}
+
+.temp-item-modal:last-child {
+    margin-bottom: 0;
+}
+
+.temp-item-modal .item-icon {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+}
+
+.temp-item-modal .temp-item-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.temp-item-modal .temp-item-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.temp-item-modal .temp-item-detail {
+    font-size: 13px;
+    color: #666;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.temp-item-modal .remove-button {
+    flex-shrink: 0;
+    padding: 8px 16px;
+    background: #ff5252;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    transition: background 0.2s;
+}
+
+.temp-item-modal .remove-button:hover {
+    background: #ff1744;
+}

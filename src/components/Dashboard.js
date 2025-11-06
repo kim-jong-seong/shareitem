@@ -54,7 +54,7 @@ function Dashboard(props) {
 
       {/* 탭 콘텐츠 */}
       <div className="tab-content">
-        {activeTab === 'houses' && <HouseManagement />}
+        {activeTab === 'houses' && <HouseManagement onViewHouse={props.onViewHouse} />}
         {activeTab === 'invitations' && (
           <InvitationList onInvitationUpdate={handleInvitationUpdate} />
         )}

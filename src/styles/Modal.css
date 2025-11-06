@@ -26,7 +26,7 @@
 .modal-content {
     background: white;
     border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     width: 90%;
     max-width: 500px;
     max-height: 90vh;
@@ -34,6 +34,11 @@
     display: flex;
     flex-direction: column;
     animation: slideUp 0.3s ease-out;
+}
+
+/* form-modal에 대한 max-width 설정 */
+.form-modal .modal-content {
+    max-width: 500px;
 }
 
 @keyframes slideUp {
@@ -53,10 +58,11 @@
     justify-content: space-between;
     align-items: center;
     padding: 20px 24px;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 2px solid #e0e0e0;
 }
 
-.modal-header h2 {
+.modal-header h2,
+.modal-header h3 {
     margin: 0;
     font-size: 20px;
     font-weight: 600;
@@ -86,14 +92,15 @@
 
 /* 모달 바디 */
 .modal-body {
-    padding: 24px;
+    padding: 20px 24px;
     flex: 1;
     overflow-y: auto;
+    max-height: 65vh;
 }
 
 /* 모달 푸터 */
 .modal-footer {
-    padding: 16px 24px;
+    padding: 14px 24px;
     border-top: 1px solid #e0e0e0;
     display: flex;
     justify-content: flex-end;
@@ -102,7 +109,7 @@
 
 /* 폼 그룹 */
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 16px;
 }
 
 .form-group:last-child {
@@ -111,7 +118,7 @@
 
 .form-group label {
     display: block;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
     font-size: 14px;
     font-weight: 600;
     color: #333;
@@ -121,12 +128,24 @@
 .form-group select,
 .form-group textarea {
     width: 100%;
-    padding: 10px 12px;
-    border: 1px solid #ddd;
+    padding: 8px 12px;
+    border: 2px solid #e0e0e0;
     border-radius: 6px;
     font-size: 14px;
     transition: all 0.2s;
     box-sizing: border-box;
+}
+
+.form-group select {
+    padding-right: 32px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-position: right 12px center;
+    background-repeat: no-repeat;
+    background-size: 12px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    cursor: pointer;
 }
 
 .form-group input:focus,
@@ -134,7 +153,6 @@
 .form-group textarea:focus {
     outline: none;
     border-color: #1976d2;
-    box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
 }
 
 .form-group input:disabled,
@@ -144,13 +162,61 @@
     cursor: not-allowed;
 }
 
+.form-group textarea {
+    resize: vertical;
+    min-height: 60px;
+}
+
 .form-hint {
     margin-top: 6px;
     font-size: 12px;
     color: #999;
 }
 
+/* 타입 선택 */
+.type-selector {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.type-option {
+    flex: 1;
+    padding: 10px 14px;
+    border: 2px solid #e0e0e0;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: white;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.type-option:hover {
+    border-color: #1976d2;
+    background: #f5f5f5;
+}
+
+.type-option.active {
+    border-color: #1976d2;
+    background: #e3f2fd;
+}
+
+.type-option-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.type-option-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #333;
+}
+
 /* 버튼 */
+.cancel-btn,
+.submit-btn,
 .cancel-button,
 .submit-button {
     padding: 10px 20px;
@@ -162,32 +228,35 @@
     transition: all 0.2s;
 }
 
+.cancel-btn,
 .cancel-button {
-    background-color: white;
+    background: white;
     color: #666;
-    border: 1px solid #ddd;
+    border: 2px solid #e0e0e0;
 }
 
+.cancel-btn:hover:not(:disabled),
 .cancel-button:hover:not(:disabled) {
-    background-color: #f5f5f5;
+    background: #f5f5f5;
 }
 
+.submit-btn,
 .submit-button {
-    background-color: #1976d2;
+    background: #1976d2;
     color: white;
 }
 
+.submit-btn:hover:not(:disabled),
 .submit-button:hover:not(:disabled) {
-    background-color: #1565c0;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 6px rgba(25, 118, 210, 0.3);
+    background: #1565c0;
 }
 
-.cancel-button:disabled,
-.submit-button:disabled {
+.submit-btn:disabled,
+.submit-button:disabled,
+.cancel-btn:disabled,
+.cancel-button:disabled {
     opacity: 0.6;
     cursor: not-allowed;
-    transform: none;
 }
 
 /* 에러 박스 */
@@ -220,7 +289,8 @@
         padding: 16px 20px;
     }
 
-    .modal-header h2 {
+    .modal-header h2,
+    .modal-header h3 {
         font-size: 18px;
     }
 
@@ -233,6 +303,8 @@
         flex-direction: column-reverse;
     }
 
+    .cancel-btn,
+    .submit-btn,
     .cancel-button,
     .submit-button {
         width: 100%;
