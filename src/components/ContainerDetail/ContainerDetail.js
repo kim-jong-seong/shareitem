@@ -12,7 +12,8 @@ function ContainerDetail(props) {
       <div className="detail-header">
         <div className="detail-title-section">
           <div className="detail-icon">
-            {props.container.type_cd === 'COM1200001' ? '📁' :
+            {props.container.type_cd === 'house' ? '🏠' :
+             props.container.type_cd === 'COM1200001' ? '📁' :
              props.container.type_cd === 'COM1200002' ? '📦' : '🏷️'}
           </div>
           <div className="detail-title-info">
@@ -23,20 +24,22 @@ function ContainerDetail(props) {
             </div>
           </div>
         </div>
-        <div className="detail-actions">
-          <button 
-            className="action-button"
-            onClick={() => props.onEdit(props.container)}
-          >
-            ✏️ 수정
-          </button>
-          <button 
-            className="action-button"
-            onClick={() => props.onDelete(props.container)}
-          >
-            🗑️ 삭제
-          </button>
-        </div>
+        {props.container.type_cd !== 'house' && (
+          <div className="detail-actions">
+            <button 
+              className="action-button"
+              onClick={() => props.onEdit(props.container)}
+            >
+              ✏️ 수정
+            </button>
+            <button 
+              className="action-button"
+              onClick={() => props.onDelete(props.container)}
+            >
+              🗑️ 삭제
+            </button>
+          </div>
+        )}
       </div>
 
       {/* 탭 */}
@@ -47,18 +50,23 @@ function ContainerDetail(props) {
         >
           기본 정보
         </button>
-        <button 
-          className={`detail-tab ${activeTab === 'history' ? 'active' : ''}`}
-          onClick={() => setActiveTab('history')}
-        >
-          히스토리
-        </button>
+        {props.container.type_cd !== 'house' && (
+          <button 
+            className={`detail-tab ${activeTab === 'history' ? 'active' : ''}`}
+            onClick={() => setActiveTab('history')}
+          >
+            히스토리
+          </button>
+        )}
       </div>
 
       {/* 탭 콘텐츠 */}
       <div className="detail-tab-content">
         {activeTab === 'basic' && (
-          <BasicInfoTab container={props.container} />
+          <BasicInfoTab 
+            container={props.container}
+            childPreview={props.childPreview}
+          />
         )}
         {activeTab === 'history' && (
           <HistoryTab 
@@ -70,8 +78,7 @@ function ContainerDetail(props) {
 
       {/* 임시보관함 */}
       {props.tempStorage && props.tempStorage.length > 0 && 
-       props.container.type_cd !== 'COM1200003' && 
-       !props.tempStorage.some(item => item.id === props.container.id) && (
+       props.container.type_cd !== 'COM1200003' && (
         <div className="temp-storage">
           <div className="temp-storage-header">
             <div className="temp-storage-title">📦 임시보관함 ({props.tempStorage.length})</div>

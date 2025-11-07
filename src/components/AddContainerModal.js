@@ -78,7 +78,6 @@ function AddContainerModal(props) {
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      alert('추가되었습니다');
       props.onSuccess();
     } catch (err) {
       setError(err.response?.data?.error || '추가에 실패했습니다');

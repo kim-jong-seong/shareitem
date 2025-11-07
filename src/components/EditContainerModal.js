@@ -69,7 +69,6 @@ function EditContainerModal(props) {
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      alert('수정되었습니다');
       props.onSuccess();
     } catch (err) {
       setError(err.response?.data?.error || '수정에 실패했습니다');

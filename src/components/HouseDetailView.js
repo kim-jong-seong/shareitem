@@ -17,6 +17,7 @@ function HouseDetailView(props) {
   const [children, setChildren] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
   const [detailInfo, setDetailInfo] = useState(null);
+  const [childPreview, setChildPreview] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -104,14 +105,13 @@ function HouseDetailView(props) {
   };
 
   // 단일 클릭 - 최적화: 목록 데이터를 즉시 표시
-  const handleItemClick = (container) => {
+  const handleItemClick = async (container) => {
     setSelectedItem(container);
     // 이미 목록에서 가져온 데이터를 즉시 표시
     setDetailInfo(container);
+    setChildPreview([]); // 초기화
     
-    // 추가 상세 정보가 필요하면 백그라운드로 로드 (선택적)
-    // 현재 목록 데이터만으로도 충분하므로 주석 처리
-    /*
+    // 상세 정보 및 하위 항목 미리보기 로드
     try {
       const token = localStorage.getItem('token');
       const response = await axios.get(
@@ -119,17 +119,31 @@ function HouseDetailView(props) {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setDetailInfo(response.data.container);
+      setChildPreview(response.data.child_preview || []);
     } catch (err) {
       console.error('상세 정보 조회 실패:', err);
     }
-    */
   };
 
   // 형제 클릭 (왼쪽 패널) - 상세정보만 표시 (최적화)
-  const handleSiblingClick = (container) => {
+  const handleSiblingClick = async (container) => {
     setSelectedItem(container);
     // 이미 목록에서 가져온 데이터를 즉시 표시
     setDetailInfo(container);
+    setChildPreview([]); // 초기화
+    
+    // 상세 정보 및 하위 항목 미리보기 로드
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get(
+        `${API_URL}/api/houses/${props.houseId}/containers/${container.id}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setDetailInfo(response.data.container);
+      setChildPreview(response.data.child_preview || []);
+    } catch (err) {
+      console.error('상세 정보 조회 실패:', err);
+    }
     
     // pathNames의 마지막 항목을 현재 선택한 항목으로 업데이트
     if (pathNames.length > 0) {
@@ -263,7 +277,6 @@ function HouseDetailView(props) {
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      alert('삭제되었습니다');
       if (currentPath.length === 0) {
         loadRootLevel();
       } else {
@@ -297,7 +310,14 @@ function HouseDetailView(props) {
     }
 
     // 현재 보고 있는 위치의 ID를 가져옴 (여기로 이동할 부모 ID)
-    const targetParentId = selectedItem?.id || (currentPath.length > 0 ? currentPath[currentPath.length - 1] : null);
+    // 집인 경우 null (최상위로 이동)
+    let targetParentId;
+    if (selectedItem?.type_cd === 'house') {
+      targetParentId = null; // 집 = 최상위
+    } else {
+      targetParentId = selectedItem?.id || (currentPath.length > 0 ? currentPath[currentPath.length - 1] : null);
+    }
+    
     const currentLocation = selectedItem?.name || (currentPath.length > 0 ? pathNames[pathNames.length - 1] : props.houseName);
 
     console.log('이동 대상:', {
@@ -308,16 +328,8 @@ function HouseDetailView(props) {
       pathNames
     });
 
-    if (!window.confirm(
-      `임시보관함의 ${tempStorage.length}개 항목을 "${currentLocation}"(으)로 이동하시겠습니까?`
-    )) {
-      return;
-    }
-
     try {
       const token = localStorage.getItem('token');
-      let successCount = 0;
-      let failCount = 0;
       const failedItems = [];
 
       for (const item of tempStorage) {
@@ -327,21 +339,14 @@ function HouseDetailView(props) {
             { up_container_id: targetParentId },
             { headers: { Authorization: `Bearer ${token}` } }
           );
-          successCount++;
         } catch (err) {
           console.error(`"${item.name}" 이동 실패:`, err);
-          failCount++;
           failedItems.push(item);
         }
       }
 
-      if (failCount === 0) {
-        alert(`${successCount}개 항목이 "${currentLocation}"(으)로 이동되었습니다`);
-        setTempStorage([]);
-      } else {
-        alert(`${successCount}개 항목 이동 성공, ${failCount}개 항목 이동 실패`);
-        setTempStorage(failedItems);
-      }
+      // 실패한 항목만 임시보관함에 남김
+      setTempStorage(failedItems);
 
       // 화면 새로고침
       if (currentPath.length === 0) {
@@ -355,7 +360,16 @@ function HouseDetailView(props) {
     }
   };
 
-  const handleSearchSelect = async (result) => {
+  // 새로고침
+  const handleRefresh = () => {
+    if (currentPath.length === 0) {
+      loadRootLevel();
+    } else {
+      handleBreadcrumbClick(currentPath.length - 1);
+    }
+  };
+
+    const handleSearchSelect = async (result) => {
     setShowSearchModal(false);
     
     try {
@@ -477,6 +491,9 @@ function HouseDetailView(props) {
           <div className="search-box" onClick={() => setShowSearchModal(true)}>
             <span>🔍</span>
           </div>
+          <div className="search-box" onClick={handleRefresh} title="새로고침">
+            <span>🔄</span>
+          </div>
           {tempStorage.length > 0 && (
             <div 
               className="temp-badge" 
@@ -507,13 +524,28 @@ function HouseDetailView(props) {
             {loading ? (
               <div className="loading-box">로딩 중...</div>
             ) : currentPath.length === 0 ? (
-              <div className="item-card active">
+              <div 
+                className="item-card active"
+                onClick={() => {
+                  // 집 정보 표시
+                  const houseInfo = {
+                    id: props.houseId,
+                    name: props.houseName,
+                    type_cd: 'house',
+                    type_nm: '집',
+                    child_count: children.length
+                  };
+                  setSelectedItem(houseInfo);
+                  setDetailInfo(houseInfo);
+                  setChildPreview([]); // 집은 미리보기 없음
+                }}
+              >
                 <div className="item-icon">🏠</div>
                 <div className="item-info">
                   <div className="item-name">{props.houseName}</div>
                   <div className="item-meta">
                     <span>집</span>
-                    <span>{children.length}개 영역</span>
+                    <span>{children.length}개 항목</span>
                   </div>
                 </div>
               </div>
@@ -616,6 +648,7 @@ function HouseDetailView(props) {
                 houseName={props.houseName}
                 pathNames={pathNames}
                 container={detailInfo}
+                childPreview={childPreview}
                 tempStorage={tempStorage}
                 onEdit={handleEditClick}
                 onDelete={handleDelete}
