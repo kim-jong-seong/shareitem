@@ -1,4 +1,12 @@
-/* 상세 정보 헤더 */
+/* 컨테이너 디테일 전체 레이아웃 */
+.container-detail {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* 상세 정보 헤더 - 고정 */
 .detail-header {
     padding: 20px;
     border-bottom: 1px solid #e0e0e0;
@@ -6,6 +14,7 @@
     justify-content: space-between;
     align-items: flex-start;
     background: white;
+    flex-shrink: 0;
 }
 
 .detail-title-section {
@@ -70,13 +79,14 @@
     background: #1565c0;
 }
 
-/* 탭 스타일 - 작고 심플한 스타일 */
+/* 탭 스타일 - 고정 */
 .detail-tabs {
     display: flex;
     gap: 20px;
     padding: 12px 20px;
     border-bottom: 1px solid #e0e0e0;
     background: white;
+    flex-shrink: 0;
 }
 
 .detail-tab {
@@ -102,9 +112,51 @@
     border-bottom-color: #1976d2;
 }
 
+/* 탭 콘텐츠 - 스크롤 영역 */
 .detail-tab-content {
     flex: 1;
     overflow-y: auto;
+    background: white;
+}
+
+/* 상세 섹션 */
+.detail-section {
+    padding: 20px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.detail-section:last-child {
+    border-bottom: none;
+}
+
+.detail-section-title {
+    margin-bottom: 16px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #666;
+}
+
+.detail-field {
+    display: flex;
+    padding: 12px 0;
+    border-bottom: 1px solid #f5f5f5;
+}
+
+.detail-field:last-child {
+    border-bottom: none;
+}
+
+.detail-field-label {
+    width: 100px;
+    flex-shrink: 0;
+    font-size: 14px;
+    color: #999;
+}
+
+.detail-field-value {
+    flex: 1;
+    font-size: 14px;
+    color: #333;
 }
 
 /* 히스토리 스타일 */
@@ -190,4 +242,147 @@
 .history-empty p {
     margin: 0;
     font-size: 14px;
+}
+
+/* 임시보관함 */
+.temp-storage {
+    background: #fff3e0;
+    border: 2px dashed #ff9800;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 20px;
+}
+
+.temp-storage-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.temp-storage-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #f57c00;
+}
+
+.temp-item {
+    background: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    transition: background 0.2s;
+}
+
+.temp-item:last-child {
+    margin-bottom: 0;
+}
+
+.temp-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.temp-item-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.temp-item-name {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.temp-item-location {
+    font-size: 12px;
+    color: #666;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.temp-item-meta {
+    font-size: 12px;
+    color: #999;
+}
+
+/* 임시보관함 아이템 액션 버튼 영역 */
+.temp-item-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.temp-item:hover .temp-item-actions {
+    opacity: 1;
+}
+
+/* 개별 이동 버튼 */
+.temp-move-btn {
+    padding: 4px 10px;
+    background: #1976d2;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    white-space: nowrap;
+}
+
+.temp-move-btn:hover {
+    background: #1565c0;
+}
+
+/* 제거 버튼 */
+.temp-remove {
+    cursor: pointer;
+    color: #d32f2f;
+    font-size: 16px;
+    font-weight: bold;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+    padding: 4px;
+}
+
+.temp-remove:hover {
+    opacity: 1;
+}
+
+/* 하위 항목 미리보기 애니메이션 */
+.child-preview-section {
+    animation: fadeIn 0.3s ease-out;
+}
+
+.child-preview-item {
+    opacity: 0;
+    animation: slideInUp 0.4s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

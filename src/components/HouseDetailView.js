@@ -256,12 +256,45 @@ function HouseDetailView(props) {
     setShowEditModal(true);
   };
 
-  const handleEditSuccess = () => {
+  const handleEditSuccess = async () => {
     setShowEditModal(false);
+    
+    // 수정된 컨테이너의 ID 저장
+    const editedContainerId = selectedItem?.id;
+    
+    // 화면 새로고침
     if (currentPath.length === 0) {
-      loadRootLevel();
+      await loadRootLevel();
     } else {
-      handleBreadcrumbClick(currentPath.length - 1);
+      await handleBreadcrumbClick(currentPath.length - 1);
+    }
+    
+    // 수정된 컨테이너를 다시 선택하고 상세정보 로드
+    if (editedContainerId) {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await axios.get(
+          `${API_URL}/api/houses/${props.houseId}/containers/${editedContainerId}`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        
+        const updatedContainer = response.data.container;
+        setSelectedItem(updatedContainer);
+        setDetailInfo(updatedContainer);
+        
+        // 하위 항목 미리보기 로드
+        if (updatedContainer.type_cd !== 'COM1200003') {
+          const childResponse = await axios.get(
+            `${API_URL}/api/houses/${props.houseId}/containers?parent_id=${updatedContainer.id}&limit=5`,
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
+          setChildPreview(childResponse.data.containers || []);
+        } else {
+          setChildPreview([]);
+        }
+      } catch (err) {
+        console.error('수정된 항목 재선택 실패:', err);
+      }
     }
   };
 
@@ -360,6 +393,42 @@ function HouseDetailView(props) {
     }
   };
 
+  // 개별 항목을 여기로 이동
+  const handleMoveSingleToHere = async (index) => {
+    const item = tempStorage[index];
+    
+    // 현재 보고 있는 위치의 ID를 가져옴 (여기로 이동할 부모 ID)
+    let targetParentId;
+    if (selectedItem?.type_cd === 'house') {
+      targetParentId = null; // 집 = 최상위
+    } else {
+      targetParentId = selectedItem?.id || (currentPath.length > 0 ? currentPath[currentPath.length - 1] : null);
+    }
+
+    try {
+      const token = localStorage.getItem('token');
+      await axios.patch(
+        `${API_URL}/api/houses/${props.houseId}/containers/${item.id}`,
+        { up_container_id: targetParentId },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      // 임시보관함에서 제거
+      const newTemp = [...tempStorage];
+      newTemp.splice(index, 1);
+      setTempStorage(newTemp);
+
+      // 화면 새로고침
+      if (currentPath.length === 0) {
+        loadRootLevel();
+      } else {
+        handleBreadcrumbClick(currentPath.length - 1);
+      }
+    } catch (err) {
+      alert('이동에 실패했습니다: ' + (err.response?.data?.error || err.message));
+      console.error(err);
+    }
+  };
   // 새로고침
   const handleRefresh = () => {
     if (currentPath.length === 0) {
@@ -562,7 +631,7 @@ function HouseDetailView(props) {
               
               return (
                 <>
-                  {filteredSiblings.map((sibling) => (
+                  {filteredSiblings.map((sibling, index) => (
                     <ContainerCard
                       key={sibling.id}
                       container={sibling}
@@ -572,6 +641,7 @@ function HouseDetailView(props) {
                       onEdit={() => handleEditClick(sibling)}
                       onDelete={() => handleDelete(sibling)}
                       onAddToTemp={() => handleAddToTemp(sibling)}
+                      animationDelay={`${index * 0.05}s`}
                     />
                   ))}
                 </>
@@ -609,10 +679,9 @@ function HouseDetailView(props) {
                   </div>
                 );
               }
-              
               return (
                 <>
-                  {filteredChildren.map((child) => (
+                  {filteredChildren.map((child, index) => (
                     <ContainerCard
                       key={child.id}
                       container={child}
@@ -622,6 +691,7 @@ function HouseDetailView(props) {
                       onEdit={() => handleEditClick(child)}
                       onDelete={() => handleDelete(child)}
                       onAddToTemp={() => handleAddToTemp(child)}
+                      animationDelay={`${index * 0.05}s`}
                     />
                   ))}
                   <div 
@@ -654,6 +724,7 @@ function HouseDetailView(props) {
                 onDelete={handleDelete}
                 onMoveToHere={handleMoveToHere}
                 onRemoveFromTemp={handleRemoveFromTemp}
+                onMoveSingleToHere={handleMoveSingleToHere}
               />
             ) : (
               <div className="empty-panel">

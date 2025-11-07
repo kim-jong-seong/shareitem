@@ -45,7 +45,6 @@ function BasicInfoTab(props) {
           <div className="detail-field">
             <div className="detail-field-label">하위 항목</div>
             <div className="detail-field-value">
-              {props.container.type_cd === 'house' ? '영역 ' : ''}
               {props.container.child_count || 0}개
             </div>
           </div>
@@ -54,10 +53,14 @@ function BasicInfoTab(props) {
 
       {/* 하위 항목 미리보기 (영역/박스만) */}
       {props.childPreview && props.childPreview.length > 0 && (
-        <div className="detail-section">
+        <div className="detail-section child-preview-section">
           <div className="detail-section-title">하위 항목 미리보기</div>
-          {props.childPreview.map((child) => (
-            <div key={child.id} className="item-card">
+          {props.childPreview.map((child, index) => (
+            <div 
+              key={child.id} 
+              className="item-card child-preview-item"
+              style={{ animationDelay: `${index * 0.05}s` }}
+            >
               <div className="item-icon">{getIcon(child.type_cd)}</div>
               <div className="item-info">
                 <div className="item-name">{child.name}</div>

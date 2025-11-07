@@ -59,8 +59,9 @@ function TempStorageModal(props) {
                   <button 
                     className="remove-button"
                     onClick={() => props.onRemove(index)}
+                    title="제거"
                   >
-                    제거
+                    ✕
                   </button>
                 </div>
               ))}

@@ -49,7 +49,7 @@ function HistoryTab(props) {
       
       case 'COM1300003': // 이동
         return {
-          icon: '🔄',
+          icon: '➡️',
           action: '이동',
           detail: `${log.from_container_name || '최상위'} → ${log.to_container_name || '최상위'}`
         };
