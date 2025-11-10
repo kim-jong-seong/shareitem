@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { API_URL } from '../config';
 import ContainerCard from './ContainerCard';
@@ -30,6 +30,9 @@ function HouseDetailView(props) {
 
   // 임시보관함 상태
   const [tempStorage, setTempStorage] = useState([]);
+
+  // AbortController 참조 (상세 정보 로드용)
+  const abortControllerRef = useRef(null);
 
   // 초기 로드
   useEffect(() => {
@@ -111,46 +114,41 @@ function HouseDetailView(props) {
     setDetailInfo(container);
     setChildPreview([]); // 초기화
     
+    // 이전 요청이 있으면 취소
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    
+    // 새로운 AbortController 생성
+    abortControllerRef.current = new AbortController();
+    
     // 상세 정보 및 하위 항목 미리보기 로드
     try {
       const token = localStorage.getItem('token');
       const response = await axios.get(
         `${API_URL}/api/houses/${props.houseId}/containers/${container.id}`,
-        { headers: { Authorization: `Bearer ${token}` } }
+        { 
+          headers: { Authorization: `Bearer ${token}` },
+          signal: abortControllerRef.current.signal
+        }
       );
       setDetailInfo(response.data.container);
       setChildPreview(response.data.child_preview || []);
     } catch (err) {
-      console.error('상세 정보 조회 실패:', err);
+      if (err.name !== 'CanceledError') {
+        console.error('상세 정보 조회 실패:', err);
+      }
     }
   };
 
   // 형제 클릭 (왼쪽 패널) - 상세정보만 표시 (최적화)
-  const handleSiblingClick = async (container) => {
+  // 형제 클릭 (왼쪽 패널) - 상세정보만 표시 (최적화)
+  const handleSiblingClick = (container) => {
     setSelectedItem(container);
-    // 이미 목록에서 가져온 데이터를 즉시 표시
+    // 목록에서 가져온 데이터를 즉시 표시 (API 호출 없음)
     setDetailInfo(container);
-    setChildPreview([]); // 초기화
-    
-    // 상세 정보 및 하위 항목 미리보기 로드
-    try {
-      const token = localStorage.getItem('token');
-      const response = await axios.get(
-        `${API_URL}/api/houses/${props.houseId}/containers/${container.id}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      setDetailInfo(response.data.container);
-      setChildPreview(response.data.child_preview || []);
-    } catch (err) {
-      console.error('상세 정보 조회 실패:', err);
-    }
-    
-    // pathNames의 마지막 항목을 현재 선택한 항목으로 업데이트
-    if (pathNames.length > 0) {
-      const newPathNames = [...pathNames];
-      newPathNames[newPathNames.length - 1] = container.name;
-      setPathNames(newPathNames);
-    }
+    // 하위 항목 미리보기는 목록 데이터에 없으므로 초기화
+    setChildPreview([]);
   };
 
   // 형제 더블클릭 (왼쪽 패널) - 드릴다운
@@ -429,6 +427,7 @@ function HouseDetailView(props) {
       console.error(err);
     }
   };
+
   // 새로고침
   const handleRefresh = () => {
     if (currentPath.length === 0) {
@@ -679,6 +678,7 @@ function HouseDetailView(props) {
                   </div>
                 );
               }
+              
               return (
                 <>
                   {filteredChildren.map((child, index) => (
@@ -723,8 +723,8 @@ function HouseDetailView(props) {
                 onEdit={handleEditClick}
                 onDelete={handleDelete}
                 onMoveToHere={handleMoveToHere}
-                onRemoveFromTemp={handleRemoveFromTemp}
                 onMoveSingleToHere={handleMoveSingleToHere}
+                onRemoveFromTemp={handleRemoveFromTemp}
               />
             ) : (
               <div className="empty-panel">
