@@ -60,14 +60,14 @@ function HistoryTab(props) {
           return {
             icon: '➡️',
             action: '이동',
-            detail: `${fromLocation} ➡️ ${toLocation}${log.log_remk ? ` (${log.log_remk})` : ''}`
+            detail: `${fromLocation} → ${toLocation}${log.log_remk ? ` (${log.log_remk})` : ''}`
           };
         }
         // 같은 집 내 이동
         return {
           icon: '➡️',
           action: '이동',
-          detail: `${log.from_container_name || log.current_house_name} ➡️ ${log.to_container_name || log.current_house_name}`
+          detail: `${log.from_container_name || log.current_house_name} → ${log.to_container_name || log.current_house_name}`
         };
       
       case 'COM1300004': // 수정 (통합)
