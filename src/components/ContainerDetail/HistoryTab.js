@@ -48,10 +48,26 @@ function HistoryTab(props) {
         };
       
       case 'COM1300003': // 이동
+        // 집 간 이동
+        if (log.from_house_id && log.to_house_id) {
+          const fromLocation = log.from_container_name 
+            ? `[${log.from_house_name}] ${log.from_container_name}`
+            : `[${log.from_house_name}]`;
+          const toLocation = log.to_container_name
+            ? `[${log.to_house_name}] ${log.to_container_name}`
+            : `[${log.to_house_name}]`;
+          
+          return {
+            icon: '➡️',
+            action: '이동',
+            detail: `${fromLocation} ➡️ ${toLocation}${log.log_remk ? ` (${log.log_remk})` : ''}`
+          };
+        }
+        // 같은 집 내 이동
         return {
           icon: '➡️',
           action: '이동',
-          detail: `${log.from_container_name || '최상위'} → ${log.to_container_name || '최상위'}`
+          detail: `${log.from_container_name || log.current_house_name} ➡️ ${log.to_container_name || log.current_house_name}`
         };
       
       case 'COM1300004': // 수정 (통합)
@@ -102,10 +118,10 @@ function HistoryTab(props) {
 
   return (
     <div className="history-list">
-      {logs.map((log) => {
+      {logs.map((log, index) => {
         const formatted = formatLogMessage(log);
         return (
-          <div key={log.id} className="history-item">
+          <div key={log.id} className="history-item" style={{ animationDelay: `${index * 0.05}s` }}>
             <div className="history-header">
               <div className="history-action">
                 <span className="history-icon">{formatted.icon}</span>

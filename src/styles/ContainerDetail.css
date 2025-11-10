@@ -168,6 +168,8 @@
     padding: 16px 20px;
     border-bottom: 1px solid #e0e0e0;
     transition: background 0.2s;
+    opacity: 0;
+    animation: slideInUp 0.4s ease-out forwards;
 }
 
 .history-item:hover {
