@@ -1,1 +1,2 @@
-export const API_URL = 'http://18.219.127.156:3001';
+//export const API_URL = 'http://18.219.127.156:3001';
+export const API_URL = 'https://shareitem.site';
