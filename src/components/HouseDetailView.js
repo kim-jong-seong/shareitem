@@ -581,7 +581,7 @@ function HouseDetailView(props) {
           <div className="panel-header">
             <span>
               {currentPath.length === 0 
-                ? props.houseName
+                ? '집 목록'
                 : currentPath.length === 1
                   ? props.houseName
                   : `${props.houseName} › ${pathNames.slice(0, -1).join(' › ')}`
