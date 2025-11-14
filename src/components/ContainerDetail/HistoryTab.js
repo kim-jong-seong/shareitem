@@ -6,6 +6,7 @@ function HistoryTab(props) {
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [currentHouseName, setCurrentHouseName] = useState('');
 
   const fetchLogs = useCallback(async () => {
     setLoading(true);
@@ -19,6 +20,7 @@ function HistoryTab(props) {
       );
       
       setLogs(response.data.logs);
+      setCurrentHouseName(response.data.current_house_name || '');
       setLoading(false);
     } catch (err) {
       setError('히스토리를 불러오는데 실패했습니다');
@@ -67,7 +69,7 @@ function HistoryTab(props) {
         return {
           icon: '➡️',
           action: '이동',
-          detail: `${log.from_container_name || log.current_house_name} → ${log.to_container_name || log.current_house_name}`
+          detail: `${log.from_container_name || currentHouseName} → ${log.to_container_name || currentHouseName}`
         };
       
       case 'COM1300004': // 수정 (통합)

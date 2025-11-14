@@ -31,14 +31,89 @@ function HouseDetailView(props) {
   // 임시보관함 상태
   const [tempStorage, setTempStorage] = useState([]);
 
+  // 집 목록 관련 상태
+  const [houses, setHouses] = useState([]);
+  const [selectedHouseId, setSelectedHouseId] = useState(props.houseId);
+  const [selectedHouseName, setSelectedHouseName] = useState(props.houseName);
+
   // AbortController 참조 (상세 정보 로드용)
   const abortControllerRef = useRef(null);
 
   // 초기 로드
   useEffect(() => {
-    loadRootLevel();
+    fetchHouses();
+    loadTempStorage();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.houseId]);
+  }, []);
+
+  // 선택된 집이 변경되면 컨테이너 로드
+  useEffect(() => {
+    if (selectedHouseId) {
+      loadRootLevel();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedHouseId]);
+
+
+  // 집 목록 조회
+  const fetchHouses = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get(`${API_URL}/api/houses`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setHouses(response.data.houses);
+      
+      const currentHouse = response.data.houses.find(h => h.id === selectedHouseId);
+      if (currentHouse) {
+        setSelectedHouseId(currentHouse.id);
+        setSelectedHouseName(currentHouse.name);
+      }
+    } catch (err) {
+      console.error('집 목록 조회 실패:', err);
+      setError('집 목록을 불러오는데 실패했습니다');
+    }
+  };
+
+  // 집 선택
+  const handleSelectHouse = (house) => {
+    if (house.id === selectedHouseId) return;
+    
+    setSelectedHouseId(house.id);
+    setSelectedHouseName(house.name);
+    setCurrentPath([]);
+    setPathNames([]);
+    setSiblings([]);
+    setChildren([]);
+    setSelectedItem(null);
+    setDetailInfo(null);
+    setChildPreview([]);
+  };
+
+  // 임시보관함 키 - 전역
+  const getTempStorageKey = () => 'tempStorage_global';
+
+  // 임시보관함 로드
+  const loadTempStorage = () => {
+    const key = getTempStorageKey();
+    const saved = localStorage.getItem(key);
+    if (saved) {
+      try {
+        setTempStorage(JSON.parse(saved));
+      } catch {
+        setTempStorage([]);
+      }
+    } else {
+      setTempStorage([]);
+    }
+  };
+
+  // 임시보관함 저장
+  const saveTempStorage = (newTempStorage) => {
+    const key = getTempStorageKey();
+    localStorage.setItem(key, JSON.stringify(newTempStorage));
+    setTempStorage(newTempStorage);
+  };
 
   // 최상위 레벨 로드
   const loadRootLevel = async () => {
@@ -46,7 +121,7 @@ function HouseDetailView(props) {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.get(
-        `${API_URL}/api/houses/${props.houseId}/containers?level=root`,
+        `${API_URL}/api/houses/${selectedHouseId}/containers?level=root`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -75,21 +150,21 @@ function HouseDetailView(props) {
       let siblingsData = [];
       if (currentPath.length === 0) {
         const response = await axios.get(
-          `${API_URL}/api/houses/${props.houseId}/containers?level=root`,
+          `${API_URL}/api/houses/${selectedHouseId}/containers?level=root`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         siblingsData = response.data.containers;
       } else {
         const parentId = currentPath[currentPath.length - 1];
         const response = await axios.get(
-          `${API_URL}/api/houses/${props.houseId}/containers?parent_id=${parentId}`,
+          `${API_URL}/api/houses/${selectedHouseId}/containers?parent_id=${parentId}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         siblingsData = response.data.containers;
       }
 
       const childrenResponse = await axios.get(
-        `${API_URL}/api/houses/${props.houseId}/containers?parent_id=${container.id}`,
+        `${API_URL}/api/houses/${selectedHouseId}/containers?parent_id=${container.id}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -126,7 +201,7 @@ function HouseDetailView(props) {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.get(
-        `${API_URL}/api/houses/${props.houseId}/containers/${container.id}`,
+        `${API_URL}/api/houses/${selectedHouseId}/containers/${container.id}`,
         { 
           headers: { Authorization: `Bearer ${token}` },
           signal: abortControllerRef.current.signal
@@ -163,7 +238,7 @@ function HouseDetailView(props) {
       const token = localStorage.getItem('token');
 
       const response = await axios.get(
-        `${API_URL}/api/houses/${props.houseId}/containers?parent_id=${container.id}`,
+        `${API_URL}/api/houses/${selectedHouseId}/containers?parent_id=${container.id}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -202,21 +277,21 @@ function HouseDetailView(props) {
         let siblingsData = [];
         if (index === 0) {
           const response = await axios.get(
-            `${API_URL}/api/houses/${props.houseId}/containers?level=root`,
+            `${API_URL}/api/houses/${selectedHouseId}/containers?level=root`,
             { headers: { Authorization: `Bearer ${token}` } }
           );
           siblingsData = response.data.containers;
         } else {
           const parentId = currentPath[index - 1];
           const response = await axios.get(
-            `${API_URL}/api/houses/${props.houseId}/containers?parent_id=${parentId}`,
+            `${API_URL}/api/houses/${selectedHouseId}/containers?parent_id=${parentId}`,
             { headers: { Authorization: `Bearer ${token}` } }
           );
           siblingsData = response.data.containers;
         }
 
         const childrenResponse = await axios.get(
-          `${API_URL}/api/houses/${props.houseId}/containers?parent_id=${targetId}`,
+          `${API_URL}/api/houses/${selectedHouseId}/containers?parent_id=${targetId}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
 
@@ -272,7 +347,7 @@ function HouseDetailView(props) {
       try {
         const token = localStorage.getItem('token');
         const response = await axios.get(
-          `${API_URL}/api/houses/${props.houseId}/containers/${editedContainerId}`,
+          `${API_URL}/api/houses/${selectedHouseId}/containers/${editedContainerId}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         
@@ -283,7 +358,7 @@ function HouseDetailView(props) {
         // 하위 항목 미리보기 로드
         if (updatedContainer.type_cd !== 'COM1200003') {
           const childResponse = await axios.get(
-            `${API_URL}/api/houses/${props.houseId}/containers?parent_id=${updatedContainer.id}&limit=5`,
+            `${API_URL}/api/houses/${selectedHouseId}/containers?parent_id=${updatedContainer.id}&limit=5`,
             { headers: { Authorization: `Bearer ${token}` } }
           );
           setChildPreview(childResponse.data.containers || []);
@@ -304,7 +379,7 @@ function HouseDetailView(props) {
     try {
       const token = localStorage.getItem('token');
       await axios.delete(
-        `${API_URL}/api/houses/${props.houseId}/containers/${container.id}`,
+        `${API_URL}/api/houses/${selectedHouseId}/containers/${container.id}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -322,16 +397,18 @@ function HouseDetailView(props) {
   const handleAddToTemp = (container) => {
     const itemWithPath = {
       ...container,
-      path: pathNames.length > 0 ? pathNames.join(' > ') : props.houseName
+      path: pathNames.length > 0 ? pathNames.join(' › ') : selectedHouseName,
+      from_house_id: selectedHouseId,
+      from_house_name: selectedHouseName
     };
-    setTempStorage([...tempStorage, itemWithPath]);
-    // alert 제거
+    const newTemp = [...tempStorage, itemWithPath];
+    saveTempStorage(newTemp);
   };
 
   const handleRemoveFromTemp = (index) => {
     const newTemp = [...tempStorage];
     newTemp.splice(index, 1);
-    setTempStorage(newTemp);
+    saveTempStorage(newTemp);
   };
 
   const handleMoveToHere = async () => {
@@ -349,7 +426,7 @@ function HouseDetailView(props) {
       targetParentId = selectedItem?.id || (currentPath.length > 0 ? currentPath[currentPath.length - 1] : null);
     }
     
-    const currentLocation = selectedItem?.name || (currentPath.length > 0 ? pathNames[pathNames.length - 1] : props.houseName);
+    const currentLocation = selectedItem?.name || (currentPath.length > 0 ? pathNames[pathNames.length - 1] : selectedHouseName);
 
     console.log('이동 대상:', {
       targetParentId,
@@ -365,19 +442,42 @@ function HouseDetailView(props) {
 
       for (const item of tempStorage) {
         try {
-          await axios.patch(
-            `${API_URL}/api/houses/${props.houseId}/containers/${item.id}`,
-            { up_container_id: targetParentId },
-            { headers: { Authorization: `Bearer ${token}` } }
-          );
+          // from_house_id가 없거나 같은 집 내 이동인 경우
+          const fromHouseId = item.from_house_id || selectedHouseId;
+          
+          if (fromHouseId === selectedHouseId) {
+            // 같은 집 내 이동: 기존 API 사용
+            await axios.patch(
+              `${API_URL}/api/houses/${selectedHouseId}/containers/${item.id}`,
+              { up_container_id: targetParentId },
+              { headers: { Authorization: `Bearer ${token}` } }
+            );
+          } else {
+            // 집 간 이동: /move API 사용
+            await axios.patch(
+              `${API_URL}/api/houses/${fromHouseId}/containers/${item.id}/move`,
+              { 
+                parent_id: targetParentId,
+                to_house_id: selectedHouseId
+              },
+              { headers: { Authorization: `Bearer ${token}` } }
+            );
+          }
         } catch (err) {
           console.error(`"${item.name}" 이동 실패:`, err);
+          console.error('에러 상세:', err.response?.data);
           failedItems.push(item);
         }
       }
 
       // 실패한 항목만 임시보관함에 남김
-      setTempStorage(failedItems);
+      saveTempStorage(failedItems);
+
+      if (failedItems.length === 0) {
+        // alert('모든 항목이 이동되었습니다');
+      } else {
+        alert(`${tempStorage.length - failedItems.length}개 항목이 이동되었습니다.\n${failedItems.length}개 항목은 실패했습니다.`);
+      }
 
       // 화면 새로고침
       if (currentPath.length === 0) {
@@ -405,16 +505,33 @@ function HouseDetailView(props) {
 
     try {
       const token = localStorage.getItem('token');
-      await axios.patch(
-        `${API_URL}/api/houses/${props.houseId}/containers/${item.id}`,
-        { up_container_id: targetParentId },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      
+      // from_house_id가 없는 경우 현재 선택된 집으로 간주
+      const fromHouseId = item.from_house_id || selectedHouseId;
+      
+      if (fromHouseId === selectedHouseId) {
+        // 같은 집 내 이동: 기존 API 사용
+        await axios.patch(
+          `${API_URL}/api/houses/${selectedHouseId}/containers/${item.id}`,
+          { up_container_id: targetParentId },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+      } else {
+        // 집 간 이동: /move API 사용
+        await axios.patch(
+          `${API_URL}/api/houses/${fromHouseId}/containers/${item.id}/move`,
+          {
+            parent_id: targetParentId,
+            to_house_id: selectedHouseId
+          },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+      }
 
       // 임시보관함에서 제거
       const newTemp = [...tempStorage];
       newTemp.splice(index, 1);
-      setTempStorage(newTemp);
+      saveTempStorage(newTemp);
 
       // 화면 새로고침
       if (currentPath.length === 0) {
@@ -444,7 +561,7 @@ function HouseDetailView(props) {
       const token = localStorage.getItem('token');
       
       const response = await axios.get(
-        `${API_URL}/api/houses/${props.houseId}/containers/${result.id}`,
+        `${API_URL}/api/houses/${selectedHouseId}/containers/${result.id}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       
@@ -456,7 +573,7 @@ function HouseDetailView(props) {
       
       while (currentParentId) {
         const parentResponse = await axios.get(
-          `${API_URL}/api/houses/${props.houseId}/containers/${currentParentId}`,
+          `${API_URL}/api/houses/${selectedHouseId}/containers/${currentParentId}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         const parent = parentResponse.data.container;
@@ -469,21 +586,21 @@ function HouseDetailView(props) {
         let siblingsData = [];
         if (parentPath.length === 1) {
           const siblingsResponse = await axios.get(
-            `${API_URL}/api/houses/${props.houseId}/containers?level=root`,
+            `${API_URL}/api/houses/${selectedHouseId}/containers?level=root`,
             { headers: { Authorization: `Bearer ${token}` } }
           );
           siblingsData = siblingsResponse.data.containers;
         } else if (parentPath.length > 1) {
           const grandParentId = parentPath[parentPath.length - 2];
           const siblingsResponse = await axios.get(
-            `${API_URL}/api/houses/${props.houseId}/containers?parent_id=${grandParentId}`,
+            `${API_URL}/api/houses/${selectedHouseId}/containers?parent_id=${grandParentId}`,
             { headers: { Authorization: `Bearer ${token}` } }
           );
           siblingsData = siblingsResponse.data.containers;
         }
         
         const childrenResponse = await axios.get(
-          `${API_URL}/api/houses/${props.houseId}/containers?parent_id=${container.up_container_id}`,
+          `${API_URL}/api/houses/${selectedHouseId}/containers?parent_id=${container.up_container_id}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         
@@ -539,7 +656,7 @@ function HouseDetailView(props) {
               className="breadcrumb-item"
               onClick={() => handleBreadcrumbClick(-1)}
             >
-              {props.houseName}
+              {selectedHouseName}
             </span>
             {pathNames.map((name, index) => (
               <React.Fragment key={index}>
@@ -581,10 +698,10 @@ function HouseDetailView(props) {
           <div className="panel-header">
             <span>
               {currentPath.length === 0 
-                ? '집 목록'
+                ? '🏠 내 집 목록'
                 : currentPath.length === 1
-                  ? props.houseName
-                  : `${props.houseName} › ${pathNames.slice(0, -1).join(' › ')}`
+                  ? selectedHouseName
+                  : `${selectedHouseName} › ${pathNames.slice(0, -1).join(' › ')}`
               }
             </span>
           </div>
@@ -592,32 +709,36 @@ function HouseDetailView(props) {
             {loading ? (
               <div className="loading-box">로딩 중...</div>
             ) : currentPath.length === 0 ? (
-              <div 
-                className="item-card active"
-                onClick={() => {
-                  // 집 정보 표시
-                  const houseInfo = {
-                    id: props.houseId,
-                    name: props.houseName,
-                    type_cd: 'house',
-                    type_nm: '집',
-                    child_count: children.length
-                  };
-                  setSelectedItem(houseInfo);
-                  setDetailInfo(houseInfo);
-                  setChildPreview([]); // 집은 미리보기 없음
-                }}
-              >
-                <div className="item-icon">🏠</div>
-                <div className="item-info">
-                  <div className="item-name">{props.houseName}</div>
-                  <div className="item-meta">
-                    <span>집</span>
-                    <span>{children.length}개 항목</span>
+              // 최상위: 집 목록 표시
+              <>
+                {houses.map((house, index) => (
+                  <div
+                    key={house.id}
+                    className={`item-card ${house.id === selectedHouseId ? 'active' : ''}`}
+                    style={{ animationDelay: `${index * 0.05}s` }}
+                    onClick={() => handleSelectHouse(house)}
+                  >
+                    <div className="item-icon">🏠</div>
+                    <div className="item-info">
+                      <div className="item-name">{house.name}</div>
+                      <div className="item-meta">
+                        <span className={house.role_cd === 'COM1100001' ? 'item-badge owner' : ''}>
+                          {house.role_nm}
+                        </span>
+                        <span>👥 {house.member_count || 0}명</span>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
+                ))}
+                
+                {houses.length === 0 && (
+                  <div className="empty-panel">
+                    <p>등록된 집이 없습니다</p>
+                  </div>
+                )}
+              </>
             ) : (() => {
+              // 하위 레벨: 형제 항목들 (siblings) 표시
               const filteredSiblings = siblings.filter(sibling => !tempStorage.some(temp => temp.id === sibling.id));
               
               if (filteredSiblings.length === 0) {
@@ -654,7 +775,7 @@ function HouseDetailView(props) {
           <div className="panel-header">
             <span>
               {currentPath.length === 0
-                ? `› ${props.houseName}`
+                ? `› ${selectedHouseName}`
                 : `› ${pathNames[pathNames.length - 1]}`
               }
             </span>
@@ -714,8 +835,8 @@ function HouseDetailView(props) {
           <div className="panel-content">
             {detailInfo ? (
               <ContainerDetail
-                houseId={props.houseId}
-                houseName={props.houseName}
+                houseId={selectedHouseId}
+                houseName={selectedHouseName}
                 pathNames={pathNames}
                 container={detailInfo}
                 childPreview={childPreview}
@@ -738,7 +859,7 @@ function HouseDetailView(props) {
       {/* 모달들 */}
       {showAddModal && (
         <AddContainerModal
-          houseId={props.houseId}
+          houseId={selectedHouseId}
           parentId={addParentId}
           onClose={() => setShowAddModal(false)}
           onSuccess={handleAddSuccess}
@@ -747,7 +868,7 @@ function HouseDetailView(props) {
 
       {showEditModal && selectedItem && (
         <EditContainerModal
-          houseId={props.houseId}
+          houseId={selectedHouseId}
           container={selectedItem}
           onClose={() => setShowEditModal(false)}
           onSuccess={handleEditSuccess}
@@ -756,8 +877,8 @@ function HouseDetailView(props) {
 
       {showSearchModal && (
         <SearchModal
-          houseId={props.houseId}
-          houseName={props.houseName}
+          houseId={selectedHouseId}
+          houseName={selectedHouseName}
           onClose={() => setShowSearchModal(false)}
           onSelect={handleSearchSelect}
         />
