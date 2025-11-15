@@ -7,7 +7,8 @@ function SearchModal(props) {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
   const [status, setStatus] = useState('검색어를 입력해주세요');
-  
+  const [isNavigating, setIsNavigating] = useState(false);
+
   const searchTimerRef = useRef(null);
   const inputRef = useRef(null);
 
@@ -75,7 +76,7 @@ function SearchModal(props) {
   };
 
   return (
-    <div 
+    <div
       className="modal-overlay search-modal"
       onMouseDown={(e) => {
         if (e.target === e.currentTarget) {
@@ -92,8 +93,8 @@ function SearchModal(props) {
         }
       }}
       onClick={(e) => {
-        if (e.target === e.currentTarget && 
-            mouseDownTarget === e.currentTarget && 
+        if (e.target === e.currentTarget &&
+            mouseDownTarget === e.currentTarget &&
             mouseUpTarget === e.currentTarget) {
           props.onClose();
         }
@@ -102,7 +103,7 @@ function SearchModal(props) {
       <div className="modal-content search-modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h3>🔍 물품 검색</h3>
-          <button className="modal-close" onClick={props.onClose}>✕</button>
+          <button className="modal-close" onClick={props.onClose} disabled={isNavigating}>✕</button>
         </div>
 
         <div className="modal-body">
@@ -116,6 +117,7 @@ function SearchModal(props) {
               onChange={(e) => setQuery(e.target.value)}
               placeholder="물품명을 입력하세요..."
               autoComplete="off"
+              disabled={isNavigating}
             />
           </div>
 
@@ -126,7 +128,7 @@ function SearchModal(props) {
             ) : (
               <>
                 {results.map((result, index) => (
-                  <div 
+                  <div
                     key={index}
                     className="search-result-item"
                   >
@@ -136,7 +138,9 @@ function SearchModal(props) {
                     </div>
                     <div className="search-result-info">
                       <div className="search-result-name">{result.name}</div>
-                      <div className="search-result-path">{result.path || props.houseName}</div>
+                      <div className="search-result-path">
+                        {result.path ? `${props.houseName} › ${result.path}` : props.houseName}
+                      </div>
                       {result.type_cd === 'COM1200003' && result.quantity > 1 && (
                         <div className="search-result-meta">수량: {result.quantity}개</div>
                       )}
@@ -144,9 +148,13 @@ function SearchModal(props) {
                         <div className="search-result-meta">소유자: {result.owner_name}</div>
                       )}
                     </div>
-                    <button 
+                    <button
                       className="goto-button"
-                      onClick={() => props.onSelect(result)}
+                      onClick={() => {
+                        setIsNavigating(true);
+                        props.onSelect(result);
+                      }}
+                      disabled={isNavigating}
                     >
                       이동
                     </button>
@@ -156,6 +164,16 @@ function SearchModal(props) {
             )}
           </div>
         </div>
+
+        {/* 로딩 오버레이 */}
+        {isNavigating && (
+          <div className="search-loading-overlay">
+            <div className="search-loading-content">
+              <div className="search-loading-spinner"></div>
+              <div className="search-loading-text">이동 중...</div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

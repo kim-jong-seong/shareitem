@@ -487,6 +487,13 @@ function HouseDetailView(props) {
     };
     const newTemp = [...tempStorage, itemWithPath];
     saveTempStorage(newTemp);
+
+    // 임시보관함으로 이동한 항목이 현재 선택된 항목이면 상세정보 초기화
+    if (selectedItem?.id === container.id) {
+      setSelectedItem(null);
+      setDetailInfo(null);
+      setChildPreview([]);
+    }
   };
 
   const handleRemoveFromTemp = (index) => {
@@ -750,22 +757,20 @@ function HouseDetailView(props) {
   };
 
     const handleSearchSelect = async (result) => {
-    setShowSearchModal(false);
-    
     try {
       const token = localStorage.getItem('token');
-      
+
       const response = await axios.get(
         `${API_URL}/api/houses/${selectedHouseId}/containers/${result.id}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      
+
       const container = response.data.container;
-      
+
       let parentPath = [];
       let parentPathNames = [];
       let currentParentId = container.up_container_id;
-      
+
       while (currentParentId) {
         const parentResponse = await axios.get(
           `${API_URL}/api/houses/${selectedHouseId}/containers/${currentParentId}`,
@@ -776,7 +781,7 @@ function HouseDetailView(props) {
         parentPathNames.unshift(parent.name);
         currentParentId = parent.up_container_id;
       }
-      
+
       if (container.type_cd === 'COM1200003') {
         let siblingsData = [];
         if (parentPath.length === 1) {
@@ -793,12 +798,12 @@ function HouseDetailView(props) {
           );
           siblingsData = siblingsResponse.data.containers;
         }
-        
+
         const childrenResponse = await axios.get(
           `${API_URL}/api/houses/${selectedHouseId}/containers?parent_id=${container.up_container_id}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
-        
+
         setCurrentPath(parentPath);
         setPathNames(parentPathNames);
         setSiblings(siblingsData);
@@ -811,13 +816,17 @@ function HouseDetailView(props) {
         } else {
           await handleBreadcrumbClick(parentPath.length - 1);
         }
-        
+
         setSelectedItem(container);
         setDetailInfo(container);
       }
+
+      // 이동 완료 후 모달 닫기
+      setShowSearchModal(false);
     } catch (err) {
       console.error('이동 실패:', err);
       alert('위치로 이동하는데 실패했습니다');
+      setShowSearchModal(false);
     }
   };
 
