@@ -522,6 +522,10 @@ function HouseDetailView(props) {
 
     const currentLocation = selectedItem?.name || (currentPath.length > 0 ? pathNames[pathNames.length - 1] : selectedHouseName);
 
+    // 현재 선택 상태 백업
+    const currentSelectedItem = selectedItem;
+    const currentDetailInfo = detailInfo;
+
     console.log('이동 대상:', {
       targetHouseId,
       targetParentId,
@@ -582,8 +586,38 @@ function HouseDetailView(props) {
         // 렌더링 후 임시보관함 업데이트
         setTimeout(() => saveTempStorage(failedItems), 0);
       } else {
-        // 하위 경로: 현재 경로 새로고침 후 임시보관함 업데이트
-        await handleBreadcrumbClick(currentPath.length - 1);
+        // 하위 경로: 현재 경로 새로고침
+        const token = localStorage.getItem('token');
+
+        let siblingsData = [];
+        if (currentPath.length === 1) {
+          const response = await axios.get(
+            `${API_URL}/api/houses/${selectedHouseId}/containers?level=root`,
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
+          siblingsData = response.data.containers;
+        } else {
+          const parentId = currentPath[currentPath.length - 2];
+          const response = await axios.get(
+            `${API_URL}/api/houses/${selectedHouseId}/containers?parent_id=${parentId}`,
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
+          siblingsData = response.data.containers;
+        }
+
+        const targetId = currentPath[currentPath.length - 1];
+        const childrenResponse = await axios.get(
+          `${API_URL}/api/houses/${selectedHouseId}/containers?parent_id=${targetId}`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        setSiblings(siblingsData);
+        setChildren(childrenResponse.data.containers);
+
+        // 선택 상태 복원
+        setSelectedItem(currentSelectedItem);
+        setDetailInfo(currentDetailInfo);
+
         setTimeout(() => saveTempStorage(failedItems), 0);
       }
 
@@ -616,6 +650,10 @@ function HouseDetailView(props) {
     } else {
       targetParentId = selectedItem?.id || (currentPath.length > 0 ? currentPath[currentPath.length - 1] : null);
     }
+
+    // 현재 선택 상태 백업
+    const currentSelectedItem = selectedItem;
+    const currentDetailInfo = detailInfo;
 
     try {
       const token = localStorage.getItem('token');
@@ -659,8 +697,38 @@ function HouseDetailView(props) {
         // 렌더링 후 임시보관함 업데이트
         setTimeout(() => saveTempStorage(newTemp), 0);
       } else {
-        // 하위 경로: 현재 경로 새로고침 후 임시보관함 업데이트
-        await handleBreadcrumbClick(currentPath.length - 1);
+        // 하위 경로: 현재 경로 새로고침
+        const token = localStorage.getItem('token');
+
+        let siblingsData = [];
+        if (currentPath.length === 1) {
+          const response = await axios.get(
+            `${API_URL}/api/houses/${selectedHouseId}/containers?level=root`,
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
+          siblingsData = response.data.containers;
+        } else {
+          const parentId = currentPath[currentPath.length - 2];
+          const response = await axios.get(
+            `${API_URL}/api/houses/${selectedHouseId}/containers?parent_id=${parentId}`,
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
+          siblingsData = response.data.containers;
+        }
+
+        const targetId = currentPath[currentPath.length - 1];
+        const childrenResponse = await axios.get(
+          `${API_URL}/api/houses/${selectedHouseId}/containers?parent_id=${targetId}`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        setSiblings(siblingsData);
+        setChildren(childrenResponse.data.containers);
+
+        // 선택 상태 복원
+        setSelectedItem(currentSelectedItem);
+        setDetailInfo(currentDetailInfo);
+
         setTimeout(() => saveTempStorage(newTemp), 0);
       }
 
