@@ -50,22 +50,27 @@ function HistoryTab(props) {
         };
       
       case 'COM1300003': // 이동
-        // 집 간 이동
-        if (log.from_house_id && log.to_house_id) {
-          const fromLocation = log.from_container_name 
+        // 집 간 이동인지 확인 (from_house_id와 to_house_id가 다를 때만)
+        const isCrossHouseMove = log.from_house_id && log.to_house_id &&
+                                  log.from_house_id !== log.to_house_id;
+
+        if (isCrossHouseMove) {
+          // 다른 집으로 이동 - 집 이름 표시
+          const fromLocation = log.from_container_name
             ? `[${log.from_house_name}] ${log.from_container_name}`
             : `[${log.from_house_name}]`;
           const toLocation = log.to_container_name
             ? `[${log.to_house_name}] ${log.to_container_name}`
             : `[${log.to_house_name}]`;
-          
+
           return {
             icon: '➡️',
             action: '이동',
-            detail: `${fromLocation} → ${toLocation}${log.log_remk ? ` (${log.log_remk})` : ''}`
+            detail: `${fromLocation} → ${toLocation}`
           };
         }
-        // 같은 집 내 이동
+
+        // 같은 집 내 이동 - 집 이름 표시 안 함
         return {
           icon: '➡️',
           action: '이동',

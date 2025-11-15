@@ -46,13 +46,12 @@ function HouseDetailView(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // 선택된 집이 변경되면 컨테이너 로드
-  useEffect(() => {
-    if (selectedHouseId) {
-      loadRootLevel();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedHouseId]);
+  // 주석 처리: 이제 더블클릭으로만 진입하므로 자동 로드 불필요
+  // useEffect(() => {
+  //   if (selectedHouseId) {
+  //     loadRootLevel();
+  //   }
+  // }, [selectedHouseId]);
 
 
   // 집 목록 조회
@@ -75,19 +74,48 @@ function HouseDetailView(props) {
     }
   };
 
-  // 집 선택
-  const handleSelectHouse = (house) => {
-    if (house.id === selectedHouseId) return;
-    
-    setSelectedHouseId(house.id);
-    setSelectedHouseName(house.name);
-    setCurrentPath([]);
-    setPathNames([]);
-    setSiblings([]);
-    setChildren([]);
-    setSelectedItem(null);
-    setDetailInfo(null);
+  // 집 클릭 (단일 클릭) - 상세정보만 표시
+  const handleHouseClick = (house) => {
+    // 집 정보를 상세정보 패널에 표시 (경로나 목록은 변경하지 않음)
+    const houseInfo = {
+      ...house,
+      type_cd: 'house', // 집임을 표시
+      child_count: house.container_count || 0
+    };
+    setSelectedItem(houseInfo);
+    setDetailInfo(houseInfo);
     setChildPreview([]);
+  };
+
+  // 집 더블클릭 - 드릴다운 (집 내부로 진입)
+  const handleHouseDoubleClick = async (house) => {
+    setLoading(true);
+    try {
+      // 집 전환
+      if (house.id !== selectedHouseId) {
+        setSelectedHouseId(house.id);
+        setSelectedHouseName(house.name);
+      }
+
+      // 집 내부로 진입 (해당 집의 루트 레벨 로드)
+      const token = localStorage.getItem('token');
+      const response = await axios.get(
+        `${API_URL}/api/houses/${house.id}/containers?level=root`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      setCurrentPath([]);
+      setPathNames([]);
+      setSiblings([]);
+      setChildren(response.data.containers);
+      setSelectedItem(null);
+      setDetailInfo(null);
+      setLoading(false);
+    } catch (err) {
+      setError('데이터를 불러오는데 실패했습니다');
+      setLoading(false);
+      console.error(err);
+    }
   };
 
   // 임시보관함 키 - 전역
@@ -417,6 +445,16 @@ function HouseDetailView(props) {
       return;
     }
 
+    // 목적지 집 ID 결정
+    let targetHouseId;
+    if (selectedItem?.type_cd === 'house') {
+      // 집을 클릭한 경우: 해당 집의 ID 사용
+      targetHouseId = selectedItem.id;
+    } else {
+      // 컨테이너를 클릭한 경우: 현재 선택된 집 ID 사용
+      targetHouseId = selectedHouseId;
+    }
+
     // 현재 보고 있는 위치의 ID를 가져옴 (여기로 이동할 부모 ID)
     // 집인 경우 null (최상위로 이동)
     let targetParentId;
@@ -425,10 +463,11 @@ function HouseDetailView(props) {
     } else {
       targetParentId = selectedItem?.id || (currentPath.length > 0 ? currentPath[currentPath.length - 1] : null);
     }
-    
+
     const currentLocation = selectedItem?.name || (currentPath.length > 0 ? pathNames[pathNames.length - 1] : selectedHouseName);
 
     console.log('이동 대상:', {
+      targetHouseId,
       targetParentId,
       currentLocation,
       selectedItem,
@@ -443,12 +482,12 @@ function HouseDetailView(props) {
       for (const item of tempStorage) {
         try {
           // from_house_id가 없거나 같은 집 내 이동인 경우
-          const fromHouseId = item.from_house_id || selectedHouseId;
-          
-          if (fromHouseId === selectedHouseId) {
+          const fromHouseId = item.from_house_id || targetHouseId;
+
+          if (fromHouseId === targetHouseId) {
             // 같은 집 내 이동: 기존 API 사용
             await axios.patch(
-              `${API_URL}/api/houses/${selectedHouseId}/containers/${item.id}`,
+              `${API_URL}/api/houses/${targetHouseId}/containers/${item.id}`,
               { up_container_id: targetParentId },
               { headers: { Authorization: `Bearer ${token}` } }
             );
@@ -456,9 +495,9 @@ function HouseDetailView(props) {
             // 집 간 이동: /move API 사용
             await axios.patch(
               `${API_URL}/api/houses/${fromHouseId}/containers/${item.id}/move`,
-              { 
+              {
                 parent_id: targetParentId,
-                to_house_id: selectedHouseId
+                to_house_id: targetHouseId
               },
               { headers: { Authorization: `Bearer ${token}` } }
             );
@@ -479,9 +518,13 @@ function HouseDetailView(props) {
         alert(`${tempStorage.length - failedItems.length}개 항목이 이동되었습니다.\n${failedItems.length}개 항목은 실패했습니다.`);
       }
 
+      // 집 목록 새로고침 (항목 개수 업데이트)
+      await fetchHouses();
+
       // 화면 새로고침
       if (currentPath.length === 0) {
-        loadRootLevel();
+        // 최상위: 집 목록만 새로고침 (loadRootLevel 호출 안함)
+        // 이미 fetchHouses()로 목록이 갱신됨
       } else {
         handleBreadcrumbClick(currentPath.length - 1);
       }
@@ -494,7 +537,17 @@ function HouseDetailView(props) {
   // 개별 항목을 여기로 이동
   const handleMoveSingleToHere = async (index) => {
     const item = tempStorage[index];
-    
+
+    // 목적지 집 ID 결정
+    let targetHouseId;
+    if (selectedItem?.type_cd === 'house') {
+      // 집을 클릭한 경우: 해당 집의 ID 사용
+      targetHouseId = selectedItem.id;
+    } else {
+      // 컨테이너를 클릭한 경우: 현재 선택된 집 ID 사용
+      targetHouseId = selectedHouseId;
+    }
+
     // 현재 보고 있는 위치의 ID를 가져옴 (여기로 이동할 부모 ID)
     let targetParentId;
     if (selectedItem?.type_cd === 'house') {
@@ -505,14 +558,14 @@ function HouseDetailView(props) {
 
     try {
       const token = localStorage.getItem('token');
-      
-      // from_house_id가 없는 경우 현재 선택된 집으로 간주
-      const fromHouseId = item.from_house_id || selectedHouseId;
-      
-      if (fromHouseId === selectedHouseId) {
+
+      // from_house_id가 없는 경우 목적지 집으로 간주
+      const fromHouseId = item.from_house_id || targetHouseId;
+
+      if (fromHouseId === targetHouseId) {
         // 같은 집 내 이동: 기존 API 사용
         await axios.patch(
-          `${API_URL}/api/houses/${selectedHouseId}/containers/${item.id}`,
+          `${API_URL}/api/houses/${targetHouseId}/containers/${item.id}`,
           { up_container_id: targetParentId },
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -522,7 +575,7 @@ function HouseDetailView(props) {
           `${API_URL}/api/houses/${fromHouseId}/containers/${item.id}/move`,
           {
             parent_id: targetParentId,
-            to_house_id: selectedHouseId
+            to_house_id: targetHouseId
           },
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -533,9 +586,12 @@ function HouseDetailView(props) {
       newTemp.splice(index, 1);
       saveTempStorage(newTemp);
 
+      // 집 목록 새로고침 (항목 개수 업데이트)
+      await fetchHouses();
+
       // 화면 새로고침
       if (currentPath.length === 0) {
-        loadRootLevel();
+        // 최상위: 집 목록만 새로고침
       } else {
         handleBreadcrumbClick(currentPath.length - 1);
       }
@@ -698,7 +754,7 @@ function HouseDetailView(props) {
           <div className="panel-header">
             <span>
               {currentPath.length === 0 
-                ? '🏠 내 집 목록'
+                ? ' 내 집 목록'
                 : currentPath.length === 1
                   ? selectedHouseName
                   : `${selectedHouseName} › ${pathNames.slice(0, -1).join(' › ')}`
@@ -714,18 +770,16 @@ function HouseDetailView(props) {
                 {houses.map((house, index) => (
                   <div
                     key={house.id}
-                    className={`item-card ${house.id === selectedHouseId ? 'active' : ''}`}
+                    className={`item-card ${selectedItem?.id === house.id ? 'active' : ''}`}
                     style={{ animationDelay: `${index * 0.05}s` }}
-                    onClick={() => handleSelectHouse(house)}
+                    onClick={() => handleHouseClick(house)}
+                    onDoubleClick={() => handleHouseDoubleClick(house)}
                   >
                     <div className="item-icon">🏠</div>
                     <div className="item-info">
                       <div className="item-name">{house.name}</div>
                       <div className="item-meta">
-                        <span className={house.role_cd === 'COM1100001' ? 'item-badge owner' : ''}>
-                          {house.role_nm}
-                        </span>
-                        <span>👥 {house.member_count || 0}명</span>
+                        <span>집 {house.container_count || 0}개 항목</span>
                       </div>
                     </div>
                   </div>
