@@ -34,17 +34,56 @@ function HouseDetailView(props) {
   // 집 목록 관련 상태
   const [houses, setHouses] = useState([]);
   const [selectedHouseId, setSelectedHouseId] = useState(props.houseId);
-  const [selectedHouseName, setSelectedHouseName] = useState(props.houseName);
+
+  // 현재 선택된 집 이름을 동적으로 가져오기
+  const selectedHouseName = houses.find(h => h.id === selectedHouseId)?.name || props.houseName;
 
   // AbortController 참조 (상세 정보 로드용)
   const abortControllerRef = useRef(null);
 
   // 초기 로드
   useEffect(() => {
-    fetchHouses();
-    loadTempStorage();
+    const init = async () => {
+      await fetchHouses();
+      loadTempStorage();
+    };
+    init();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // 집 목록 로드 후 초기 선택 처리 및 중앙 목록 로드
+  useEffect(() => {
+    if (houses.length > 0 && selectedHouseId && currentPath.length === 0) {
+      // 현재 선택된 집 찾기
+      const currentHouse = houses.find(h => h.id === selectedHouseId);
+      if (currentHouse && (!selectedItem || selectedItem.id !== currentHouse.id)) {
+        // 집 정보를 상세정보 패널에 표시
+        const houseInfo = {
+          ...currentHouse,
+          type_cd: 'house',
+          child_count: currentHouse.container_count || 0
+        };
+        setSelectedItem(houseInfo);
+        setDetailInfo(houseInfo);
+
+        // 중앙 목록 로드 (초기 진입 시)
+        const loadInitialChildren = async () => {
+          try {
+            const token = localStorage.getItem('token');
+            const response = await axios.get(
+              `${API_URL}/api/houses/${selectedHouseId}/containers?level=root`,
+              { headers: { Authorization: `Bearer ${token}` } }
+            );
+            setChildren(response.data.containers);
+          } catch (err) {
+            console.error('초기 목록 로드 실패:', err);
+          }
+        };
+        loadInitialChildren();
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [houses, selectedHouseId]);
 
   // 주석 처리: 이제 더블클릭으로만 진입하므로 자동 로드 불필요
   // useEffect(() => {
@@ -62,12 +101,6 @@ function HouseDetailView(props) {
         headers: { Authorization: `Bearer ${token}` }
       });
       setHouses(response.data.houses);
-      
-      const currentHouse = response.data.houses.find(h => h.id === selectedHouseId);
-      if (currentHouse) {
-        setSelectedHouseId(currentHouse.id);
-        setSelectedHouseName(currentHouse.name);
-      }
     } catch (err) {
       console.error('집 목록 조회 실패:', err);
       setError('집 목록을 불러오는데 실패했습니다');
@@ -89,13 +122,17 @@ function HouseDetailView(props) {
 
   // 집 더블클릭 - 드릴다운 (집 내부로 진입)
   const handleHouseDoubleClick = async (house) => {
-    setLoading(true);
     try {
       // 집 전환
       if (house.id !== selectedHouseId) {
         setSelectedHouseId(house.id);
-        setSelectedHouseName(house.name);
       }
+
+      // 집 목록 백그라운드 새로고침 (로딩 표시 없이)
+      fetchHouses();
+
+      // 중앙 패널만 로딩 표시
+      setLoading(true);
 
       // 집 내부로 진입 (해당 집의 루트 레벨 로드)
       const token = localStorage.getItem('token');
@@ -108,8 +145,16 @@ function HouseDetailView(props) {
       setPathNames([]);
       setSiblings([]);
       setChildren(response.data.containers);
-      setSelectedItem(null);
-      setDetailInfo(null);
+
+      // 집 정보를 선택 및 상세정보 표시
+      const houseInfo = {
+        ...house,
+        type_cd: 'house',
+        child_count: house.container_count || 0
+      };
+      setSelectedItem(houseInfo);
+      setDetailInfo(houseInfo);
+
       setLoading(false);
     } catch (err) {
       setError('데이터를 불러오는데 실패했습니다');
@@ -157,8 +202,19 @@ function HouseDetailView(props) {
       setPathNames([]);
       setSiblings([]);
       setChildren(response.data.containers);
-      setSelectedItem(null);
-      setDetailInfo(null);
+
+      // 집 정보를 선택 및 상세정보 표시
+      const currentHouse = houses.find(h => h.id === selectedHouseId);
+      if (currentHouse) {
+        const houseInfo = {
+          ...currentHouse,
+          type_cd: 'house',
+          child_count: currentHouse.container_count || 0
+        };
+        setSelectedItem(houseInfo);
+        setDetailInfo(houseInfo);
+      }
+
       setLoading(false);
     } catch (err) {
       setError('데이터를 불러오는데 실패했습니다');
@@ -509,25 +565,30 @@ function HouseDetailView(props) {
         }
       }
 
-      // 실패한 항목만 임시보관함에 남김
-      saveTempStorage(failedItems);
-
-      if (failedItems.length === 0) {
-        // alert('모든 항목이 이동되었습니다');
-      } else {
+      if (failedItems.length > 0) {
         alert(`${tempStorage.length - failedItems.length}개 항목이 이동되었습니다.\n${failedItems.length}개 항목은 실패했습니다.`);
       }
 
-      // 집 목록 새로고침 (항목 개수 업데이트)
-      await fetchHouses();
-
-      // 화면 새로고침
+      // 임시보관함 필터링을 유지하면서 화면 새로고침
       if (currentPath.length === 0) {
-        // 최상위: 집 목록만 새로고침 (loadRootLevel 호출 안함)
-        // 이미 fetchHouses()로 목록이 갱신됨
+        // 최상위 경로: 현재 보고 있는 집의 목록 새로고침
+        const token = localStorage.getItem('token');
+        const response = await axios.get(
+          `${API_URL}/api/houses/${selectedHouseId}/containers?level=root`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        // 먼저 새 목록 설정
+        setChildren(response.data.containers);
+        // 렌더링 후 임시보관함 업데이트
+        setTimeout(() => saveTempStorage(failedItems), 0);
       } else {
-        handleBreadcrumbClick(currentPath.length - 1);
+        // 하위 경로: 현재 경로 새로고침 후 임시보관함 업데이트
+        await handleBreadcrumbClick(currentPath.length - 1);
+        setTimeout(() => saveTempStorage(failedItems), 0);
       }
+
+      // 집 목록 새로고침 (항목 개수 업데이트)
+      fetchHouses();
     } catch (err) {
       alert('이동에 실패했습니다: ' + (err.response?.data?.error || err.message));
       console.error(err);
@@ -581,20 +642,30 @@ function HouseDetailView(props) {
         );
       }
 
-      // 임시보관함에서 제거
+      // 임시보관함에서 제거할 항목 준비
       const newTemp = [...tempStorage];
       newTemp.splice(index, 1);
-      saveTempStorage(newTemp);
+
+      // 임시보관함 필터링을 유지하면서 화면 새로고침
+      if (currentPath.length === 0) {
+        // 최상위 경로: 현재 보고 있는 집의 목록 새로고침
+        const token = localStorage.getItem('token');
+        const response = await axios.get(
+          `${API_URL}/api/houses/${selectedHouseId}/containers?level=root`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        // 먼저 새 목록 설정
+        setChildren(response.data.containers);
+        // 렌더링 후 임시보관함 업데이트
+        setTimeout(() => saveTempStorage(newTemp), 0);
+      } else {
+        // 하위 경로: 현재 경로 새로고침 후 임시보관함 업데이트
+        await handleBreadcrumbClick(currentPath.length - 1);
+        setTimeout(() => saveTempStorage(newTemp), 0);
+      }
 
       // 집 목록 새로고침 (항목 개수 업데이트)
-      await fetchHouses();
-
-      // 화면 새로고침
-      if (currentPath.length === 0) {
-        // 최상위: 집 목록만 새로고침
-      } else {
-        handleBreadcrumbClick(currentPath.length - 1);
-      }
+      fetchHouses();
     } catch (err) {
       alert('이동에 실패했습니다: ' + (err.response?.data?.error || err.message));
       console.error(err);
@@ -762,10 +833,8 @@ function HouseDetailView(props) {
             </span>
           </div>
           <div className="panel-content">
-            {loading ? (
-              <div className="loading-box">로딩 중...</div>
-            ) : currentPath.length === 0 ? (
-              // 최상위: 집 목록 표시
+            {currentPath.length === 0 ? (
+              // 최상위: 집 목록 표시 (로딩 상태 무시)
               <>
                 {houses.map((house, index) => (
                   <div
