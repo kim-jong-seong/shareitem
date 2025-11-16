@@ -134,9 +134,9 @@
 
 .logout-btn {
   padding: 10px 20px;
-  background: white;
-  color: #d32f2f;
-  border: 2px solid #d32f2f;
+  background: #ef5350 !important;
+  color: white !important;
+  border: none !important;
   border-radius: 8px;
   font-size: 14px;
   font-weight: 600;
@@ -145,7 +145,7 @@
 }
 
 .logout-btn:hover {
-  background: #ffebee;
+  background: #e53935 !important;
   transform: translateY(-2px);
 }
 
@@ -322,13 +322,13 @@
 }
 
 .card-delete-btn {
-    background-color: white;
-    color: #d32f2f;
-    border: 1px solid #d32f2f;
+    background-color: #ef5350;
+    color: white;
+    border: none;
 }
 
 .card-delete-btn:hover {
-    background-color: #ffebee;
+    background-color: #e53935;
     transform: translateY(-1px);
 }
 

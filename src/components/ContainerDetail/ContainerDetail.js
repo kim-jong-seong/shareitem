@@ -37,7 +37,7 @@ function ContainerDetail(props) {
               수정
             </button>
             <button
-              className="action-button"
+              className="action-button delete"
               onClick={() => props.onDelete(props.container)}
             >
               <img src={deleteIcon} alt="삭제" style={{ width: '16px', height: '16px', marginRight: '4px', verticalAlign: 'middle' }} />

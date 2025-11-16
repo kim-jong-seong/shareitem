@@ -149,24 +149,24 @@
 }
 
 .reject-button {
-    background-color: white;
-    color: #d32f2f;
-    border: 2px solid #d32f2f;
+    background-color: #ef5350;
+    color: white;
+    border: none;
 }
 
 .reject-button:hover {
-    background-color: #ffebee;
+    background-color: #e53935;
     transform: translateY(-1px);
 }
 
 .cancel-button-inv {
-    background-color: white;
-    color: #f57c00;
-    border: 2px solid #f57c00;
+    background-color: #ff9800;
+    color: white;
+    border: none;
 }
 
 .cancel-button-inv:hover {
-    background-color: #fff3e0;
+    background-color: #f57c00;
     transform: translateY(-1px);
 }
 
