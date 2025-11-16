@@ -153,131 +153,185 @@
   transform: translateY(0);
 }
 
-/* 테이블 */
-.table-container {
+/* 집 목록 그리드 */
+.houses-grid {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: 1fr;
+}
+
+/* 태블릿 (768px 이상) */
+@media (min-width: 768px) {
+    .houses-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* 데스크톱 (1024px 이상) */
+@media (min-width: 1024px) {
+    .houses-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* 빈 상태 */
+.empty-state {
+    padding: 60px 20px;
+    text-align: center;
     background-color: white;
-    border: 1px solid #e0e0e0;
-    border-radius: 4px;
-    overflow: hidden;
-}
-
-.house-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.house-table thead {
-    background-color: #f5f5f5;
-}
-
-.house-table th {
-    padding: 16px;
-    text-align: center;
-    font-size: 14px;
-    font-weight: 600;
-    color: #333;
-    border-bottom: 2px solid #e0e0e0;
-}
-
-.house-table th:first-child {
-    width: 25%;  /* 집 이름 */
-}
-
-.house-table th:nth-child(2) {
-    width: 15%;  /* 관리자 */
-}
-
-.house-table th:nth-child(3) {
-    width: 12%;  /* 나의 역할 */
-}
-
-.house-table th:nth-child(4) {
-    width: 15%;  /* 구성원 */
-}
-
-.house-table th:nth-child(5) {
-    width: 22%;  /* 관리 */
-}
-
-.house-table tbody tr {
-    border-bottom: 1px solid #f0f0f0;
-}
-
-.house-table tbody tr:hover {
-    background-color: #fafafa;
-}
-
-.house-table td {
-    padding: 16px;
-    font-size: 14px;
-    color: #555;
-    text-align: center;
-}
-
-.empty-cell {
-    padding: 60px 16px;
-    text-align: center;
+    border: 2px dashed #e0e0e0;
+    border-radius: 8px;
     color: #999;
     font-size: 14px;
 }
 
-/* 역할 뱃지 */
-.badge {
-    display: inline-block;
+.empty-state p {
+    margin: 0;
+}
+
+/* 집 카드 */
+.house-card {
+    background-color: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.house-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+    border-color: #1976d2;
+}
+
+/* 카드 헤더 */
+.house-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.house-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.house-title h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+}
+
+.role-badge {
     padding: 4px 12px;
     border-radius: 12px;
     font-size: 12px;
     font-weight: 500;
 }
 
-.admin-badge {
+.role-badge.admin {
     background-color: #e3f2fd;
     color: #1976d2;
 }
 
-.member-badge {
+.role-badge.member {
     background-color: #f5f5f5;
     color: #666;
 }
 
-/* 버튼 그룹 */
-.button-group {
+/* 카드 정보 */
+.house-card-info {
     display: flex;
-    gap: 12px;
-    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
 }
 
-.view-button {
-    padding: 8px 20px;
-    background-color: white;
-    color: #1976d2;
-    border: 1px solid #1976d2;
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+}
+
+.info-row.clickable {
+    cursor: pointer;
+    transition: background-color 0.2s;
+    padding: 8px 12px;
+    margin: 0 -12px;
     border-radius: 4px;
-    font-size: 13px;
+}
+
+.info-row.clickable:hover {
+    background-color: #f5f5f5;
+}
+
+.info-label {
+    font-size: 14px;
+    color: #666;
+    font-weight: 500;
+}
+
+.info-value {
+    font-size: 14px;
+    color: #333;
+    font-weight: 500;
+}
+
+.info-value.members {
+    display: flex;
+    align-items: center;
+    color: #1976d2;
+}
+
+/* 카드 액션 버튼 */
+.house-card-actions {
+    display: flex;
+    gap: 10px;
+    padding-top: 12px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.card-view-btn,
+.card-delete-btn {
+    flex: 1;
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.2s;
-    min-width: 70px;
+    border: none;
 }
 
-.view-button:hover {
-    background-color: #e3f2fd;
+.card-view-btn {
+    background-color: #1976d2;
+    color: white;
 }
 
-.delete-button {
-    padding: 8px 20px;
+.card-view-btn:hover {
+    background-color: #1565c0;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(25, 118, 210, 0.3);
+}
+
+.card-delete-btn {
     background-color: white;
     color: #d32f2f;
     border: 1px solid #d32f2f;
-    border-radius: 4px;
-    font-size: 13px;
-    cursor: pointer;
-    transition: all 0.2s;
-    min-width: 70px;
 }
 
-.delete-button:hover {
+.card-delete-btn:hover {
     background-color: #ffebee;
+    transform: translateY(-1px);
 }
+
 
 /* 로딩 */
 .loading-box {
@@ -446,49 +500,3 @@
     }
 }
 
-/* 클릭 가능한 셀 */
-.clickable {
-    cursor: pointer;
-    transition: background-color 0.2s;
-}
-
-.member-count-cell {
-    user-select: none;
-}
-
-/* 구성원 수 배지 */
-.member-count-badge {
-    display: inline-block;
-    padding: 4px 10px;
-    background-color: #f5f5f5;
-    border: 1px solid #e0e0e0;
-    border-radius: 12px;
-    font-size: 13px;
-    color: #666;
-    font-weight: 500;
-    transition: all 0.2s;
-}
-
-.clickable:hover .member-count-badge {
-    border-color: #1976d2;
-    color: #1976d2;
-}
-
-/* 관리 버튼 */
-.manage-button {
-    padding: 8px 16px;
-    background-color: #1976d2;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.manage-button:hover {
-    background-color: #1565c0;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 6px rgba(25, 118, 210, 0.3);
-}

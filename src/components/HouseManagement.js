@@ -3,6 +3,7 @@ import axios from 'axios';
 import { API_URL } from '../config';
 import CreateHouseModal from './CreateHouseModal';
 import MemberManagementModal from './MemberManagementModal';
+import { houseIcon } from '../utils/iconUtils';
 import usersIcon from '../assets/icons/users.svg';
 
 function HouseManagement(props) {
@@ -111,75 +112,68 @@ function HouseManagement(props) {
         </div>
       )}
 
-      {/* 집 목록 테이블 */}
-      <div className="table-container">
-        <table className="house-table">
-          <thead>
-            <tr>
-              <th>집 이름</th>
-              <th>관리자</th>
-              <th>나의 역할</th>
-              <th>구성원</th>
-              <th>관리</th>
-            </tr>
-          </thead>
-          <tbody>
-            {houses.length === 0 ? (
-              <tr>
-                <td colSpan="5" className="empty-cell">
-                  등록된 집이 없습니다. 새 집을 등록해주세요.
-                </td>
-              </tr>
-            ) : (
-              houses.map((house) => (
-                <tr key={house.id}>
-                  <td>
-                    <strong>{house.name}</strong>
-                  </td>
-                  <td>
-                    {house.admin_name || '-'}
-                  </td>
-                  <td>
-                    <span className={house.role_cd === 'COM1100001' ? 'badge admin-badge' : 'badge member-badge'}>
-                      {house.role_nm}
-                    </span>
-                  </td>
-                  <td
-                    className="member-count-cell clickable"
-                    onClick={() => handleManageMembers(house)}
-                    title="클릭하여 구성원 관리"
-                  >
-                    <span className="member-count-badge">
-                      <img src={usersIcon} alt="구성원" style={{ width: '16px', height: '16px', marginRight: '4px', verticalAlign: 'middle' }} />
-                      {house.member_count || 0}명
-                    </span>
-                  </td>
-                  <td>
-                    <div className="button-group">
-                      <button 
-                        className="view-button"
-                        onClick={() => handleViewHouse(house)}
-                      >
-                        조회
-                      </button>
-                      <button 
-                        className="delete-button"
-                        onClick={() => 
-                          house.role_cd === 'COM1100001' 
-                            ? handleDeleteHouse(house.id, house.name)
-                            : handleLeaveHouse(house.id, house.name)
-                        }
-                      >
-                        삭제
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+      {/* 집 목록 카드 그리드 */}
+      {houses.length === 0 ? (
+        <div className="empty-state">
+          <p>등록된 집이 없습니다. 새 집을 등록해주세요.</p>
+        </div>
+      ) : (
+        <div className="houses-grid">
+          {houses.map((house) => (
+            <div key={house.id} className="house-card">
+              {/* 카드 헤더 */}
+              <div className="house-card-header">
+                <div className="house-title">
+                  <img src={houseIcon} alt="house" style={{ width: '24px', height: '24px' }} />
+                  <h3>{house.name}</h3>
+                </div>
+                <span className={house.role_cd === 'COM1100001' ? 'role-badge admin' : 'role-badge member'}>
+                  {house.role_nm}
+                </span>
+              </div>
+
+              {/* 카드 정보 */}
+              <div className="house-card-info">
+                <div className="info-row">
+                  <span className="info-label">관리자</span>
+                  <span className="info-value">{house.admin_name || '-'}</span>
+                </div>
+                <div
+                  className="info-row clickable"
+                  onClick={() => handleManageMembers(house)}
+                  title="클릭하여 구성원 관리"
+                >
+                  <span className="info-label">구성원</span>
+                  <span className="info-value members">
+                    <img src={usersIcon} alt="구성원" style={{ width: '16px', height: '16px', marginRight: '4px', verticalAlign: 'middle' }} />
+                    {house.member_count || 0}명
+                  </span>
+                </div>
+              </div>
+
+              {/* 카드 액션 버튼 */}
+              <div className="house-card-actions">
+                <button
+                  className="card-view-btn"
+                  onClick={() => handleViewHouse(house)}
+                >
+                  조회
+                </button>
+                <button
+                  className="card-delete-btn"
+                  onClick={() =>
+                    house.role_cd === 'COM1100001'
+                      ? handleDeleteHouse(house.id, house.name)
+                      : handleLeaveHouse(house.id, house.name)
+                  }
+                >
+                  {house.role_cd === 'COM1100001' ? '삭제' : '나가기'}
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* 집 생성 모달 */}
       {showCreateModal && (
