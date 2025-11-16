@@ -134,6 +134,7 @@ function HouseDetailView(props) {
     const houseInfo = {
       ...house,
       type_cd: 'house', // 집임을 표시
+      type_nm: '집',
       child_count: house.container_count || 0
     };
     setSelectedItem(houseInfo);
@@ -171,6 +172,7 @@ function HouseDetailView(props) {
       const houseInfo = {
         ...house,
         type_cd: 'house',
+        type_nm: '집',
         child_count: house.container_count || 0
       };
       setSelectedItem(houseInfo);
@@ -230,6 +232,7 @@ function HouseDetailView(props) {
         const houseInfo = {
           ...currentHouse,
           type_cd: 'house',
+          type_nm: '집',
           child_count: currentHouse.container_count || 0
         };
         setSelectedItem(houseInfo);
