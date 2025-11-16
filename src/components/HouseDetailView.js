@@ -445,6 +445,8 @@ function HouseDetailView(props) {
     setShowAddModal(false);
     if (currentPath.length === 0) {
       loadRootLevel();
+      // 최상위에서 추가 시 집 목록도 새로고침 (container_count 업데이트)
+      fetchHouses();
     } else {
       handleBreadcrumbClick(currentPath.length - 1);
     }
@@ -530,11 +532,25 @@ function HouseDetailView(props) {
     const newTemp = [...tempStorage, itemWithPath];
     saveTempStorage(newTemp);
 
-    // 임시보관함으로 이동한 항목이 현재 선택된 항목이면 상세정보 초기화
-    if (selectedItem?.id === container.id) {
-      setSelectedItem(null);
-      setDetailInfo(null);
-      setChildPreview([]);
+    // 현재 경로의 컨테이너를 임시보관함에 추가한 경우
+    // (현재 경로의 마지막 항목이 임시보관함에 추가된 경우)
+    const isCurrentPathContainer = currentPath.length > 0 &&
+                                   currentPath[currentPath.length - 1] === container.id;
+
+    if (isCurrentPathContainer) {
+      // 상위 경로로 이동 (재귀 참조 방지)
+      if (currentPath.length === 1) {
+        loadRootLevel();
+      } else {
+        handleBreadcrumbClick(currentPath.length - 2);
+      }
+    } else {
+      // 임시보관함으로 이동한 항목이 현재 선택된 항목이면 상세정보 초기화
+      if (selectedItem?.id === container.id) {
+        setSelectedItem(null);
+        setDetailInfo(null);
+        setChildPreview([]);
+      }
     }
   };
 
