@@ -10,6 +10,8 @@ import ContainerDetail from './ContainerDetail/ContainerDetail';
 import searchIcon from '../assets/icons/search.svg';
 import refreshIcon from '../assets/icons/refresh.svg';
 import boxTempIcon from '../assets/icons/box_temp.svg';
+import arrowBlueIcon from '../assets/icons/arrow_blue.svg';
+import arrowBlue2Icon from '../assets/icons/arrow_blue2.svg';
 import { houseIcon } from '../utils/iconUtils';
 import '../styles/HouseDetailView.css';
 
@@ -840,13 +842,14 @@ function HouseDetailView(props) {
       <div className="header">
         <div className="header-left">
           <button className="back-button" onClick={props.onBack}>
-            ← 목록
+            <img src={arrowBlue2Icon} alt="목록" style={{ width: '16px', height: '16px', marginRight: '4px', verticalAlign: 'middle', transform: 'rotate(180deg)' }} />
+            목록
           </button>
           
           {/* 상위로 이동 버튼 (최상위가 아닐 때만 표시) */}
           {currentPath.length > 0 && (
-            <button 
-              className="back-button" 
+            <button
+              className="back-button"
               onClick={() => {
                 if (currentPath.length === 1) {
                   loadRootLevel();
@@ -855,7 +858,8 @@ function HouseDetailView(props) {
                 }
               }}
             >
-              ← 상위
+              <img src={arrowBlueIcon} alt="상위" style={{ width: '16px', height: '16px', marginRight: '4px', verticalAlign: 'middle' }} />
+              상위
             </button>
           )}
           
