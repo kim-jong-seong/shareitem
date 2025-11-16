@@ -16,11 +16,11 @@ function ContainerCard(props) {
     if (props.container.type_cd === 'COM1200003') {
       // 물품
       const parts = [];
-      if (props.container.quantity && props.container.quantity > 1) {
-        parts.push(`수량: ${props.container.quantity}개`);
-      }
       if (props.container.owner_name) {
         parts.push(props.container.owner_name);
+      }
+      if (props.container.quantity && props.container.quantity > 1) {
+        parts.push(`수량: ${props.container.quantity}개`);
       }
       return parts;
     } else {
