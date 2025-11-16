@@ -1,11 +1,10 @@
 import React from 'react';
+import { getContainerIcon } from '../../utils/iconUtils';
 
 function BasicInfoTab(props) {
   // 아이콘 가져오기
   const getIcon = (typeCd) => {
-    if (typeCd === 'COM1200001') return '📁';
-    if (typeCd === 'COM1200002') return '📦';
-    return '🏷️';
+    return getContainerIcon(typeCd);
   };
 
   return (
@@ -61,7 +60,9 @@ function BasicInfoTab(props) {
               className="item-card child-preview-item"
               style={{ animationDelay: `${index * 0.05}s` }}
             >
-              <div className="item-icon">{getIcon(child.type_cd)}</div>
+              <div className="item-icon">
+                <img src={getIcon(child.type_cd)} alt="icon" style={{ width: '32px', height: '32px' }} />
+              </div>
               <div className="item-info">
                 <div className="item-name">{child.name}</div>
                 <div className="item-meta">

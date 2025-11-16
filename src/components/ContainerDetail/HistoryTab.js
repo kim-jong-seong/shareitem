@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { API_URL } from '../../config';
+import arrowGreenIcon from '../../assets/icons/arrow_green.svg';
+import addIcon from '../../assets/icons/add.svg';
+import editIcon from '../../assets/icons/edit.svg';
 
 function HistoryTab(props) {
   const [logs, setLogs] = useState([]);
@@ -23,7 +26,7 @@ function HistoryTab(props) {
       setCurrentHouseName(response.data.current_house_name || '');
       setLoading(false);
     } catch (err) {
-      setError('히스토리를 불러오는데 실패했습니다');
+      setError('정보를 불러오는데 실패했습니다');
       setLoading(false);
       console.error(err);
     }
@@ -37,7 +40,7 @@ function HistoryTab(props) {
     switch(log.act_cd) {
       case 'COM1300001': // 생성
         return {
-          icon: '📝',
+          icon: addIcon,
           action: '생성',
           detail: log.log_remk || ''
         };
@@ -64,7 +67,7 @@ function HistoryTab(props) {
             : `[${log.to_house_name}]`;
 
           return {
-            icon: '➡️',
+            icon: arrowGreenIcon,
             action: '이동',
             detail: `${fromLocation} → ${toLocation}`
           };
@@ -72,14 +75,14 @@ function HistoryTab(props) {
 
         // 같은 집 내 이동 - 집 이름 표시 안 함
         return {
-          icon: '➡️',
+          icon: arrowGreenIcon,
           action: '이동',
           detail: `${log.from_container_name || currentHouseName} → ${log.to_container_name || currentHouseName}`
         };
       
       case 'COM1300004': // 수정 (통합)
         return {
-          icon: '✏️',
+          icon: editIcon,
           action: '수정',
           detail: log.log_remk || '정보 수정'
         };
@@ -131,7 +134,13 @@ function HistoryTab(props) {
           <div key={log.id} className="history-item" style={{ animationDelay: `${index * 0.05}s` }}>
             <div className="history-header">
               <div className="history-action">
-                <span className="history-icon">{formatted.icon}</span>
+                <span className="history-icon">
+                  {(typeof formatted.icon === 'string' && (formatted.icon.startsWith('/') || formatted.icon.includes('.svg'))) ? (
+                    <img src={formatted.icon} alt={formatted.action} style={{ width: '20px', height: '20px' }} />
+                  ) : (
+                    formatted.icon
+                  )}
+                </span>
                 <span className="history-action-name">{formatted.action}</span>
               </div>
               <div className="history-date">{formatDate(log.created_at)}</div>

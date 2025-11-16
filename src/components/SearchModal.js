@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { API_URL } from '../config';
+import searchIcon from '../assets/icons/search.svg';
+import { getContainerIcon } from '../utils/iconUtils';
 import '../styles/SearchModal.css';
 
 function SearchModal(props) {
@@ -102,7 +104,10 @@ function SearchModal(props) {
     >
       <div className="modal-content search-modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h3>🔍 물품 검색</h3>
+          <h3>
+            <img src={searchIcon} alt="검색" style={{ width: '20px', height: '20px', marginRight: '8px', verticalAlign: 'middle' }} />
+            물품 검색
+          </h3>
           <button className="modal-close" onClick={props.onClose} disabled={isNavigating}>✕</button>
         </div>
 
@@ -133,8 +138,7 @@ function SearchModal(props) {
                     className="search-result-item"
                   >
                     <div className="search-result-icon">
-                      {result.type_cd === 'COM1200001' ? '📁' :
-                       result.type_cd === 'COM1200002' ? '📦' : '🏷️'}
+                      <img src={getContainerIcon(result.type_cd)} alt="icon" style={{ width: '32px', height: '32px' }} />
                     </div>
                     <div className="search-result-info">
                       <div className="search-result-name">{result.name}</div>

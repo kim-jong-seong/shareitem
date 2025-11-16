@@ -7,6 +7,10 @@ import EditContainerModal from './EditContainerModal';
 import SearchModal from './SearchModal';
 import TempStorageModal from './TempStorageModal';
 import ContainerDetail from './ContainerDetail/ContainerDetail';
+import searchIcon from '../assets/icons/search.svg';
+import refreshIcon from '../assets/icons/refresh.svg';
+import boxTempIcon from '../assets/icons/box_temp.svg';
+import { houseIcon } from '../utils/iconUtils';
 import '../styles/HouseDetailView.css';
 
 function HouseDetailView(props) {
@@ -878,17 +882,18 @@ function HouseDetailView(props) {
 
         <div className="header-right">
           <div className="search-box" onClick={() => setShowSearchModal(true)}>
-            <span>🔍</span>
+            <img src={searchIcon} alt="검색" style={{ width: '20px', height: '20px' }} />
           </div>
           <div className="search-box" onClick={handleRefresh} title="새로고침">
-            <span>🔄</span>
+            <img src={refreshIcon} alt="새로고침" style={{ width: '20px', height: '20px' }} />
           </div>
           {tempStorage.length > 0 && (
-            <div 
-              className="temp-badge" 
+            <div
+              className="temp-badge"
               onClick={() => setShowTempStorageModal(true)}
             >
-              📦 임시보관함 ({tempStorage.length})
+              <img src={boxTempIcon} alt="임시보관함" style={{ width: '16px', height: '16px', marginRight: '4px', verticalAlign: 'middle' }} />
+              임시보관함 ({tempStorage.length})
             </div>
           )}
         </div>
@@ -921,7 +926,9 @@ function HouseDetailView(props) {
                     onClick={() => handleHouseClick(house)}
                     onDoubleClick={() => handleHouseDoubleClick(house)}
                   >
-                    <div className="item-icon">🏠</div>
+                    <div className="item-icon">
+                      <img src={houseIcon} alt="house" style={{ width: '32px', height: '32px' }} />
+                    </div>
                     <div className="item-info">
                       <div className="item-name">{house.name}</div>
                       <div className="item-meta">

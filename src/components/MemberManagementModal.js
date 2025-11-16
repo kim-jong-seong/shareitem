@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { API_URL } from '../config';
 import SimplifiedInviteModal from './SimplifiedInviteModal';
+import userIcon from '../assets/icons/user.svg';
 import '../styles/MemberManagementModal.css';
 
 function MemberManagementModal({ houseId, houseName, onClose, onSuccess }) {
@@ -45,7 +46,7 @@ function MemberManagementModal({ houseId, houseName, onClose, onSuccess }) {
         headers: { Authorization: `Bearer ${token}` }
       });
       
-      alert(`${userName}님을 추방했습니다`);
+      // alert(`${userName}님을 추방했습니다`);
       fetchMembers(); // 목록 새로고침
       if (onSuccess) onSuccess();
     } catch (err) {
@@ -136,7 +137,9 @@ function MemberManagementModal({ houseId, houseName, onClose, onSuccess }) {
             <div className="member-list">
               {members.map((member) => (
                 <div key={member.user_id} className="member-card">
-                  <div className="member-icon">👤</div>
+                  <div className="member-icon">
+                    <img src={userIcon} alt="user" style={{ width: '32px', height: '32px' }} />
+                  </div>
                   <div className="member-info">
                     <div className="member-name">
                       {member.user_name}

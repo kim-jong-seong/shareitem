@@ -1,4 +1,6 @@
 import React from 'react';
+import { getContainerIcon } from '../utils/iconUtils';
+import boxTempIcon from '../assets/icons/box_temp.svg';
 import '../styles/Modal.css';
 import '../styles/TempStorageModal.css';
 
@@ -33,7 +35,10 @@ function TempStorageModal(props) {
     >
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h3>📦 임시보관함</h3>
+          <h3>
+            <img src={boxTempIcon} alt="임시보관함" style={{ width: '20px', height: '20px', marginRight: '8px', verticalAlign: 'middle' }} />
+            임시보관함
+          </h3>
           <button className="modal-close" onClick={props.onClose}>✕</button>
         </div>
 
@@ -44,9 +49,8 @@ function TempStorageModal(props) {
             <>
               {props.tempStorage.map((item, index) => (
                 <div key={index} className="temp-item-modal">
-                  <div className="item-icon" style={{ fontSize: '32px' }}>
-                    {item.type_cd === 'COM1200001' ? '📁' :
-                     item.type_cd === 'COM1200002' ? '📦' : '🏷️'}
+                  <div className="item-icon">
+                    <img src={getContainerIcon(item.type_cd)} alt="icon" style={{ width: '32px', height: '32px' }} />
                   </div>
                   <div className="temp-item-info">
                     <div className="temp-item-name">{item.name}</div>

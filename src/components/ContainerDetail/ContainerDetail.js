@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import BasicInfoTab from './BasicInfoTab';
 import HistoryTab from './HistoryTab';
+import { getContainerIcon } from '../../utils/iconUtils';
+import editIcon from '../../assets/icons/edit.svg';
+import deleteIcon from '../../assets/icons/delete.svg';
+import boxTempIcon from '../../assets/icons/box_temp.svg';
 import '../../styles/ContainerDetail.css';
 
 function ContainerDetail(props) {
@@ -12,9 +16,7 @@ function ContainerDetail(props) {
       <div className="detail-header">
         <div className="detail-title-section">
           <div className="detail-icon">
-            {props.container.type_cd === 'house' ? '🏠' :
-             props.container.type_cd === 'COM1200001' ? '📁' :
-             props.container.type_cd === 'COM1200002' ? '📦' : '🏷️'}
+            <img src={getContainerIcon(props.container.type_cd)} alt="icon" style={{ width: '32px', height: '32px' }} />
           </div>
           <div className="detail-title-info">
             <h3 className="detail-title">{props.container.name}</h3>
@@ -26,17 +28,19 @@ function ContainerDetail(props) {
         </div>
         {props.container.type_cd !== 'house' && (
           <div className="detail-actions">
-            <button 
+            <button
               className="action-button"
               onClick={() => props.onEdit(props.container)}
             >
-              ✏️ 수정
+              <img src={editIcon} alt="수정" style={{ width: '16px', height: '16px', marginRight: '4px', verticalAlign: 'middle' }} />
+              수정
             </button>
-            <button 
+            <button
               className="action-button"
               onClick={() => props.onDelete(props.container)}
             >
-              🗑️ 삭제
+              <img src={deleteIcon} alt="삭제" style={{ width: '16px', height: '16px', marginRight: '4px', verticalAlign: 'middle' }} />
+              삭제
             </button>
           </div>
         )}
@@ -80,8 +84,11 @@ function ContainerDetail(props) {
          props.container.type_cd !== 'COM1200003' && (
           <div className="temp-storage">
             <div className="temp-storage-header">
-              <div className="temp-storage-title">📦 임시보관함 ({props.tempStorage.length})</div>
-              <button 
+              <div className="temp-storage-title">
+                <img src={boxTempIcon} alt="임시보관함" style={{ width: '16px', height: '16px', marginRight: '4px', verticalAlign: 'middle' }} />
+                임시보관함 ({props.tempStorage.length})
+              </div>
+              <button
                 className="action-button primary"
                 style={{ fontSize: '12px', padding: '6px 12px' }}
                 onClick={props.onMoveToHere}
@@ -94,9 +101,8 @@ function ContainerDetail(props) {
                 <div className="temp-item-header">
                   <div className="temp-item-info">
                     <div className="temp-item-name">
-                      {item.type_cd === 'COM1200001' ? '📁' :
-                       item.type_cd === 'COM1200002' ? '📦' : '🏷️'}
-                      {' '}{item.name}
+                      <img src={getContainerIcon(item.type_cd)} alt="icon" style={{ width: '16px', height: '16px', marginRight: '4px', verticalAlign: 'middle' }} />
+                      {item.name}
                     </div>
                     <div className="temp-item-location">
                       위치: {item.path}

@@ -1,12 +1,14 @@
 import React from 'react';
+import { getContainerIcon } from '../utils/iconUtils';
+import boxTempIcon from '../assets/icons/box_temp.svg';
+import editIcon from '../assets/icons/edit.svg';
+import deleteIcon from '../assets/icons/delete.svg';
 import '../styles/ContainerCard.css';
 
 function ContainerCard(props) {
   // 타입별 아이콘
   const getIcon = () => {
-    if (props.container.type_cd === 'COM1200001') return '📁'; // 영역
-    if (props.container.type_cd === 'COM1200002') return '📦'; // 박스
-    return '🏷️'; // 물품 (기본)
+    return getContainerIcon(props.container.type_cd);
   };
 
   // 메타 정보
@@ -39,7 +41,9 @@ function ContainerCard(props) {
       onClick={props.onClick}
       onDoubleClick={props.onDoubleClick}
     >
-      <div className="item-icon">{getIcon()}</div>
+      <div className="item-icon">
+        <img src={getIcon()} alt="icon" style={{ width: '32px', height: '32px' }} />
+      </div>
       <div className="item-info">
         <div className="item-name">{props.container.name}</div>
         <div className="item-meta">
@@ -56,17 +60,17 @@ function ContainerCard(props) {
       
       {/* 호버 시 액션 버튼 */}
       <div className="item-card-actions">
-        <button 
-          className="item-action-btn temp-btn" 
+        <button
+          className="item-action-btn temp-btn"
           onClick={(e) => {
             e.stopPropagation();
             props.onAddToTemp();
           }}
           title="임시보관함으로"
         >
-          📦
+          <img src={boxTempIcon} alt="임시보관함" style={{ width: '16px', height: '16px' }} />
         </button>
-        <button 
+        <button
           className="item-action-btn edit-btn"
           onClick={(e) => {
             e.stopPropagation();
@@ -74,9 +78,9 @@ function ContainerCard(props) {
           }}
           title="수정"
         >
-          ✏️
+          <img src={editIcon} alt="수정" style={{ width: '16px', height: '16px' }} />
         </button>
-        <button 
+        <button
           className="item-action-btn delete-btn"
           onClick={(e) => {
             e.stopPropagation();
@@ -84,7 +88,7 @@ function ContainerCard(props) {
           }}
           title="삭제"
         >
-          🗑️
+          <img src={deleteIcon} alt="삭제" style={{ width: '16px', height: '16px' }} />
         </button>
       </div>
     </div>

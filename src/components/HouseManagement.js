@@ -3,6 +3,7 @@ import axios from 'axios';
 import { API_URL } from '../config';
 import CreateHouseModal from './CreateHouseModal';
 import MemberManagementModal from './MemberManagementModal';
+import usersIcon from '../assets/icons/users.svg';
 
 function HouseManagement(props) {
   const [houses, setHouses] = useState([]);
@@ -143,13 +144,14 @@ function HouseManagement(props) {
                       {house.role_nm}
                     </span>
                   </td>
-                  <td 
+                  <td
                     className="member-count-cell clickable"
                     onClick={() => handleManageMembers(house)}
                     title="클릭하여 구성원 관리"
                   >
                     <span className="member-count-badge">
-                      👥 {house.member_count || 0}명
+                      <img src={usersIcon} alt="구성원" style={{ width: '16px', height: '16px', marginRight: '4px', verticalAlign: 'middle' }} />
+                      {house.member_count || 0}명
                     </span>
                   </td>
                   <td>

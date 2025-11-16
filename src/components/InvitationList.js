@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { API_URL } from '../config';
+import inviteIcon from '../assets/icons/invite.svg';
+import sendIcon from '../assets/icons/send.svg';
 import '../styles/InvitationList.css';
 
 function InvitationList({ onInvitationUpdate }) {
@@ -54,7 +56,7 @@ function InvitationList({ onInvitationUpdate }) {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       
-      alert('초대를 수락했습니다');
+      // alert('초대를 수락했습니다');
       fetchInvitations(); // 목록 새로고침
       if (onInvitationUpdate) onInvitationUpdate(); // 부모 컴포넌트에 알림
     } catch (err) {
@@ -133,12 +135,14 @@ function InvitationList({ onInvitationUpdate }) {
         <div className="invitation-list">
           {receivedInvitations.length === 0 ? (
             <div className="empty-invitation">
-              <p>📭 받은 초대가 없습니다</p>
+              <p>받은 초대가 없습니다</p>
             </div>
           ) : (
             receivedInvitations.map((invitation) => (
               <div key={invitation.id} className="invitation-card">
-                <div className="invitation-icon">📩</div>
+                <div className="invitation-icon">
+                  <img src={inviteIcon} alt="받은초대" style={{ width: '32px', height: '32px' }} />
+                </div>
                 <div className="invitation-content">
                   <p className="invitation-text">
                     <strong>{invitation.inviter_name}</strong>님이{' '}
@@ -176,12 +180,14 @@ function InvitationList({ onInvitationUpdate }) {
         <div className="invitation-list">
           {sentInvitations.length === 0 ? (
             <div className="empty-invitation">
-              <p>📭 보낸 초대가 없습니다</p>
+              <p>보낸 초대가 없습니다</p>
             </div>
           ) : (
             sentInvitations.map((invitation) => (
               <div key={invitation.id} className="invitation-card">
-                <div className="invitation-icon">📤</div>
+                <div className="invitation-icon">
+                  <img src={sendIcon} alt="보낸초대" style={{ width: '32px', height: '32px' }} />
+                </div>
                 <div className="invitation-content">
                   <p className="invitation-text">
                     <strong>{invitation.invitee_name}</strong>님을{' '}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { API_URL } from '../config';
+import { areaIcon, boxIcon, tagIcon } from '../utils/iconUtils';
 import '../styles/Modal.css';
 
 function AddContainerModal(props) {
@@ -120,25 +121,31 @@ function AddContainerModal(props) {
           <div className="modal-body">
             {/* 타입 선택 */}
             <div className="type-selector">
-              <div 
+              <div
                 className={`type-option ${type === 'area' ? 'active' : ''}`}
                 onClick={() => setType('area')}
               >
-                <div className="type-option-icon">📁</div>
+                <div className="type-option-icon">
+                  <img src={areaIcon} alt="area" style={{ width: '32px', height: '32px' }} />
+                </div>
                 <div className="type-option-label">영역</div>
               </div>
-              <div 
+              <div
                 className={`type-option ${type === 'box' ? 'active' : ''}`}
                 onClick={() => setType('box')}
               >
-                <div className="type-option-icon">📦</div>
+                <div className="type-option-icon">
+                  <img src={boxIcon} alt="box" style={{ width: '32px', height: '32px' }} />
+                </div>
                 <div className="type-option-label">박스</div>
               </div>
-              <div 
+              <div
                 className={`type-option ${type === 'item' ? 'active' : ''}`}
                 onClick={() => setType('item')}
               >
-                <div className="type-option-icon">🏷️</div>
+                <div className="type-option-icon">
+                  <img src={tagIcon} alt="item" style={{ width: '32px', height: '32px' }} />
+                </div>
                 <div className="type-option-label">물품</div>
               </div>
             </div>
