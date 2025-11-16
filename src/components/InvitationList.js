@@ -79,7 +79,7 @@ function InvitationList({ onInvitationUpdate }) {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       
-      alert('초대를 거절했습니다');
+      // alert('초대를 거절했습니다');
       fetchInvitations(); // 목록 새로고침
       if (onInvitationUpdate) onInvitationUpdate(); // 부모 컴포넌트에 알림
     } catch (err) {
@@ -102,7 +102,7 @@ function InvitationList({ onInvitationUpdate }) {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       
-      alert('초대를 취소했습니다');
+      // alert('초대를 취소했습니다');
       fetchInvitations(); // 목록 새로고침
     } catch (err) {
       alert('초대 취소에 실패했습니다: ' + (err.response?.data?.error || err.message));
