@@ -26,7 +26,8 @@ function ContainerDetail(props) {
             </div>
           </div>
         </div>
-        {props.container.type_cd !== 'house' && (
+        {/* PC에서만 헤더에 버튼 표시 */}
+        {!props.isMobile && props.container.type_cd !== 'house' && (
           <div className="detail-actions">
             <button
               className="action-button"
@@ -45,6 +46,41 @@ function ContainerDetail(props) {
           </div>
         )}
       </div>
+
+      {/* 모바일에서만 열기 버튼과 수정/삭제 버튼 표시 */}
+      {props.isMobile && props.container.type_cd !== 'house' && (
+        <>
+          {/* 열기 버튼 (물품이 아닐 때만) */}
+          {props.container.type_cd !== 'COM1200003' && props.onDrillDown && (
+            <div className="drill-down-section-mobile">
+              <button
+                className="drill-down-button-mobile"
+                onClick={props.onDrillDown}
+              >
+                열기 →
+              </button>
+            </div>
+          )}
+
+          {/* 수정/삭제 버튼 */}
+          <div className="detail-actions-mobile">
+            <button
+              className="action-button-mobile edit"
+              onClick={() => props.onEdit(props.container)}
+            >
+              <img src={editIcon} alt="수정" style={{ width: '16px', height: '16px', marginRight: '4px', verticalAlign: 'middle' }} />
+              수정
+            </button>
+            <button
+              className="action-button-mobile delete"
+              onClick={() => props.onDelete(props.container)}
+            >
+              <img src={deleteIcon} alt="삭제" style={{ width: '16px', height: '16px', marginRight: '4px', verticalAlign: 'middle' }} />
+              삭제
+            </button>
+          </div>
+        </>
+      )}
 
       {/* 탭 - 고정 */}
       <div className="detail-tabs">

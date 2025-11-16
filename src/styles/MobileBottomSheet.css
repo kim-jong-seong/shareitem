@@ -1,0 +1,155 @@
+/* 바텀시트 오버레이 */
+.mobile-bottom-sheet-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+  display: flex;
+  align-items: flex-end;
+}
+
+/* 배경 (dim) */
+.bottom-sheet-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  animation: fadeIn 0.3s ease;
+}
+
+/* 바텀시트 컨테이너 */
+.bottom-sheet-container {
+  position: relative;
+  width: 100%;
+  height: 95vh;
+  background-color: white;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  animation: slideUp 0.3s ease;
+  z-index: 101;
+  overflow: hidden;
+}
+
+/* 드래그 핸들 영역 */
+.bottom-sheet-handle-wrapper {
+  padding: 12px 0 8px 0;
+  display: flex;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* 드래그 핸들 */
+.bottom-sheet-handle {
+  width: 40px;
+  height: 4px;
+  background-color: #d0d0d0;
+  border-radius: 2px;
+}
+
+/* X 닫기 버튼 */
+.bottom-sheet-close-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background-color: #f5f5f5;
+  border-radius: 50%;
+  font-size: 20px;
+  color: #666;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+  z-index: 102;
+}
+
+.bottom-sheet-close-btn:hover {
+  background-color: #e0e0e0;
+}
+
+.bottom-sheet-close-btn:active {
+  background-color: #d0d0d0;
+}
+
+/* 바텀시트 내용 */
+.bottom-sheet-content {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* 애니메이션 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(100%);
+  }
+}
+
+/* 닫힐 때 애니메이션 */
+.mobile-bottom-sheet-overlay.closing .bottom-sheet-backdrop {
+  animation: fadeOut 0.2s ease;
+}
+
+.mobile-bottom-sheet-overlay.closing .bottom-sheet-container {
+  animation: slideDown 0.2s ease;
+}
+
+/* 스크롤바 스타일 (웹킷 브라우저) */
+.bottom-sheet-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.bottom-sheet-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.bottom-sheet-content::-webkit-scrollbar-thumb {
+  background-color: #d0d0d0;
+  border-radius: 3px;
+}
+
+.bottom-sheet-content::-webkit-scrollbar-thumb:hover {
+  background-color: #b0b0b0;
+}

@@ -13,6 +13,7 @@ import boxTempIcon from '../assets/icons/box_temp.svg';
 import arrowBlueIcon from '../assets/icons/arrow_blue.svg';
 import arrowBlue2Icon from '../assets/icons/arrow_blue2.svg';
 import { houseIcon } from '../utils/iconUtils';
+import MobileBottomSheet from './MobileBottomSheet';
 import '../styles/HouseDetailView.css';
 
 function HouseDetailView(props) {
@@ -41,6 +42,10 @@ function HouseDetailView(props) {
   const [houses, setHouses] = useState([]);
   const [selectedHouseId, setSelectedHouseId] = useState(props.houseId);
 
+  // 모바일 관련 상태
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [showBottomSheet, setShowBottomSheet] = useState(false);
+
   // 현재 선택된 집 이름을 동적으로 가져오기
   const selectedHouseName = houses.find(h => h.id === selectedHouseId)?.name || props.houseName;
 
@@ -55,6 +60,16 @@ function HouseDetailView(props) {
     };
     init();
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // 반응형 감지 (resize 이벤트)
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   // 집 목록 로드 후 초기 선택 처리 및 중앙 목록 로드
@@ -278,21 +293,21 @@ function HouseDetailView(props) {
     // 이미 목록에서 가져온 데이터를 즉시 표시
     setDetailInfo(container);
     setChildPreview([]); // 초기화
-    
+
     // 이전 요청이 있으면 취소
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
     }
-    
+
     // 새로운 AbortController 생성
     abortControllerRef.current = new AbortController();
-    
+
     // 상세 정보 및 하위 항목 미리보기 로드
     try {
       const token = localStorage.getItem('token');
       const response = await axios.get(
         `${API_URL}/api/houses/${selectedHouseId}/containers/${container.id}`,
-        { 
+        {
           headers: { Authorization: `Bearer ${token}` },
           signal: abortControllerRef.current.signal
         }
@@ -303,6 +318,27 @@ function HouseDetailView(props) {
       if (err.name !== 'CanceledError') {
         console.error('상세 정보 조회 실패:', err);
       }
+    }
+  };
+
+  // 모바일 전용: 항목 클릭 시 바텀시트 열기
+  const handleItemClickMobile = async (container) => {
+    setSelectedItem(container);
+    setDetailInfo(container);
+    setChildPreview([]);
+    setShowBottomSheet(true); // 즉시 바텀시트 열기
+
+    // 상세 정보 로드 (백그라운드)
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get(
+        `${API_URL}/api/houses/${selectedHouseId}/containers/${container.id}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setDetailInfo(response.data.container);
+      setChildPreview(response.data.child_preview || []);
+    } catch (err) {
+      console.error('상세 정보 조회 실패:', err);
     }
   };
 
@@ -636,6 +672,11 @@ function HouseDetailView(props) {
 
       // 집 목록 새로고침 (항목 개수 업데이트)
       fetchHouses();
+
+      // 모바일에서는 바텀시트 닫기
+      if (isMobile && showBottomSheet) {
+        setShowBottomSheet(false);
+      }
     } catch (err) {
       alert('이동에 실패했습니다: ' + (err.response?.data?.error || err.message));
       console.error(err);
@@ -747,6 +788,11 @@ function HouseDetailView(props) {
 
       // 집 목록 새로고침 (항목 개수 업데이트)
       fetchHouses();
+
+      // 모바일에서는 바텀시트 닫기
+      if (isMobile && showBottomSheet) {
+        setShowBottomSheet(false);
+      }
     } catch (err) {
       alert('이동에 실패했습니다: ' + (err.response?.data?.error || err.message));
       console.error(err);
@@ -759,6 +805,28 @@ function HouseDetailView(props) {
       loadRootLevel();
     } else {
       handleBreadcrumbClick(currentPath.length - 1);
+    }
+  };
+
+  // 모바일 전용: 바텀시트에서 드릴다운
+  const handleDrillDownFromSheet = async () => {
+    if (!selectedItem || selectedItem.type_cd === 'COM1200003') return;
+
+    // 바텀시트 닫기
+    setShowBottomSheet(false);
+
+    // 바텀시트 닫힌 후 드릴다운 실행
+    setTimeout(() => {
+      handleDrillDown(selectedItem);
+    }, 300);
+  };
+
+  // 모바일 전용: 뒤로가기 (바텀시트 우선 닫기)
+  const handleBackMobile = () => {
+    if (showBottomSheet) {
+      setShowBottomSheet(false);
+    } else {
+      props.onBack();
     }
   };
 
@@ -840,72 +908,214 @@ function HouseDetailView(props) {
     <div className="house-detail-view">
       {/* 헤더 */}
       <div className="header">
-        <div className="header-left">
-          <button className="back-button" onClick={props.onBack}>
-            <img src={arrowBlue2Icon} alt="목록" style={{ width: '16px', height: '16px', marginRight: '4px', verticalAlign: 'middle', transform: 'rotate(180deg)' }} />
-            목록
-          </button>
-          
-          {/* 상위로 이동 버튼 (최상위가 아닐 때만 표시) */}
-          {currentPath.length > 0 && (
-            <button
-              className="back-button"
-              onClick={() => {
-                if (currentPath.length === 1) {
-                  loadRootLevel();
-                } else {
-                  handleBreadcrumbClick(currentPath.length - 2);
-                }
-              }}
-            >
-              <img src={arrowBlueIcon} alt="상위" style={{ width: '16px', height: '16px', marginRight: '4px', verticalAlign: 'middle' }} />
-              상위
+        <div className="header-top-row">
+          <div className="header-left">
+            <button className="back-button" onClick={isMobile ? handleBackMobile : props.onBack}>
+              <img src={arrowBlue2Icon} alt="목록" style={{ width: '16px', height: '16px', marginRight: '4px', verticalAlign: 'middle', transform: 'rotate(180deg)' }} />
+              목록
             </button>
-          )}
-          
+
+            {/* 상위로 이동 버튼 (최상위가 아닐 때만 표시) */}
+            {currentPath.length > 0 && (
+              <button
+                className="back-button"
+                onClick={() => {
+                  if (currentPath.length === 1) {
+                    loadRootLevel();
+                  } else {
+                    handleBreadcrumbClick(currentPath.length - 2);
+                  }
+                }}
+              >
+                <img src={arrowBlueIcon} alt="상위" style={{ width: '16px', height: '16px', marginRight: '4px', verticalAlign: 'middle' }} />
+                상위
+              </button>
+            )}
+
+            {/* PC에서만 경로를 같은 줄에 표시 (버튼 옆에 붙여서) */}
+            {!isMobile && (
+              <div className="breadcrumb">
+                <span
+                  className="breadcrumb-item"
+                  onClick={() => handleBreadcrumbClick(-1)}
+                >
+                  {selectedHouseName}
+                </span>
+                {pathNames.map((name, index) => (
+                  <React.Fragment key={index}>
+                    <span className="breadcrumb-separator">›</span>
+                    <span
+                      className={index === pathNames.length - 1 ? 'breadcrumb-current' : 'breadcrumb-item'}
+                      onClick={() => handleBreadcrumbClick(index)}
+                    >
+                      {name}
+                    </span>
+                  </React.Fragment>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div className="header-right">
+            <div className="search-box" onClick={() => setShowSearchModal(true)}>
+              <img src={searchIcon} alt="검색" style={{ width: '20px', height: '20px' }} />
+            </div>
+            <div className="search-box" onClick={handleRefresh} title="새로고침">
+              <img src={refreshIcon} alt="새로고침" style={{ width: '20px', height: '20px' }} />
+            </div>
+            {tempStorage.length > 0 && (
+              <div
+                className="temp-badge"
+                onClick={() => setShowTempStorageModal(true)}
+                data-count={tempStorage.length}
+              >
+                <img src={boxTempIcon} alt="임시보관함" style={{ width: '16px', height: '16px', marginRight: '4px', verticalAlign: 'middle' }} />
+                <span className="temp-badge-text">임시보관함 ({tempStorage.length})</span>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* 모바일에서만 경로를 별도 줄에 표시 */}
+        {isMobile && (
           <div className="breadcrumb">
-            <span 
+            <span
               className="breadcrumb-item"
               onClick={() => handleBreadcrumbClick(-1)}
             >
               {selectedHouseName}
             </span>
-            {pathNames.map((name, index) => (
-              <React.Fragment key={index}>
+            {pathNames.length > 3 ? (
+              /* 모바일에서 경로가 3개 넘으면 첫번째 > ... > 마지막 2개만 표시 */
+              <>
                 <span className="breadcrumb-separator">›</span>
-                <span 
-                  className={index === pathNames.length - 1 ? 'breadcrumb-current' : 'breadcrumb-item'}
-                  onClick={() => handleBreadcrumbClick(index)}
+                <span
+                  className="breadcrumb-item"
+                  onClick={() => handleBreadcrumbClick(0)}
                 >
-                  {name}
+                  {pathNames[0]}
                 </span>
-              </React.Fragment>
-            ))}
+                <span className="breadcrumb-separator">›</span>
+                <span className="breadcrumb-item">...</span>
+                <span className="breadcrumb-separator">›</span>
+                <span
+                  className="breadcrumb-item"
+                  onClick={() => handleBreadcrumbClick(pathNames.length - 2)}
+                >
+                  {pathNames[pathNames.length - 2]}
+                </span>
+                <span className="breadcrumb-separator">›</span>
+                <span
+                  className="breadcrumb-current"
+                  onClick={() => handleBreadcrumbClick(pathNames.length - 1)}
+                >
+                  {pathNames[pathNames.length - 1]}
+                </span>
+              </>
+            ) : (
+              /* 모바일에서 경로가 3개 이하일 때 전체 표시 */
+              pathNames.map((name, index) => (
+                <React.Fragment key={index}>
+                  <span className="breadcrumb-separator">›</span>
+                  <span
+                    className={index === pathNames.length - 1 ? 'breadcrumb-current' : 'breadcrumb-item'}
+                    onClick={() => handleBreadcrumbClick(index)}
+                  >
+                    {name}
+                  </span>
+                </React.Fragment>
+              ))
+            )}
           </div>
-        </div>
-
-        <div className="header-right">
-          <div className="search-box" onClick={() => setShowSearchModal(true)}>
-            <img src={searchIcon} alt="검색" style={{ width: '20px', height: '20px' }} />
-          </div>
-          <div className="search-box" onClick={handleRefresh} title="새로고침">
-            <img src={refreshIcon} alt="새로고침" style={{ width: '20px', height: '20px' }} />
-          </div>
-          {tempStorage.length > 0 && (
-            <div
-              className="temp-badge"
-              onClick={() => setShowTempStorageModal(true)}
-            >
-              <img src={boxTempIcon} alt="임시보관함" style={{ width: '16px', height: '16px', marginRight: '4px', verticalAlign: 'middle' }} />
-              임시보관함 ({tempStorage.length})
-            </div>
-          )}
-        </div>
+        )}
       </div>
 
       {error && <div className="error-box">{error}</div>}
 
-      <div className="panel-container">
+      {/* PC/모바일 분기 */}
+      {isMobile ? (
+        /* ========== 모바일 레이아웃 ========== */
+        <div className="mobile-layout">
+          {/* 모바일 패널 - 현재 위치만 표시 */}
+          <div className="mobile-panel-content">
+            {/* 현재 위치 (자식) */}
+            <>
+                <div className="mobile-panel-header">
+                  <span>
+                    {currentPath.length === 0
+                      ? `${selectedHouseName}`
+                      : `${pathNames[pathNames.length - 1]}`
+                    }
+                  </span>
+                  <button
+                    className="add-button-mobile"
+                    onClick={() => handleAddClick(currentPath[currentPath.length - 1] || null)}
+                  >
+                    + 추가
+                  </button>
+                </div>
+                <div className="mobile-panel-list">
+                  {loading ? (
+                    <div className="loading-box">로딩 중...</div>
+                  ) : (() => {
+                    const filteredChildren = children.filter(child => !tempStorage.some(temp => temp.id === child.id));
+
+                    if (filteredChildren.length === 0) {
+                      return (
+                        <div className="empty-panel">
+                          <p>비어있습니다</p>
+                        </div>
+                      );
+                    }
+
+                    return (
+                      <>
+                        {filteredChildren.map((child, index) => (
+                          <ContainerCard
+                            key={child.id}
+                            container={child}
+                            isActive={selectedItem?.id === child.id}
+                            onClick={() => handleItemClickMobile(child)}
+                            onEdit={() => handleEditClick(child)}
+                            onDelete={() => handleDelete(child)}
+                            onAddToTemp={() => handleAddToTemp(child)}
+                            animationDelay={`${index * 0.05}s`}
+                          />
+                        ))}
+                      </>
+                    );
+                  })()}
+                </div>
+              </>
+          </div>
+
+          {/* 모바일 바텀시트 */}
+          <MobileBottomSheet
+            isOpen={showBottomSheet}
+            onClose={() => setShowBottomSheet(false)}
+          >
+            {detailInfo && (
+              <ContainerDetail
+                houseId={selectedHouseId}
+                houseName={selectedHouseName}
+                pathNames={pathNames}
+                container={detailInfo}
+                childPreview={childPreview}
+                tempStorage={tempStorage}
+                onEdit={handleEditClick}
+                onDelete={handleDelete}
+                onMoveToHere={handleMoveToHere}
+                onMoveSingleToHere={handleMoveSingleToHere}
+                onRemoveFromTemp={handleRemoveFromTemp}
+                onDrillDown={handleDrillDownFromSheet}
+                isMobile={true}
+              />
+            )}
+          </MobileBottomSheet>
+        </div>
+      ) : (
+        /* ========== PC 레이아웃 (기존 코드 그대로) ========== */
+        <div className="panel-container">
         {/* 왼쪽 패널 */}
         <div className="panel left-panel">
           <div className="panel-header">
@@ -1057,6 +1267,7 @@ function HouseDetailView(props) {
                 onMoveToHere={handleMoveToHere}
                 onMoveSingleToHere={handleMoveSingleToHere}
                 onRemoveFromTemp={handleRemoveFromTemp}
+                isMobile={false}
               />
             ) : (
               <div className="empty-panel">
@@ -1065,7 +1276,8 @@ function HouseDetailView(props) {
             )}
           </div>
         </div>
-      </div>
+        </div>
+      )}
 
       {/* 모달들 */}
       {showAddModal && (

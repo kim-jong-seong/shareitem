@@ -388,3 +388,87 @@
         transform: translateY(0);
     }
 }
+
+/* 모바일 전용 열기 버튼 영역 */
+.drill-down-section-mobile {
+    padding: 16px 20px 8px 20px;
+    background: white;
+    flex-shrink: 0;
+}
+
+.drill-down-button-mobile {
+    width: 100%;
+    padding: 14px 20px;
+    background-color: #1976d2;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background-color 0.2s;
+}
+
+.drill-down-button-mobile:hover {
+    background-color: #1565c0;
+}
+
+.drill-down-button-mobile:active {
+    background-color: #0d47a1;
+}
+
+/* 모바일 전용 수정/삭제 버튼 */
+.detail-actions-mobile {
+    display: flex;
+    gap: 12px;
+    padding: 8px 20px 16px 20px;
+    background: white;
+    border-bottom: 1px solid #e0e0e0;
+    flex-shrink: 0;
+}
+
+.action-button-mobile {
+    flex: 1;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.action-button-mobile.edit {
+    background: white;
+    color: #1976d2;
+    border: 2px solid #1976d2;
+}
+
+.action-button-mobile.edit:hover {
+    background: #e3f2fd;
+}
+
+.action-button-mobile.edit:active {
+    background: #bbdefb;
+}
+
+.action-button-mobile.delete {
+    background: white;
+    color: #d32f2f;
+    border: 2px solid #d32f2f;
+}
+
+.action-button-mobile.delete:hover {
+    background: #ffebee;
+}
+
+.action-button-mobile.delete:active {
+    background: #ffcdd2;
+}
