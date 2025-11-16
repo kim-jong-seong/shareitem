@@ -268,6 +268,43 @@
     color: #f57c00;
 }
 
+.temp-storage-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.temp-clear-all-button {
+    padding: 6px 12px;
+    background: #ef5350;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.temp-clear-all-button:hover {
+    background: #e53935;
+}
+
+.temp-move-all-button {
+    padding: 6px 12px;
+    background: #ff9800;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.temp-move-all-button:hover {
+    background: #f57c00;
+}
+
 .temp-item {
     background: white;
     padding: 8px 12px;

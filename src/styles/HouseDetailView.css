@@ -229,6 +229,129 @@
     font-size: 14px;
 }
 
+/* PC 임시보관함 섹션 */
+.pc-temp-storage-section {
+    background: #fff3e0;
+    border: 2px solid #ff9800;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 16px;
+}
+
+.pc-temp-storage-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.pc-temp-storage-header span {
+    font-size: 14px;
+    font-weight: 600;
+    color: #f57c00;
+}
+
+.pc-temp-header-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.pc-clear-all-button {
+    padding: 6px 12px;
+    background: #ef5350;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.pc-clear-all-button:hover {
+    background: #e53935;
+}
+
+.pc-move-here-button {
+    padding: 6px 12px;
+    background: #ff9800;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.pc-move-here-button:hover {
+    background: #f57c00;
+}
+
+.pc-temp-storage-items {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.pc-temp-item {
+    display: flex;
+    align-items: center;
+    background: white;
+    padding: 10px 12px;
+    border-radius: 6px;
+    gap: 12px;
+}
+
+.pc-temp-item-icon {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pc-temp-item-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.pc-temp-item-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 2px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.pc-temp-item-location {
+    font-size: 12px;
+    color: #666;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.pc-temp-remove {
+    flex-shrink: 0;
+    background: transparent;
+    color: #d32f2f;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 4px 8px;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+}
+
+.pc-temp-remove:hover {
+    opacity: 1;
+}
+
 /* 로딩 */
 .loading-box {
     padding: 60px 20px;
@@ -559,6 +682,129 @@
         overflow-y: auto;
         padding: 8px;
         -webkit-overflow-scrolling: touch;
+    }
+
+    /* 모바일 임시보관함 섹션 */
+    .mobile-temp-storage-section {
+        background: #fff3e0;
+        border: 2px solid #ff9800;
+        border-radius: 8px;
+        padding: 12px;
+        margin-bottom: 16px;
+    }
+
+    .mobile-temp-storage-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+    }
+
+    .mobile-temp-storage-header span {
+        font-size: 14px;
+        font-weight: 600;
+        color: #f57c00;
+    }
+
+    .mobile-temp-header-actions {
+        display: flex;
+        gap: 8px;
+    }
+
+    .mobile-clear-all-button {
+        padding: 6px 12px;
+        background: #ef5350;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+
+    .mobile-clear-all-button:hover {
+        background: #e53935;
+    }
+
+    .mobile-move-here-button {
+        padding: 6px 12px;
+        background: #ff9800;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+
+    .mobile-move-here-button:hover {
+        background: #f57c00;
+    }
+
+    .mobile-temp-storage-items {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .mobile-temp-item {
+        display: flex;
+        align-items: center;
+        background: white;
+        padding: 10px 12px;
+        border-radius: 6px;
+        gap: 12px;
+    }
+
+    .mobile-temp-item-icon {
+        flex-shrink: 0;
+        width: 28px;
+        height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .mobile-temp-item-info {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .mobile-temp-item-name {
+        font-size: 14px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 2px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .mobile-temp-item-location {
+        font-size: 12px;
+        color: #666;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .mobile-temp-remove {
+        flex-shrink: 0;
+        background: transparent;
+        color: #d32f2f;
+        border: none;
+        cursor: pointer;
+        font-size: 18px;
+        font-weight: bold;
+        padding: 4px 8px;
+        opacity: 0.6;
+        transition: opacity 0.2s;
+    }
+
+    .mobile-temp-remove:hover {
+        opacity: 1;
     }
 
     /* PC 레이아웃 숨기기 */

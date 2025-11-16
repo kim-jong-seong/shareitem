@@ -124,13 +124,20 @@ function ContainerDetail(props) {
                 <img src={boxTempIcon} alt="임시보관함" style={{ width: '16px', height: '16px', marginRight: '4px', verticalAlign: 'middle' }} />
                 임시보관함 ({props.tempStorage.length})
               </div>
-              <button
-                className="action-button primary"
-                style={{ fontSize: '12px', padding: '6px 12px' }}
-                onClick={props.onMoveToHere}
-              >
-                여기로 전체 이동
-              </button>
+              <div className="temp-storage-actions">
+                <button
+                  className="temp-clear-all-button"
+                  onClick={props.onClearAll}
+                >
+                  전체 취소
+                </button>
+                <button
+                  className="temp-move-all-button"
+                  onClick={props.onMoveToHere}
+                >
+                  여기로 이동
+                </button>
+              </div>
             </div>
             {props.tempStorage.map((item, index) => (
               <div key={index} className="temp-item">

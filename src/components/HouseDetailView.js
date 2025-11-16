@@ -12,7 +12,7 @@ import refreshIcon from '../assets/icons/refresh.svg';
 import boxTempIcon from '../assets/icons/box_temp.svg';
 import arrowBlueIcon from '../assets/icons/arrow_blue.svg';
 import arrowBlue2Icon from '../assets/icons/arrow_blue2.svg';
-import { houseIcon } from '../utils/iconUtils';
+import { houseIcon, getContainerIcon } from '../utils/iconUtils';
 import MobileBottomSheet from './MobileBottomSheet';
 import '../styles/HouseDetailView.css';
 
@@ -560,6 +560,10 @@ function HouseDetailView(props) {
     saveTempStorage(newTemp);
   };
 
+  const handleClearAllTemp = () => {
+    saveTempStorage([]);
+  };
+
   const handleMoveToHere = async () => {
     if (tempStorage.length === 0) {
       alert('임시보관함이 비어있습니다');
@@ -1071,6 +1075,54 @@ function HouseDetailView(props) {
                   </button>
                 </div>
                 <div className="mobile-panel-list">
+                  {/* 임시보관함 영역 (모바일 전용, 항목이 있을 때만 표시) */}
+                  {tempStorage.length > 0 && (
+                    <div className="mobile-temp-storage-section">
+                      <div className="mobile-temp-storage-header">
+                        <span>
+                          <img src={boxTempIcon} alt="임시보관함" style={{ width: '16px', height: '16px', marginRight: '6px', verticalAlign: 'middle' }} />
+                          임시보관함 ({tempStorage.length})
+                        </span>
+                        <div className="mobile-temp-header-actions">
+                          <button
+                            className="mobile-clear-all-button"
+                            onClick={handleClearAllTemp}
+                          >
+                            전체 취소
+                          </button>
+                          <button
+                            className="mobile-move-here-button"
+                            onClick={handleMoveToHere}
+                          >
+                            여기로 이동
+                          </button>
+                        </div>
+                      </div>
+                      <div className="mobile-temp-storage-items">
+                        {tempStorage.map((item, index) => (
+                          <div key={index} className="mobile-temp-item">
+                            <div className="mobile-temp-item-icon">
+                              <img src={getContainerIcon(item.type_cd)} alt="icon" style={{ width: '28px', height: '28px' }} />
+                            </div>
+                            <div className="mobile-temp-item-info">
+                              <div className="mobile-temp-item-name">{item.name}</div>
+                              <div className="mobile-temp-item-location">
+                                {item.from_house_name}
+                                {item.path && ` › ${item.path}`}
+                              </div>
+                            </div>
+                            <button
+                              className="mobile-temp-remove"
+                              onClick={() => handleRemoveFromTemp(index)}
+                            >
+                              ✕
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
                   {loading ? (
                     <div className="loading-box">로딩 중...</div>
                   ) : (() => {
@@ -1123,6 +1175,7 @@ function HouseDetailView(props) {
                 onMoveToHere={handleMoveToHere}
                 onMoveSingleToHere={handleMoveSingleToHere}
                 onRemoveFromTemp={handleRemoveFromTemp}
+                onClearAll={handleClearAllTemp}
                 onDrillDown={handleDrillDownFromSheet}
                 isMobile={true}
               />
@@ -1224,11 +1277,59 @@ function HouseDetailView(props) {
             </button>
           </div>
           <div className="panel-content">
+            {/* 임시보관함 영역 (PC 전용, 항목이 있을 때만 표시) */}
+            {tempStorage.length > 0 && (
+              <div className="pc-temp-storage-section">
+                <div className="pc-temp-storage-header">
+                  <span>
+                    <img src={boxTempIcon} alt="임시보관함" style={{ width: '16px', height: '16px', marginRight: '6px', verticalAlign: 'middle' }} />
+                    임시보관함 ({tempStorage.length})
+                  </span>
+                  <div className="pc-temp-header-actions">
+                    <button
+                      className="pc-clear-all-button"
+                      onClick={handleClearAllTemp}
+                    >
+                      전체 취소
+                    </button>
+                    <button
+                      className="pc-move-here-button"
+                      onClick={handleMoveToHere}
+                    >
+                      여기로 이동
+                    </button>
+                  </div>
+                </div>
+                <div className="pc-temp-storage-items">
+                  {tempStorage.map((item, index) => (
+                    <div key={index} className="pc-temp-item">
+                      <div className="pc-temp-item-icon">
+                        <img src={getContainerIcon(item.type_cd)} alt="icon" style={{ width: '28px', height: '28px' }} />
+                      </div>
+                      <div className="pc-temp-item-info">
+                        <div className="pc-temp-item-name">{item.name}</div>
+                        <div className="pc-temp-item-location">
+                          {item.from_house_name}
+                          {item.path && ` › ${item.path}`}
+                        </div>
+                      </div>
+                      <button
+                        className="pc-temp-remove"
+                        onClick={() => handleRemoveFromTemp(index)}
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {loading ? (
               <div className="loading-box">로딩 중...</div>
             ) : (() => {
               const filteredChildren = children.filter(child => !tempStorage.some(temp => temp.id === child.id));
-              
+
               if (filteredChildren.length === 0) {
                 return (
                   <div className="empty-panel">
@@ -1236,7 +1337,7 @@ function HouseDetailView(props) {
                   </div>
                 );
               }
-              
+
               return (
                 <>
                   {filteredChildren.map((child, index) => (
@@ -1252,7 +1353,7 @@ function HouseDetailView(props) {
                       animationDelay={`${index * 0.05}s`}
                     />
                   ))}
-                  <div 
+                  <div
                     className="add-item-footer"
                     onClick={() => handleAddClick(currentPath[currentPath.length - 1] || null)}
                   >
@@ -1283,6 +1384,7 @@ function HouseDetailView(props) {
                 onMoveToHere={handleMoveToHere}
                 onMoveSingleToHere={handleMoveSingleToHere}
                 onRemoveFromTemp={handleRemoveFromTemp}
+                onClearAll={handleClearAllTemp}
                 isMobile={false}
               />
             ) : (
@@ -1328,6 +1430,7 @@ function HouseDetailView(props) {
           tempStorage={tempStorage}
           onClose={() => setShowTempStorageModal(false)}
           onRemove={handleRemoveFromTemp}
+          onClearAll={handleClearAllTemp}
         />
       )}
     </div>

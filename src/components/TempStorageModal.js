@@ -39,7 +39,14 @@ function TempStorageModal(props) {
             <img src={boxTempIcon} alt="임시보관함" style={{ width: '20px', height: '20px', marginRight: '8px', verticalAlign: 'middle' }} />
             임시보관함
           </h3>
-          <button className="modal-close" onClick={props.onClose}>✕</button>
+          <div className="modal-header-actions">
+            {props.tempStorage.length > 0 && (
+              <button className="clear-all-button" onClick={props.onClearAll}>
+                전체 취소
+              </button>
+            )}
+            <button className="modal-close" onClick={props.onClose}>✕</button>
+          </div>
         </div>
 
         <div className="modal-body">
