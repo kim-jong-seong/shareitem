@@ -5,6 +5,9 @@ import addIcon from '../assets/icons/add.svg';
 import editIcon from '../assets/icons/edit.svg';
 import arrowGreenIcon from '../assets/icons/arrow_green.svg';
 import deleteIcon from '../assets/icons/delete.svg';
+import areaIcon from '../assets/icons/area.svg';
+import boxIcon from '../assets/icons/box.svg';
+import tagIcon from '../assets/icons/tag.svg';
 import '../styles/Modal.css';
 import '../styles/HouseHistoryModal.css';
 
@@ -12,6 +15,8 @@ function HouseHistoryModal(props) {
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [mouseDownTarget, setMouseDownTarget] = useState(null);
+  const [mouseUpTarget, setMouseUpTarget] = useState(null);
 
   useEffect(() => {
     fetchLogs();
@@ -114,11 +119,43 @@ function HouseHistoryModal(props) {
     return `${year}.${month}.${day} ${hours}:${minutes}`;
   };
 
+  const getTypeIcon = (typeCd) => {
+    switch(typeCd) {
+      case 'COM1200001': return areaIcon;
+      case 'COM1200002': return boxIcon;
+      case 'COM1200003': return tagIcon;
+      default: return null;
+    }
+  };
+
   return (
-    <div className="modal-overlay" onClick={props.onClose}>
+    <div
+      className="modal-overlay"
+      onMouseDown={(e) => {
+        if (e.target === e.currentTarget) {
+          setMouseDownTarget(e.currentTarget);
+        } else {
+          setMouseDownTarget(null);
+        }
+      }}
+      onMouseUp={(e) => {
+        if (e.target === e.currentTarget) {
+          setMouseUpTarget(e.currentTarget);
+        } else {
+          setMouseUpTarget(null);
+        }
+      }}
+      onClick={(e) => {
+        if (e.target === e.currentTarget &&
+            mouseDownTarget === e.currentTarget &&
+            mouseUpTarget === e.currentTarget) {
+          props.onClose();
+        }
+      }}
+    >
       <div className="modal-content house-history-modal" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h2>{props.houseName} 최근 활동</h2>
+          <h2>📋 {props.houseName} 최근 활동</h2>
           <button className="modal-close" onClick={props.onClose}>
             ✕
           </button>
@@ -139,32 +176,37 @@ function HouseHistoryModal(props) {
                 const formatted = formatLogMessage(log);
                 const containerName = log.container_name || '알 수 없음';
                 const isDeleted = !log.container_id;
+                const typeIcon = getTypeIcon(log.container_type_cd);
 
                 return (
                   <div key={log.id} className="history-item" style={{ animationDelay: `${index * 0.05}s` }}>
                     <div className="history-header">
-                      <div className="history-action">
-                        <span className="history-icon">
-                          {(typeof formatted.icon === 'string' && (formatted.icon.startsWith('/') || formatted.icon.includes('.svg'))) ? (
-                            <img src={formatted.icon} alt={formatted.action} style={{ width: '20px', height: '20px' }} />
-                          ) : (
-                            formatted.icon
-                          )}
-                        </span>
+                      <div className="history-title">
+                        {typeIcon && (
+                          <img src={typeIcon} alt="type" className="history-type-icon" />
+                        )}
                         <span className="history-container-name">
                           {containerName}
                           {isDeleted && <span className="deleted-badge">(삭제됨)</span>}
                         </span>
-                        <span className="history-action-name">
-                          {formatted.action}
+                        <span className="history-separator">-</span>
+                        <span className="history-icon">
+                          {(typeof formatted.icon === 'string' && (formatted.icon.startsWith('/') || formatted.icon.includes('.svg'))) ? (
+                            <img src={formatted.icon} alt={formatted.action} style={{ width: '16px', height: '16px' }} />
+                          ) : (
+                            formatted.icon
+                          )}
                         </span>
+                        <span className="history-action-name">{formatted.action}</span>
                       </div>
-                      <div className="history-date">{formatDate(log.created_at)}</div>
+                      <span className="history-date">{formatDate(log.created_at)}</span>
                     </div>
                     {formatted.detail && (
                       <div className="history-detail">{formatted.detail}</div>
                     )}
-                    <div className="history-user">{log.creator_name}</div>
+                    <div className="history-footer">
+                      <span className="history-user">{log.creator_name}</span>
+                    </div>
                   </div>
                 );
               })}

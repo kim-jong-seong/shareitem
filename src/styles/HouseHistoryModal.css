@@ -52,21 +52,23 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 12px;
   margin-bottom: 8px;
 }
 
-.house-history-modal .history-action {
+.house-history-modal .history-title {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   flex: 1;
+  min-width: 0;
 }
 
-.house-history-modal .history-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
+.house-history-modal .history-type-icon {
+  width: 18px;
+  height: 18px;
+  opacity: 0.7;
+  flex-shrink: 0;
 }
 
 .house-history-modal .history-container-name {
@@ -75,28 +77,44 @@
   font-size: 16px;
 }
 
-.house-history-modal .history-action-name {
-  font-weight: 600;
-  color: #333;
-  font-size: 14px;
+.house-history-modal .history-separator {
+  color: #999;
+  font-weight: 400;
+  margin: 0 2px;
 }
 
-.house-history-modal .history-date {
-  font-size: 13px;
-  color: #999;
+.house-history-modal .history-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.house-history-modal .history-action-name {
+  font-weight: 500;
+  color: #555;
+  font-size: 14px;
 }
 
 .house-history-modal .history-detail {
   font-size: 14px;
   color: #666;
-  margin: 8px 0;
-  padding-left: 28px;
+  margin-bottom: 6px;
+}
+
+.house-history-modal .history-date {
+  font-size: 12px;
+  color: #999;
+  flex-shrink: 0;
+}
+
+.house-history-modal .history-footer {
+  /* 활동자명만 표시 */
 }
 
 .house-history-modal .history-user {
   font-size: 13px;
   color: #999;
-  padding-left: 28px;
 }
 
 .house-history-modal .deleted-badge {
