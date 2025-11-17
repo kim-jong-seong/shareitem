@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import './App.css';
 import Login from './components/Login'
@@ -7,6 +7,65 @@ import Dashboard from './components/Dashboard'
 import InfoBox from './components/InfoBox'
 import ProfileCard from './components/ProfileCard'
 import HouseDetailView from './components/HouseDetailView'
+import searchIcon from './assets/icons/search.svg';
+import refreshIcon from './assets/icons/refresh.svg';
+import boxTempIcon from './assets/icons/box_temp.svg';
+import arrowBlueIcon from './assets/icons/arrow_blue.svg';
+import homeIcon from './assets/icons/home.svg';
+
+// HouseDetailView Wrapper 컴포넌트
+function HouseDetailViewWrapper({ user, onLogout, selectedHouse, onBack }) {
+  const houseDetailViewRef = useRef(null);
+  const [detailState, setDetailState] = useState({
+    currentPath: [],
+    tempStorage: []
+  });
+
+  // HouseDetailView의 상태 변경을 추적
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (houseDetailViewRef.current) {
+        setDetailState({
+          currentPath: houseDetailViewRef.current.currentPath || [],
+          tempStorage: houseDetailViewRef.current.tempStorage || []
+        });
+      }
+    }, 100);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <>
+      <ProfileCard
+        user={user}
+        onLogout={onLogout}
+        isDetailView={true}
+        detailViewProps={{
+          searchIcon,
+          refreshIcon,
+          boxTempIcon,
+          arrowBlueIcon,
+          homeIcon,
+          onBack: onBack,
+          onUpClick: () => houseDetailViewRef.current?.handleUpClick(),
+          showUpButton: detailState.currentPath.length > 0,
+          onAddClick: () => houseDetailViewRef.current?.handleAddClick(),
+          onSearchClick: () => houseDetailViewRef.current?.handleSearchClick(),
+          onRefreshClick: () => houseDetailViewRef.current?.handleRefreshClick(),
+          onTempStorageClick: () => houseDetailViewRef.current?.handleTempStorageClick(),
+          tempStorageCount: detailState.tempStorage.length
+        }}
+      />
+      <HouseDetailView
+        ref={houseDetailViewRef}
+        houseId={selectedHouse.id}
+        houseName={selectedHouse.name}
+        onBack={onBack}
+      />
+    </>
+  );
+}
 
 function App() {
   const [currentView, setCurrentView] = useState('login');
@@ -147,9 +206,10 @@ function App() {
 
         {/* 집 상세 조회 */}
         {currentView === "houseDetail" && selectedHouse && (
-          <HouseDetailView 
-            houseId={selectedHouse.id}
-            houseName={selectedHouse.name}
+          <HouseDetailViewWrapper
+            user={user}
+            onLogout={onLogout}
+            selectedHouse={selectedHouse}
             onBack={handleBackToDashboard}
           />
         )}

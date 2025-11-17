@@ -2,17 +2,36 @@
 .app-header {
   background: white;
   border-bottom: 1px solid #e5e7eb;
-  padding: 0 24px;
   height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   position: sticky;
   top: 0;
   z-index: 100;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   width: 100%;
   margin: 0;
+}
+
+.app-header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+/* 상세 화면용 전체 너비 헤더 */
+.app-header.full-width .app-header-inner {
+  max-width: none;
+  justify-content: space-between;
+}
+
+/* 왼쪽 섹션 */
+.header-left-section {
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
 /* 로고 */
@@ -26,7 +45,9 @@
 }
 
 .logo-icon {
-  font-size: 24px;
+  width: 28px;
+  height: 28px;
+  display: block;
 }
 
 .logo-text {
@@ -38,6 +59,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
+  margin-left: auto;
 }
 
 /* 새 집 만들기 버튼 */
@@ -174,11 +196,115 @@
   font-size: 16px;
 }
 
+/* 상세 화면 네비게이션 버튼 */
+.detail-nav-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-icon-btn {
+  width: 36px;
+  height: 36px;
+  background: #f3f4f6;
+  border: none;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.nav-icon-btn:hover {
+  background: #e5e7eb;
+}
+
+.nav-icon-btn:active {
+  transform: scale(0.95);
+}
+
+/* 추가 버튼 */
+.add-icon-btn {
+  width: 36px;
+  height: 36px;
+  background: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.add-icon-btn:hover {
+  background: #3a7bc8;
+  transform: translateY(-1px);
+}
+
+.add-icon-btn:active {
+  transform: scale(0.95);
+}
+
+/* 상세 화면 도구 버튼 */
+.tool-icon-btn {
+  width: 36px;
+  height: 36px;
+  background: #f3f4f6;
+  border: none;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tool-icon-btn:hover {
+  background: #e5e7eb;
+}
+
+.tool-icon-btn:active {
+  transform: scale(0.95);
+}
+
+/* 임시보관함 배지 버튼 */
+.temp-badge-btn {
+  height: 36px;
+  padding: 0 12px;
+  background: #fff3e0;
+  border: 1px solid #ffb74d;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.temp-badge-btn:hover {
+  background: #ffe0b2;
+  border-color: #ffa726;
+}
+
+.temp-badge-btn .temp-count {
+  font-size: 13px;
+  font-weight: 600;
+  color: #e65100;
+}
+
 /* 모바일 반응형 */
 @media (max-width: 768px) {
   .app-header {
-    padding: 0 16px;
     height: 56px;
+  }
+
+  .app-header-inner {
+    padding: 0 16px;
   }
 
   .logo-text {

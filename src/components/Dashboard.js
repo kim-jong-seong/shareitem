@@ -5,7 +5,7 @@ import HouseManagement from './HouseManagement';
 import InvitationList from './InvitationList';
 import '../styles/Dashboard.css';
 
-function Dashboard(props) {
+function Dashboard({ onViewHouse, onCreateHouse }) {
   const [activeTab, setActiveTab] = useState('houses'); // 'houses' | 'invitations'
   const [invitationCount, setInvitationCount] = useState(0);
   const [triggerCreateHouse, setTriggerCreateHouse] = useState(false);
@@ -33,16 +33,16 @@ function Dashboard(props) {
   };
 
   // 집 만들기 트리거
-  const handleCreateHouse = () => {
+  const handleCreateHouse = React.useCallback(() => {
     setTriggerCreateHouse(prev => !prev); // 토글해서 HouseManagement에 전달
-  };
+  }, []);
 
   // onCreateHouse prop을 상위로 전달
   useEffect(() => {
-    if (props.onCreateHouse) {
-      props.onCreateHouse(handleCreateHouse);
+    if (onCreateHouse) {
+      onCreateHouse(handleCreateHouse);
     }
-  }, []);
+  }, [onCreateHouse, handleCreateHouse]);
 
   return (
     <div className="dashboard-container">
@@ -69,7 +69,7 @@ function Dashboard(props) {
       <div className="tab-content">
         {activeTab === 'houses' && (
           <HouseManagement
-            onViewHouse={props.onViewHouse}
+            onViewHouse={onViewHouse}
             triggerCreate={triggerCreateHouse}
           />
         )}

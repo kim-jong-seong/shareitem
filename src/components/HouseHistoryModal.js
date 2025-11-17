@@ -8,6 +8,7 @@ import deleteIcon from '../assets/icons/delete.svg';
 import areaIcon from '../assets/icons/area.svg';
 import boxIcon from '../assets/icons/box.svg';
 import tagIcon from '../assets/icons/tag.svg';
+import recentIcon from '../assets/icons/recent.svg';
 import '../styles/Modal.css';
 import '../styles/HouseHistoryModal.css';
 
@@ -155,7 +156,10 @@ function HouseHistoryModal(props) {
     >
       <div className="modal-content house-history-modal" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h2>📋 {props.houseName} 최근 활동</h2>
+          <h2 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <img src={recentIcon} alt="최근 활동" style={{ width: '20px', height: '20px' }} />
+            {props.houseName} 최근 활동
+          </h2>
           <button className="modal-close" onClick={props.onClose}>
             ✕
           </button>

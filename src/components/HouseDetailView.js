@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useImperativeHandle, forwardRef } from 'react';
 import axios from 'axios';
 import { API_URL } from '../config';
 import ContainerCard from './ContainerCard';
@@ -8,18 +8,15 @@ import SearchModal from './SearchModal';
 import TempStorageModal from './TempStorageModal';
 import HouseHistoryModal from './HouseHistoryModal';
 import ContainerDetail from './ContainerDetail/ContainerDetail';
-import searchIcon from '../assets/icons/search.svg';
-import refreshIcon from '../assets/icons/refresh.svg';
+import recentIcon from '../assets/icons/recent.svg';
 import boxTempIcon from '../assets/icons/box_temp.svg';
-import arrowBlueIcon from '../assets/icons/arrow_blue.svg';
-import arrowBlue2Icon from '../assets/icons/arrow_blue2.svg';
 import { houseIcon, getContainerIcon } from '../utils/iconUtils';
 import { getRelativeTime } from '../utils/timeUtils';
 import { formatLogOneLine } from '../utils/logFormatUtils';
 import MobileBottomSheet from './MobileBottomSheet';
 import '../styles/HouseDetailView.css';
 
-function HouseDetailView(props) {
+const HouseDetailView = forwardRef(function HouseDetailView(props, ref) {
   // 상태 관리
   const [currentPath, setCurrentPath] = useState([]);
   const [pathNames, setPathNames] = useState([]);
@@ -897,16 +894,27 @@ function HouseDetailView(props) {
     }, 300);
   };
 
-  // 모바일 전용: 뒤로가기 (바텀시트 우선 닫기)
-  const handleBackMobile = () => {
-    if (showBottomSheet) {
-      setShowBottomSheet(false);
-    } else {
-      props.onBack();
-    }
-  };
+  // 부모 컴포넌트에서 접근 가능한 메서드 노출
+  useImperativeHandle(ref, () => ({
+    currentPath,
+    tempStorage,
+    handleUpClick: () => {
+      if (currentPath.length === 1) {
+        loadRootLevel();
+      } else if (currentPath.length > 1) {
+        handleBreadcrumbClick(currentPath.length - 2);
+      }
+    },
+    handleAddClick: () => {
+      const parentId = currentPath.length > 0 ? currentPath[currentPath.length - 1] : null;
+      handleAddClick(parentId);
+    },
+    handleSearchClick: () => setShowSearchModal(true),
+    handleRefreshClick: handleRefresh,
+    handleTempStorageClick: () => setShowTempStorageModal(true)
+  }));
 
-    const handleSearchSelect = async (result) => {
+  const handleSearchSelect = async (result) => {
     try {
       const token = localStorage.getItem('token');
 
@@ -984,79 +992,12 @@ function HouseDetailView(props) {
     <div className="house-detail-view">
       {/* 헤더 */}
       <div className="header">
-        <div className="header-top-row">
-          <div className="header-left">
-            <button className="back-button" onClick={isMobile ? handleBackMobile : props.onBack}>
-              <img src={arrowBlue2Icon} alt="목록" style={{ width: '16px', height: '16px', marginRight: '4px', verticalAlign: 'middle', transform: 'rotate(180deg)' }} />
-              목록
-            </button>
-
-            {/* 상위로 이동 버튼 (최상위가 아닐 때만 표시) */}
-            {currentPath.length > 0 && (
-              <button
-                className="back-button"
-                onClick={() => {
-                  if (currentPath.length === 1) {
-                    loadRootLevel();
-                  } else {
-                    handleBreadcrumbClick(currentPath.length - 2);
-                  }
-                }}
-              >
-                <img src={arrowBlueIcon} alt="상위" style={{ width: '16px', height: '16px', marginRight: '4px', verticalAlign: 'middle' }} />
-                상위
-              </button>
-            )}
-
-            {/* PC에서만 경로를 같은 줄에 표시 (버튼 옆에 붙여서) */}
-            {!isMobile && (
-              <div className="breadcrumb">
-                <span
-                  className="breadcrumb-item"
-                  onClick={() => handleBreadcrumbClick(-1)}
-                >
-                  {selectedHouseName}
-                </span>
-                {pathNames.map((name, index) => (
-                  <React.Fragment key={index}>
-                    <span className="breadcrumb-separator">›</span>
-                    <span
-                      className={index === pathNames.length - 1 ? 'breadcrumb-current' : 'breadcrumb-item'}
-                      onClick={() => handleBreadcrumbClick(index)}
-                    >
-                      {name}
-                    </span>
-                  </React.Fragment>
-                ))}
-              </div>
-            )}
-          </div>
-
-          <div className="header-right">
-            <div className="search-box" onClick={() => setShowSearchModal(true)}>
-              <img src={searchIcon} alt="검색" style={{ width: '20px', height: '20px' }} />
-            </div>
-            <div className="search-box" onClick={handleRefresh} title="새로고침">
-              <img src={refreshIcon} alt="새로고침" style={{ width: '20px', height: '20px' }} />
-            </div>
-            {tempStorage.length > 0 && (
-              <div
-                className="temp-badge"
-                onClick={() => setShowTempStorageModal(true)}
-                data-count={tempStorage.length}
-              >
-                <img src={boxTempIcon} alt="임시보관함" style={{ width: '16px', height: '16px', marginRight: '4px', verticalAlign: 'middle' }} />
-                <span className="temp-badge-text">임시보관함 ({tempStorage.length})</span>
-              </div>
-            )}
-          </div>
-        </div>
-
         {/* 최근 활동 섹션 */}
         <div className="recent-activity-section">
           <div className="recent-activity-header">
-            <span onClick={() => setShowHistoryModal(true)} style={{ cursor: 'pointer', flex: 1 }}>
-              📋 최근 활동
+            <span onClick={() => setShowHistoryModal(true)} style={{ cursor: 'pointer', flex: 1, display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <img src={recentIcon} alt="최근 활동" style={{ width: '16px', height: '16px' }} />
+              최근 활동
             </span>
             {recentLogs.length > 0 && (
               <button
@@ -1110,6 +1051,31 @@ function HouseDetailView(props) {
             <div className="recent-activity-empty">최근 활동이 없습니다</div>
           )}
         </div>
+
+        {/* PC에서만 경로 표시 */}
+        {!isMobile && (
+          <div className="breadcrumb-row">
+            <div className="breadcrumb">
+              <span
+                className="breadcrumb-item"
+                onClick={() => handleBreadcrumbClick(-1)}
+              >
+                {selectedHouseName}
+              </span>
+              {pathNames.map((name, index) => (
+                <React.Fragment key={index}>
+                  <span className="breadcrumb-separator">›</span>
+                  <span
+                    className={index === pathNames.length - 1 ? 'breadcrumb-current' : 'breadcrumb-item'}
+                    onClick={() => handleBreadcrumbClick(index)}
+                  >
+                    {name}
+                  </span>
+                </React.Fragment>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* 모바일에서만 경로를 별도 줄에 표시 */}
         {isMobile && (
@@ -1175,20 +1141,6 @@ function HouseDetailView(props) {
           <div className="mobile-panel-content">
             {/* 현재 위치 (자식) */}
             <>
-                <div className="mobile-panel-header">
-                  <span>
-                    {currentPath.length === 0
-                      ? `${selectedHouseName}`
-                      : `${pathNames[pathNames.length - 1]}`
-                    }
-                  </span>
-                  <button
-                    className="add-button-mobile"
-                    onClick={() => handleAddClick(currentPath[currentPath.length - 1] || null)}
-                  >
-                    + 추가
-                  </button>
-                </div>
                 <div className="mobile-panel-list">
                   {/* 임시보관함 영역 (모바일 전용, 항목이 있을 때만 표시) */}
                   {tempStorage.length > 0 && (
@@ -1384,12 +1336,6 @@ function HouseDetailView(props) {
                 : `› ${pathNames[pathNames.length - 1]}`
               }
             </span>
-            <button 
-              className="add-button"
-              onClick={() => handleAddClick(currentPath[currentPath.length - 1] || null)}
-            >
-              + 추가
-            </button>
           </div>
           <div className="panel-content">
             {/* 임시보관함 영역 (PC 전용, 항목이 있을 때만 표시) */}
@@ -1558,6 +1504,6 @@ function HouseDetailView(props) {
       )}
     </div>
   );
-}
+});
 
 export default HouseDetailView;
