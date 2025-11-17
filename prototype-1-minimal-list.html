@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>프로토타입 1: 미니멀 리스트 (Notion 스타일)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #ffffff;
+            color: #37352f;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* 헤더 */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e9e9e7;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avatar {
+            width: 32px;
+            height: 32px;
+            background: #37352f;
+            color: white;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .user-name {
+            font-size: 14px;
+            color: #37352f;
+            font-weight: 500;
+        }
+
+        .logout-btn {
+            padding: 6px 12px;
+            background: none;
+            border: 1px solid #e9e9e7;
+            border-radius: 4px;
+            font-size: 14px;
+            color: #37352f;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .logout-btn:hover {
+            background: #f7f6f3;
+        }
+
+        /* 탭 */
+        .tabs {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 32px;
+            border-bottom: 1px solid #e9e9e7;
+        }
+
+        .tab {
+            padding: 8px 0;
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            font-size: 14px;
+            color: #787774;
+            cursor: pointer;
+            transition: color 0.15s;
+            margin-bottom: -1px;
+        }
+
+        .tab:hover {
+            color: #37352f;
+        }
+
+        .tab.active {
+            color: #37352f;
+            border-bottom-color: #37352f;
+            font-weight: 500;
+        }
+
+        .tab-badge {
+            display: inline-block;
+            margin-left: 6px;
+            padding: 2px 6px;
+            background: #eb5757;
+            color: white;
+            font-size: 11px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+        /* 액션 영역 */
+        .actions {
+            margin-bottom: 24px;
+        }
+
+        .create-btn {
+            padding: 8px 16px;
+            background: #37352f;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .create-btn:hover {
+            background: #2f2e2a;
+        }
+
+        /* 집 목록 */
+        .house-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+            background: #e9e9e7;
+            border: 1px solid #e9e9e7;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .house-item {
+            background: white;
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .house-item:hover {
+            background: #f7f6f3;
+        }
+
+        .house-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex: 1;
+        }
+
+        .house-icon {
+            font-size: 20px;
+        }
+
+        .house-details {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .house-name {
+            font-size: 15px;
+            font-weight: 500;
+            color: #37352f;
+            min-width: 200px;
+        }
+
+        .house-meta {
+            display: flex;
+            gap: 16px;
+            font-size: 13px;
+            color: #787774;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .role-badge {
+            padding: 2px 8px;
+            background: #f7f6f3;
+            border-radius: 3px;
+            font-size: 12px;
+            color: #787774;
+            font-weight: 500;
+        }
+
+        .role-badge.admin {
+            background: #37352f;
+            color: white;
+        }
+
+        .house-actions {
+            display: flex;
+            gap: 8px;
+            opacity: 0;
+            transition: opacity 0.15s;
+        }
+
+        .house-item:hover .house-actions {
+            opacity: 1;
+        }
+
+        .action-btn {
+            padding: 6px 12px;
+            background: none;
+            border: 1px solid #e9e9e7;
+            border-radius: 4px;
+            font-size: 13px;
+            color: #37352f;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .action-btn:hover {
+            background: #f7f6f3;
+        }
+
+        .action-btn.delete {
+            color: #eb5757;
+            border-color: #eb5757;
+        }
+
+        .action-btn.delete:hover {
+            background: #fef2f2;
+        }
+
+        /* 빈 상태 */
+        .empty {
+            padding: 80px 20px;
+            text-align: center;
+            color: #787774;
+            font-size: 14px;
+        }
+
+        /* 반응형 */
+        @media (max-width: 768px) {
+            .house-details {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .house-name {
+                min-width: auto;
+            }
+
+            .house-actions {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 헤더 -->
+        <div class="header">
+            <div class="user-info">
+                <div class="avatar">홍</div>
+                <span class="user-name">홍길동</span>
+            </div>
+            <button class="logout-btn">로그아웃</button>
+        </div>
+
+        <!-- 탭 -->
+        <div class="tabs">
+            <button class="tab active">집 목록</button>
+            <button class="tab">초대 내역 <span class="tab-badge">3</span></button>
+        </div>
+
+        <!-- 액션 -->
+        <div class="actions">
+            <button class="create-btn">+ 새 집 만들기</button>
+        </div>
+
+        <!-- 집 목록 -->
+        <div class="house-list">
+            <div class="house-item">
+                <div class="house-info">
+                    <span class="house-icon">🏠</span>
+                    <div class="house-details">
+                        <div class="house-name">우리집</div>
+                        <div class="house-meta">
+                            <span class="role-badge admin">관리자</span>
+                            <span class="meta-item">👥 3명</span>
+                            <span class="meta-item">📦 24개</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="house-actions">
+                    <button class="action-btn">보기</button>
+                    <button class="action-btn delete">삭제</button>
+                </div>
+            </div>
+
+            <div class="house-item">
+                <div class="house-info">
+                    <span class="house-icon">🏠</span>
+                    <div class="house-details">
+                        <div class="house-name">회사 창고</div>
+                        <div class="house-meta">
+                            <span class="role-badge">멤버</span>
+                            <span class="meta-item">👥 8명</span>
+                            <span class="meta-item">📦 156개</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="house-actions">
+                    <button class="action-btn">보기</button>
+                    <button class="action-btn delete">나가기</button>
+                </div>
+            </div>
+
+            <div class="house-item">
+                <div class="house-info">
+                    <span class="house-icon">🏠</span>
+                    <div class="house-details">
+                        <div class="house-name">취미 방</div>
+                        <div class="house-meta">
+                            <span class="role-badge admin">관리자</span>
+                            <span class="meta-item">👥 1명</span>
+                            <span class="meta-item">📦 87개</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="house-actions">
+                    <button class="action-btn">보기</button>
+                    <button class="action-btn delete">삭제</button>
+                </div>
+            </div>
+
+            <div class="house-item">
+                <div class="house-info">
+                    <span class="house-icon">🏠</span>
+                    <div class="house-details">
+                        <div class="house-name">가족 공유 창고</div>
+                        <div class="house-meta">
+                            <span class="role-badge">멤버</span>
+                            <span class="meta-item">👥 5명</span>
+                            <span class="meta-item">📦 42개</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="house-actions">
+                    <button class="action-btn">보기</button>
+                    <button class="action-btn delete">나가기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

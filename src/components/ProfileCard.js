@@ -21,10 +21,8 @@ function ProfileCard({ user, onLogout }) {
     <div className="profile-card">
       <div className="profile-info">
         <div className="profile-avatar">{getUserInitial()}</div>
-        <div className="profile-text">
-          <h3>{user ? `${user.name}님` : '사용자님'}</h3>
-          <p>{user ? user.email : 'guest@shareitem.com'}</p>
-        </div>
+        <div className="profile-name">{user ? user.name : '사용자'}</div>
+        <div className="profile-email">{user ? user.email : 'guest@shareitem.com'}</div>
       </div>
       <button className="logout-btn" onClick={handleLogout}>
         로그아웃
