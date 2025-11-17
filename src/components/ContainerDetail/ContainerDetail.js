@@ -57,7 +57,7 @@ function ContainerDetail(props) {
                 className="drill-down-button-mobile"
                 onClick={props.onDrillDown}
               >
-                열기 →
+                열기
               </button>
             </div>
           )}
