@@ -38,6 +38,15 @@
   font-weight: 700;
   color: #1a202c;
   margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.login-logo-icon {
+  width: 32px;
+  height: 32px;
 }
 
 .auth-header p {

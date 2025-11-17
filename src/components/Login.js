@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { API_URL } from '../config';
 import '../styles/Login.css';
+import boxIcon from '../assets/icons/box.svg';
 
 function Login(props) {
     const [formData, setFormData] = useState({
@@ -81,7 +82,10 @@ function Login(props) {
         <div className="auth-container">
             <div className="auth-card">
                 <div className="auth-header">
-                    <h2>Share Item</h2>
+                    <h2>
+                        <img src={boxIcon} alt="box" className="login-logo-icon" />
+                        Share Item
+                    </h2>
                     <p>물품을 공유하고 관리해보세요</p>
                 </div>
 
