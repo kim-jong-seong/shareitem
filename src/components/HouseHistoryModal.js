@@ -210,6 +210,7 @@ function HouseHistoryModal(props) {
                     )}
                     <div className="history-footer">
                       <span className="history-user">{log.creator_name}</span>
+                      <span className="history-date-mobile">{formatDate(log.created_at)}</span>
                     </div>
                   </div>
                 );

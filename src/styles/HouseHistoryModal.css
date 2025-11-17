@@ -109,11 +109,20 @@
 }
 
 .house-history-modal .history-footer {
-  /* 활동자명만 표시 */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .house-history-modal .history-user {
   font-size: 13px;
+  color: #999;
+}
+
+/* 모바일 전용 날짜 (기본 숨김) */
+.house-history-modal .history-date-mobile {
+  display: none;
+  font-size: 12px;
   color: #999;
 }
 
@@ -122,4 +131,17 @@
   color: #999;
   margin-left: 4px;
   font-weight: 400;
+}
+
+/* 모바일 반응형 */
+@media (max-width: 768px) {
+  /* PC용 날짜 숨김 */
+  .house-history-modal .history-date {
+    display: none;
+  }
+
+  /* 모바일용 날짜 표시 */
+  .house-history-modal .history-date-mobile {
+    display: block;
+  }
 }
