@@ -6,6 +6,7 @@ import AddContainerModal from './AddContainerModal';
 import EditContainerModal from './EditContainerModal';
 import SearchModal from './SearchModal';
 import TempStorageModal from './TempStorageModal';
+import HouseHistoryModal from './HouseHistoryModal';
 import ContainerDetail from './ContainerDetail/ContainerDetail';
 import searchIcon from '../assets/icons/search.svg';
 import refreshIcon from '../assets/icons/refresh.svg';
@@ -13,6 +14,8 @@ import boxTempIcon from '../assets/icons/box_temp.svg';
 import arrowBlueIcon from '../assets/icons/arrow_blue.svg';
 import arrowBlue2Icon from '../assets/icons/arrow_blue2.svg';
 import { houseIcon, getContainerIcon } from '../utils/iconUtils';
+import { getRelativeTime } from '../utils/timeUtils';
+import { formatLogOneLine } from '../utils/logFormatUtils';
 import MobileBottomSheet from './MobileBottomSheet';
 import '../styles/HouseDetailView.css';
 
@@ -33,7 +36,13 @@ function HouseDetailView(props) {
   const [showEditModal, setShowEditModal] = useState(false);
   const [showSearchModal, setShowSearchModal] = useState(false);
   const [showTempStorageModal, setShowTempStorageModal] = useState(false);
+  const [showHistoryModal, setShowHistoryModal] = useState(false);
   const [addParentId, setAddParentId] = useState(null);
+
+  // 최근 활동 상태
+  const [recentLogs, setRecentLogs] = useState([]);
+  const [isActivityExpanded, setIsActivityExpanded] = useState(false);
+  const [isInitialActivityLoad, setIsInitialActivityLoad] = useState(true);
 
   // 임시보관함 상태
   const [tempStorage, setTempStorage] = useState([]);
@@ -61,6 +70,14 @@ function HouseDetailView(props) {
     init();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // 선택된 집 변경 시 최근 활동 조회
+  useEffect(() => {
+    if (selectedHouseId) {
+      fetchRecentLogs(3);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedHouseId]);
 
   // 반응형 감지 (resize 이벤트)
   useEffect(() => {
@@ -125,6 +142,26 @@ function HouseDetailView(props) {
     } catch (err) {
       console.error('집 목록 조회 실패:', err);
       setError('집 목록을 불러오는데 실패했습니다');
+    }
+  };
+
+  // 최근 활동 조회
+  const fetchRecentLogs = async (limit = 3) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get(
+        `${API_URL}/api/houses/${selectedHouseId}/logs?limit=${limit}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setRecentLogs(response.data.logs || []);
+      // 초기 로드 후에는 애니메이션 비활성화
+      if (isInitialActivityLoad) {
+        setTimeout(() => setIsInitialActivityLoad(false), 500);
+      }
+    } catch (err) {
+      console.error('최근 활동 조회 실패:', err);
+      // 에러 시 빈 배열로 설정 (UI에서 "활동 내역이 없습니다" 표시)
+      setRecentLogs([]);
     }
   };
 
@@ -453,6 +490,8 @@ function HouseDetailView(props) {
     } else {
       handleBreadcrumbClick(currentPath.length - 1);
     }
+    // 최근 활동 갱신
+    fetchRecentLogs(3);
   };
 
   const handleEditClick = (container) => {
@@ -500,6 +539,9 @@ function HouseDetailView(props) {
         console.error('수정된 항목 재선택 실패:', err);
       }
     }
+
+    // 최근 활동 갱신
+    fetchRecentLogs(3);
   };
 
   const handleDelete = async (container) => {
@@ -519,6 +561,9 @@ function HouseDetailView(props) {
       } else {
         handleBreadcrumbClick(currentPath.length - 1);
       }
+
+      // 최근 활동 갱신
+      fetchRecentLogs(3);
     } catch (err) {
       alert('삭제에 실패했습니다: ' + (err.response?.data?.error || err.message));
       console.error(err);
@@ -696,6 +741,9 @@ function HouseDetailView(props) {
       // 집 목록 새로고침 (항목 개수 업데이트)
       fetchHouses();
 
+      // 최근 활동 갱신
+      fetchRecentLogs(3);
+
       // 모바일에서는 바텀시트 닫기
       if (isMobile && showBottomSheet) {
         setShowBottomSheet(false);
@@ -812,6 +860,9 @@ function HouseDetailView(props) {
       // 집 목록 새로고침 (항목 개수 업데이트)
       fetchHouses();
 
+      // 최근 활동 갱신
+      fetchRecentLogs(3);
+
       // 모바일에서는 바텀시트 닫기
       if (isMobile && showBottomSheet) {
         setShowBottomSheet(false);
@@ -829,6 +880,8 @@ function HouseDetailView(props) {
     } else {
       handleBreadcrumbClick(currentPath.length - 1);
     }
+    // 최근 활동 갱신
+    fetchRecentLogs(3);
   };
 
   // 모바일 전용: 바텀시트에서 드릴다운
@@ -997,6 +1050,65 @@ function HouseDetailView(props) {
               </div>
             )}
           </div>
+        </div>
+
+        {/* 최근 활동 섹션 */}
+        <div className="recent-activity-section">
+          <div className="recent-activity-header">
+            <span onClick={() => setShowHistoryModal(true)} style={{ cursor: 'pointer', flex: 1 }}>
+              📋 최근 활동
+            </span>
+            {recentLogs.length > 0 && (
+              <button
+                className="activity-toggle-btn"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsActivityExpanded(!isActivityExpanded);
+                }}
+                title={isActivityExpanded ? '접기' : '펼치기'}
+              >
+                <span className={`toggle-arrow ${isActivityExpanded ? 'expanded' : ''}`}>▼</span>
+              </button>
+            )}
+          </div>
+          {recentLogs.length > 0 ? (
+            <div className="recent-activity-list">
+              {recentLogs.slice(0, 3).map((log, index) => {
+                const formatted = formatLogOneLine(log, selectedHouseName);
+                const icon = formatted.icon;
+                const shouldShow = index < (isActivityExpanded ? 3 : 1);
+                return (
+                  <div
+                    key={log.id}
+                    className={`recent-activity-item ${isInitialActivityLoad ? 'initial-load' : ''} ${!shouldShow ? 'hidden' : ''}`}
+                    onClick={() => setShowHistoryModal(true)}
+                    style={isInitialActivityLoad ? { animationDelay: `${index * 0.05}s` } : {}}
+                  >
+                    <span className="activity-icon">
+                      {(typeof icon === 'string' && (icon.startsWith('/') || icon.includes('.svg'))) ? (
+                        <img src={icon} alt={formatted.action} style={{ width: '16px', height: '16px' }} />
+                      ) : (
+                        icon
+                      )}
+                    </span>
+                    <span className="activity-creator">{formatted.creator}</span>
+                    <span className="activity-content">
+                      <span className="container-name-highlight">
+                        {formatted.typeIcon && (
+                          <img src={formatted.typeIcon} alt="type" className="type-icon-inline" />
+                        )}
+                        {formatted.containerName}
+                      </span>
+                      {formatted.detail && <span className="activity-detail-text"> {formatted.detail}</span>}
+                    </span>
+                    <span className="activity-time">{getRelativeTime(log.created_at)}</span>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="recent-activity-empty">최근 활동이 없습니다</div>
+          )}
         </div>
 
         {/* 모바일에서만 경로를 별도 줄에 표시 */}
@@ -1434,6 +1546,14 @@ function HouseDetailView(props) {
           onClose={() => setShowTempStorageModal(false)}
           onRemove={handleRemoveFromTemp}
           onClearAll={handleClearAllTemp}
+        />
+      )}
+
+      {showHistoryModal && (
+        <HouseHistoryModal
+          houseId={selectedHouseId}
+          houseName={selectedHouseName}
+          onClose={() => setShowHistoryModal(false)}
         />
       )}
     </div>

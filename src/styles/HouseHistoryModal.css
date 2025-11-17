@@ -1,0 +1,107 @@
+.house-history-modal {
+  max-width: 800px;
+  width: 90%;
+  max-height: 80vh;
+}
+
+.house-history-modal .modal-body {
+  padding: 0;
+  overflow-y: auto;
+}
+
+/* 모달 내부 스타일만 적용 (기존 HistoryTab에 영향 안 주도록) */
+.house-history-modal .history-loading,
+.house-history-modal .history-error,
+.house-history-modal .history-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: #666;
+}
+
+.house-history-modal .history-list {
+  padding: 0;
+}
+
+.house-history-modal .history-item {
+  padding: 16px 20px;
+  border-bottom: 1px solid #e0e0e0;
+  transition: background 0.2s;
+  animation: slideInUp 0.4s ease-out forwards;
+}
+
+.house-history-modal .history-item:hover {
+  background: #f9f9f9;
+}
+
+.house-history-modal .history-item:last-child {
+  border-bottom: none;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.house-history-modal .history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.house-history-modal .history-action {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+
+.house-history-modal .history-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.house-history-modal .history-container-name {
+  font-weight: 600;
+  color: #333;
+  font-size: 16px;
+}
+
+.house-history-modal .history-action-name {
+  font-weight: 600;
+  color: #333;
+  font-size: 14px;
+}
+
+.house-history-modal .history-date {
+  font-size: 13px;
+  color: #999;
+}
+
+.house-history-modal .history-detail {
+  font-size: 14px;
+  color: #666;
+  margin: 8px 0;
+  padding-left: 28px;
+}
+
+.house-history-modal .history-user {
+  font-size: 13px;
+  color: #999;
+  padding-left: 28px;
+}
+
+.house-history-modal .deleted-badge {
+  font-size: 11px;
+  color: #999;
+  margin-left: 4px;
+  font-weight: 400;
+}
