@@ -81,6 +81,7 @@
   color: #999;
   font-weight: 400;
   margin: 0 2px;
+  flex-shrink: 0;
 }
 
 .house-history-modal .history-icon {
@@ -94,6 +95,8 @@
   font-weight: 500;
   color: #555;
   font-size: 14px;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .house-history-modal .history-detail {
