@@ -1,11 +1,10 @@
 /* 고정 핀 공지사항 */
 .info-box {
     max-width: 1200px;
-    margin: 0 auto;
+    margin: 24px auto 20px;
     background-color: #e3f2fd;
     border-left: 4px solid #1976d2;
     padding: 16px;
-    margin-bottom: 20px;
     border-radius: 4px;
     display: flex;
     align-items: center;

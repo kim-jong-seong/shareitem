@@ -27,14 +27,9 @@
     color: #333;
 }
 
-/* 헤더 */
+/* 헤더 (HouseManagement 내부 헤더는 숨김) */
 .dashboard-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
-    padding-bottom: 20px;
-    border-bottom: 2px solid #e0e0e0;
+    display: none;
 }
 
 .header-left h2 {
@@ -74,18 +69,21 @@
 
 .create-button {
     padding: 10px 20px;
-    background-color: #1976d2;
+    background-color: #4a90e2;
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 8px;
     font-size: 14px;
     font-weight: 500;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: all 0.2s;
+    box-shadow: 0 2px 6px rgba(74, 144, 226, 0.3);
 }
 
 .create-button:hover {
-    background-color: #1565c0;
+    background-color: #3a7bc8;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(74, 144, 226, 0.4);
 }
 
 /* 프로필 카드 (로그인 정보) */
@@ -524,10 +522,9 @@
         width: 100%;
     }
 
+    /* 모바일에서는 대시보드 내 + 버튼 숨기기 */
     .create-button {
-        width: 100%;
-        padding: 12px 16px;
-        font-size: 15px;
+        display: none;
     }
 
     /* 프로필 카드 - 세로 배치 */

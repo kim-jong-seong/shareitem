@@ -19,6 +19,16 @@ function HouseManagement(props) {
     fetchHouses();
   }, []);
 
+  // 외부에서 집 만들기 트리거
+  const prevTriggerRef = React.useRef();
+  useEffect(() => {
+    // 첫 렌더링이 아니고, triggerCreate 값이 변경되었을 때만 모달 열기
+    if (prevTriggerRef.current !== undefined && prevTriggerRef.current !== props.triggerCreate) {
+      setShowCreateModal(true);
+    }
+    prevTriggerRef.current = props.triggerCreate;
+  }, [props.triggerCreate]);
+
   const fetchHouses = async () => {
     try {
       const token = localStorage.getItem('token');

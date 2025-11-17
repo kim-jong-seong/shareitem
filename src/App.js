@@ -13,6 +13,7 @@ function App() {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedHouse, setSelectedHouse] = useState(null); // 선택된 집 정보
+  const [createHouseHandler, setCreateHouseHandler] = useState(null);
 
   // JWT 토큰 만료 처리를 위한 axios 인터셉터
   useEffect(() => {
@@ -124,11 +125,24 @@ function App() {
         
         {/* 대시보드 (집 목록) */}
         {currentView === "dashboard" && (
-          <div className="dashboard-wrapper">
-            <ProfileCard user={user} onLogout={onLogout} />
-            <InfoBox />
-            <Dashboard onViewHouse={handleViewHouse} />
-          </div>
+          <>
+            <ProfileCard
+              user={user}
+              onLogout={onLogout}
+              onCreateHouse={() => {
+                if (createHouseHandler) {
+                  createHouseHandler();
+                }
+              }}
+            />
+            <div className="dashboard-wrapper">
+              <InfoBox />
+              <Dashboard
+                onViewHouse={handleViewHouse}
+                onCreateHouse={(handler) => setCreateHouseHandler(() => handler)}
+              />
+            </div>
+          </>
         )}
 
         {/* 집 상세 조회 */}

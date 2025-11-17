@@ -82,5 +82,5 @@ ul, ol {
 
 /* App.css */
 .dashboard-wrapper {
-  padding: 40px 20px;  /* 전체 좌우상하 여백 */
+  padding: 0 20px 40px;  /* 헤더는 제외하고 여백 */
 }
