@@ -52,6 +52,9 @@ const HouseDetailView = forwardRef(function HouseDetailView(props, ref) {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [showBottomSheet, setShowBottomSheet] = useState(false);
 
+  // 자동 스크롤 트리거 (검색/히스토리에서 이동 시)
+  const [shouldScrollToSelected, setShouldScrollToSelected] = useState(false);
+
   // 현재 선택된 집 이름을 동적으로 가져오기
   const selectedHouseName = houses.find(h => h.id === selectedHouseId)?.name || props.houseName;
 
@@ -127,6 +130,24 @@ const HouseDetailView = forwardRef(function HouseDetailView(props, ref) {
   //   }
   // }, [selectedHouseId]);
 
+  // 선택된 아이템으로 스크롤 (검색/히스토리에서 이동 시)
+  useEffect(() => {
+    if (shouldScrollToSelected && selectedItem && selectedItem.id) {
+      // 약간의 지연을 두어 DOM이 완전히 렌더링된 후 스크롤
+      const timeoutId = setTimeout(() => {
+        const element = document.querySelector(`[data-container-id="${selectedItem.id}"]`);
+        if (element) {
+          element.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center'
+          });
+        }
+        setShouldScrollToSelected(false);
+      }, 100);
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [shouldScrollToSelected, selectedItem]);
 
   // 집 목록 조회
   const fetchHouses = async () => {
@@ -981,10 +1002,65 @@ const HouseDetailView = forwardRef(function HouseDetailView(props, ref) {
 
       // 이동 완료 후 모달 닫기
       setShowSearchModal(false);
+
+      // 스크롤 트리거
+      setShouldScrollToSelected(true);
     } catch (err) {
       console.error('이동 실패:', err);
       alert('위치로 이동하는데 실패했습니다');
       setShowSearchModal(false);
+    }
+  };
+
+  // 히스토리 모달에서 컨테이너로 이동
+  const handleHistoryNavigate = async ({ container, parentPath, parentPathNames }) => {
+    try {
+      const token = localStorage.getItem('token');
+
+      if (container.type_cd === 'COM1200003') {
+        let siblingsData = [];
+        if (parentPath.length === 1) {
+          const siblingsResponse = await axios.get(
+            `${API_URL}/api/houses/${selectedHouseId}/containers?level=root`,
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
+          siblingsData = siblingsResponse.data.containers;
+        } else if (parentPath.length > 1) {
+          const grandParentId = parentPath[parentPath.length - 2];
+          const siblingsResponse = await axios.get(
+            `${API_URL}/api/houses/${selectedHouseId}/containers?parent_id=${grandParentId}`,
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
+          siblingsData = siblingsResponse.data.containers;
+        }
+
+        const childrenResponse = await axios.get(
+          `${API_URL}/api/houses/${selectedHouseId}/containers?parent_id=${container.up_container_id}`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        setCurrentPath(parentPath);
+        setPathNames(parentPathNames);
+        setSiblings(siblingsData);
+        setChildren(childrenResponse.data.containers);
+        setSelectedItem(container);
+        setDetailInfo(container);
+      } else {
+        if (parentPath.length === 0) {
+          loadRootLevel();
+        } else {
+          await handleBreadcrumbClick(parentPath.length - 1);
+        }
+
+        setSelectedItem(container);
+        setDetailInfo(container);
+      }
+
+      // 스크롤 트리거
+      setShouldScrollToSelected(true);
+    } catch (err) {
+      console.error('컨테이너 이동 실패:', err);
+      alert('위치로 이동하는데 실패했습니다');
     }
   };
 
@@ -1500,6 +1576,7 @@ const HouseDetailView = forwardRef(function HouseDetailView(props, ref) {
           houseId={selectedHouseId}
           houseName={selectedHouseName}
           onClose={() => setShowHistoryModal(false)}
+          onNavigateToContainer={handleHistoryNavigate}
         />
       )}
     </div>

@@ -16,8 +16,59 @@ function HouseHistoryModal(props) {
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [isNavigating, setIsNavigating] = useState(false);
   const [mouseDownTarget, setMouseDownTarget] = useState(null);
   const [mouseUpTarget, setMouseUpTarget] = useState(null);
+
+  // 컨테이너로 이동
+  const handleContainerClick = async (log) => {
+    // 삭제된 컨테이너는 이동 불가
+    if (!log.container_id) return;
+
+    setIsNavigating(true);
+
+    try {
+      const token = localStorage.getItem('token');
+
+      const response = await axios.get(
+        `${API_URL}/api/houses/${props.houseId}/containers/${log.container_id}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      const container = response.data.container;
+
+      // 부모 경로 추적
+      let parentPath = [];
+      let parentPathNames = [];
+      let currentParentId = container.up_container_id;
+
+      while (currentParentId) {
+        const parentResponse = await axios.get(
+          `${API_URL}/api/houses/${props.houseId}/containers/${currentParentId}`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        const parent = parentResponse.data.container;
+        parentPath.unshift(parent.id);
+        parentPathNames.unshift(parent.name);
+        currentParentId = parent.up_container_id;
+      }
+
+      // onNavigateToContainer 호출 (await 추가)
+      if (props.onNavigateToContainer) {
+        await props.onNavigateToContainer({
+          container,
+          parentPath,
+          parentPathNames
+        });
+      }
+
+      // 네비게이션 완료 후 모달 닫기
+      props.onClose();
+    } catch (err) {
+      console.error('컨테이너 이동 실패:', err);
+      setIsNavigating(false);
+    }
+  };
 
   useEffect(() => {
     fetchLogs();
@@ -160,7 +211,7 @@ function HouseHistoryModal(props) {
             <img src={recentIcon} alt="최근 활동" style={{ width: '20px', height: '20px' }} />
             {props.houseName} 최근 활동
           </h2>
-          <button className="modal-close" onClick={props.onClose}>
+          <button className="modal-close" onClick={props.onClose} disabled={isNavigating}>
             ✕
           </button>
         </div>
@@ -183,7 +234,12 @@ function HouseHistoryModal(props) {
                 const typeIcon = getTypeIcon(log.container_type_cd);
 
                 return (
-                  <div key={log.id} className="history-item" style={{ animationDelay: `${index * 0.05}s` }}>
+                  <div
+                    key={log.id}
+                    className={`history-item ${!isDeleted ? 'clickable' : ''}`}
+                    style={{ animationDelay: `${index * 0.05}s` }}
+                    onClick={() => !isDeleted && handleContainerClick(log)}
+                  >
                     <div className="history-header">
                       <div className="history-title">
                         {typeIcon && (
@@ -218,6 +274,16 @@ function HouseHistoryModal(props) {
             </div>
           )}
         </div>
+
+        {/* 로딩 오버레이 */}
+        {isNavigating && (
+          <div className="history-loading-overlay">
+            <div className="history-loading-content">
+              <div className="history-loading-spinner"></div>
+              <div className="history-loading-text">이동 중...</div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

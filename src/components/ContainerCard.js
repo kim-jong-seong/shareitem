@@ -35,11 +35,12 @@ function ContainerCard(props) {
   const meta = getMeta();
 
   return (
-    <div 
+    <div
       className={`item-card ${props.isActive ? 'active' : ''}`}
       style={props.animationDelay ? { animationDelay: props.animationDelay } : {}}
       onClick={props.onClick}
       onDoubleClick={props.onDoubleClick}
+      data-container-id={props.container.id}
     >
       <div className="item-icon">
         <img src={getIcon()} alt="icon" style={{ width: '32px', height: '32px' }} />
