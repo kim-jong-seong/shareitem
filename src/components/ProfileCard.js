@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import '../styles/ProfileCard.css';
 import boxIcon from '../assets/icons/box.svg';
+import logoutIcon from '../assets/icons/logout.svg';
 
 function ProfileCard({
   user,
@@ -143,8 +144,8 @@ function ProfileCard({
                   <div className="dropdown-user-name">{user ? user.name : '사용자'}</div>
                   <div className="dropdown-user-email">{user ? user.email : 'guest@shareitem.com'}</div>
                 </div>
-                <button className="dropdown-item" onClick={handleLogout}>
-                  <span>🚪</span>
+                <button className="dropdown-item logout" onClick={handleLogout}>
+                  <img src={logoutIcon} alt="로그아웃" className="dropdown-icon" />
                   <span>로그아웃</span>
                 </button>
               </div>

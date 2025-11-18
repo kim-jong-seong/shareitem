@@ -192,8 +192,18 @@
   background: #f9fafb;
 }
 
-.dropdown-item span:first-child {
-  font-size: 16px;
+.dropdown-item.logout {
+  color: #dc2626;
+}
+
+.dropdown-item.logout:hover {
+  background: #fee2e2;
+}
+
+.dropdown-icon {
+  width: 16px;
+  height: 16px;
+  filter: brightness(0) saturate(100%) invert(25%) sepia(85%) saturate(3500%) hue-rotate(350deg) brightness(95%) contrast(90%);
 }
 
 /* 상세 화면 네비게이션 버튼 */
