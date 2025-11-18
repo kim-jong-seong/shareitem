@@ -309,24 +309,25 @@
 }
 
 .card-view-btn {
-    background-color: #1976d2;
+    background-color: #4a90e2;
     color: white;
 }
 
 .card-view-btn:hover {
-    background-color: #1565c0;
+    background-color: #3a7bc8;
     transform: translateY(-1px);
-    box-shadow: 0 2px 6px rgba(25, 118, 210, 0.3);
+    box-shadow: 0 4px 10px rgba(74, 144, 226, 0.4);
 }
 
 .card-delete-btn {
-    background-color: #ef5350;
-    color: white;
-    border: none;
+    background-color: #f3f4f6;
+    color: #6b7280;
+    border: 1px solid #d1d5db;
 }
 
 .card-delete-btn:hover {
-    background-color: #e53935;
+    background-color: #e5e7eb;
+    border-color: #9ca3af;
     transform: translateY(-1px);
 }
 
