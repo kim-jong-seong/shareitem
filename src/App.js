@@ -1,12 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import './App.css';
-import Login from './components/Login'
-import Signup from './components/Signup'
-import Dashboard from './components/Dashboard'
-import InfoBox from './components/InfoBox'
-import ProfileCard from './components/ProfileCard'
-import HouseDetailView from './components/HouseDetailView'
+import Login from './components/auth/Login'
+import Signup from './components/auth/Signup'
+import Dashboard from './components/dashboard'
+import InfoBox from './components/dashboard/InfoBox'
+import Header from './components/layout/Header'
+import HouseDetailView from './components/houseDetail'
 import searchIcon from './assets/icons/search.svg';
 import refreshIcon from './assets/icons/refresh.svg';
 import boxTempIcon from './assets/icons/box_temp.svg';
@@ -37,7 +37,7 @@ function HouseDetailViewWrapper({ user, onLogout, selectedHouse, onBack }) {
 
   return (
     <>
-      <ProfileCard
+      <Header
         user={user}
         onLogout={onLogout}
         isDetailView={true}
@@ -185,7 +185,7 @@ function App() {
         {/* 대시보드 (집 목록) */}
         {currentView === "dashboard" && (
           <>
-            <ProfileCard
+            <Header
               user={user}
               onLogout={onLogout}
               onCreateHouse={() => {

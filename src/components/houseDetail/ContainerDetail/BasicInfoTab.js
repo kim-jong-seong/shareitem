@@ -1,5 +1,5 @@
 import React from 'react';
-import { getContainerIcon } from '../../utils/iconUtils';
+import { getContainerIcon } from '../../../utils/iconUtils';
 
 function BasicInfoTab(props) {
   // 아이콘 가져오기

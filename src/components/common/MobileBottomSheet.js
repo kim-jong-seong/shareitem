@@ -1,18 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
-import '../styles/MobileBottomSheet.css';
+import '../../styles/MobileBottomSheet.css';
 
 function MobileBottomSheet({ isOpen, onClose, children }) {
   const [isClosing, setIsClosing] = useState(false);
-  const [dragOffset, setDragOffset] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
-  const touchStartY = useRef(0);
   const containerRef = useRef(null);
 
   useEffect(() => {
     if (!isOpen) {
       setIsClosing(false);
-      setDragOffset(0);
-      setIsDragging(false);
     }
   }, [isOpen]);
 
@@ -43,48 +38,8 @@ function MobileBottomSheet({ isOpen, onClose, children }) {
     setIsClosing(true);
     setTimeout(() => {
       setIsClosing(false);
-      setDragOffset(0);
       onClose();
     }, 200); // 0.2s 애니메이션 후 닫기
-  };
-
-  const handleTouchStart = (e) => {
-    // 드래그 기능 비활성화 (핸들 제거됨)
-    // X 버튼이나 배경 클릭으로만 닫을 수 있음
-  };
-
-  const handleTouchMove = (e) => {
-    if (!isDragging) return;
-
-    const currentY = e.touches[0].clientY;
-    const diff = currentY - touchStartY.current;
-
-    // 아래로만 드래그 가능 (diff > 0)
-    if (diff > 0) {
-      setDragOffset(diff);
-      // 드래그가 실제로 시작되었을 때만 스크롤 방지 (5px 이상 이동시)
-      if (diff > 5) {
-        e.preventDefault();
-      }
-    } else {
-      // 위로 드래그하려는 경우 드래그 취소 (스크롤 허용)
-      setIsDragging(false);
-      setDragOffset(0);
-    }
-  };
-
-  const handleTouchEnd = () => {
-    if (!isDragging) return;
-
-    setIsDragging(false);
-
-    // 100px 이상 드래그하면 닫기
-    if (dragOffset > 100) {
-      handleClose();
-    } else {
-      // 그렇지 않으면 원위치
-      setDragOffset(0);
-    }
   };
 
   return (
@@ -99,13 +54,6 @@ function MobileBottomSheet({ isOpen, onClose, children }) {
       <div
         ref={containerRef}
         className="bottom-sheet-container"
-        style={{
-          transform: isDragging ? `translateY(${dragOffset}px)` : undefined,
-          transition: isDragging ? 'none' : undefined
-        }}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
       >
         {/* X 버튼 */}
         <button

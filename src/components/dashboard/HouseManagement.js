@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { API_URL } from '../config';
-import CreateHouseModal from './CreateHouseModal';
-import MemberManagementModal from './MemberManagementModal';
-import { houseIcon } from '../utils/iconUtils';
-import usersIcon from '../assets/icons/users.svg';
+import { API_URL } from '../../config';
+import CreateHouseModal from '../common/modals/CreateHouseModal';
+import MemberManagementModal from '../common/modals/MemberManagementModal';
+import { houseIcon } from '../../utils/iconUtils';
+import usersIcon from '../../assets/icons/users.svg';
 
 function HouseManagement(props) {
   const [houses, setHouses] = useState([]);

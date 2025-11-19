@@ -1,8 +1,8 @@
 import React from 'react';
-import { getContainerIcon } from '../utils/iconUtils';
-import boxTempIcon from '../assets/icons/box_temp.svg';
-import '../styles/Modal.css';
-import '../styles/TempStorageModal.css';
+import { getContainerIcon } from '../../../utils/iconUtils';
+import boxTempIcon from '../../../assets/icons/box_temp.svg';
+import '../../../styles/Modal.css';
+import '../../../styles/TempStorageModal.css';
 
 function TempStorageModal(props) {
   const [mouseDownTarget, setMouseDownTarget] = React.useState(null);

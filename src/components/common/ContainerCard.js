@@ -1,7 +1,7 @@
 import React from 'react';
-import { getContainerIcon } from '../utils/iconUtils';
-import boxTempIcon from '../assets/icons/box_temp.svg';
-import '../styles/ContainerCard.css';
+import { getContainerIcon } from '../../utils/iconUtils';
+import boxTempIcon from '../../assets/icons/box_temp.svg';
+import '../../styles/ContainerCard.css';
 
 function ContainerCard(props) {
   // 타입별 아이콘

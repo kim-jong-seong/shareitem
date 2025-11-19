@@ -1,6 +1,6 @@
 import React from 'react';
-import pinIcon from '../assets/icons/pin.svg';
-import '../styles/InfoBox.css';
+import pinIcon from '../../assets/icons/pin.svg';
+import '../../styles/InfoBox.css';
 
 function InfoBox() {
   return (

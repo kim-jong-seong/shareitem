@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { API_URL } from '../config';
+import { API_URL } from '../../config';
 import HouseManagement from './HouseManagement';
 import InvitationList from './InvitationList';
-import '../styles/Dashboard.css';
+import '../../styles/Dashboard.css';
 
 function Dashboard({ onViewHouse, onCreateHouse }) {
   const [activeTab, setActiveTab] = useState('houses'); // 'houses' | 'invitations'

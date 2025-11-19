@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { API_URL } from '../config';
-import '../styles/Login.css'; // Login과 같은 스타일 사용
+import { API_URL } from '../../config';
+import '../../styles/Login.css'; // Login과 같은 스타일 사용
 
 function Signup(props) {
     const [formData, setFormData] = useState({

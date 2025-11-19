@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { API_URL } from '../config';
-import { areaIcon, boxIcon, tagIcon } from '../utils/iconUtils';
-import '../styles/Modal.css';
+import { API_URL } from '../../../config';
+import '../../../styles/Modal.css';
 
-function AddContainerModal(props) {
+function EditContainerModal(props) {
   
-  const [type, setType] = useState('item'); // 'area', 'box', 'item'
-  const [name, setName] = useState('');
-  const [quantity, setQuantity] = useState(1);
-  const [ownerId, setOwnerId] = useState('');
-  const [memo, setMemo] = useState('');
+  const [name, setName] = useState(props.container.name);
+  const [quantity, setQuantity] = useState(props.container.quantity || 1);
+  const [ownerId, setOwnerId] = useState(props.container.owner_user_id || '');
+  const [memo, setMemo] = useState(props.container.remk || '');
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -18,7 +16,9 @@ function AddContainerModal(props) {
   const [mouseDownTarget, setMouseDownTarget] = useState(null);
   const [mouseUpTarget, setMouseUpTarget] = useState(null);
 
-  // 구성원 목록 조회
+  const isItem = props.container.type_cd === 'COM1200003';
+
+  // 구성원 목록 조회 (물품일 때만)
   useEffect(() => {
     const fetchMembers = async () => {
       try {
@@ -33,8 +33,10 @@ function AddContainerModal(props) {
       }
     };
     
-    fetchMembers();
-  }, [props.houseId]);
+    if (isItem) {
+      fetchMembers();
+    }
+  }, [props.houseId, isItem]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -50,38 +52,26 @@ function AddContainerModal(props) {
     try {
       const token = localStorage.getItem('token');
       
-      // 타입 코드 변환
-      const typeCd = 
-        type === 'area' ? 'COM1200001' :
-        type === 'box' ? 'COM1200002' :
-        'COM1200003'; // item
-
       const data = {
-        parent_id: props.parentId,
-        type_cd: typeCd,
         name: name.trim()
       };
 
       // 물품일 때만 추가 필드
-      if (type === 'item') {
+      if (isItem) {
         data.quantity = parseInt(quantity);
-        if (ownerId) {
-          data.owner_user_id = ownerId;
-        }
-        if (memo.trim()) {
-          data.remk = memo.trim();
-        }
+        data.owner_user_id = ownerId || null;
+        data.remk = memo.trim() || null;
       }
 
-      await axios.post(
-        `${API_URL}/api/houses/${props.houseId}/containers`,
+      await axios.patch(
+        `${API_URL}/api/houses/${props.houseId}/containers/${props.container.id}`,
         data,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
       props.onSuccess();
     } catch (err) {
-      setError(err.response?.data?.error || '추가에 실패했습니다');
+      setError(err.response?.data?.error || '수정에 실패했습니다');
       setLoading(false);
     }
   };
@@ -113,43 +103,12 @@ function AddContainerModal(props) {
     >
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h3>항목 추가</h3>
+          <h3>항목 수정</h3>
           <button className="modal-close" onClick={props.onClose}>✕</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="modal-body">
-            {/* 타입 선택 */}
-            <div className="type-selector">
-              <div
-                className={`type-option ${type === 'area' ? 'active' : ''}`}
-                onClick={() => setType('area')}
-              >
-                <div className="type-option-icon">
-                  <img src={areaIcon} alt="area" style={{ width: '32px', height: '32px' }} />
-                </div>
-                <div className="type-option-label">영역</div>
-              </div>
-              <div
-                className={`type-option ${type === 'box' ? 'active' : ''}`}
-                onClick={() => setType('box')}
-              >
-                <div className="type-option-icon">
-                  <img src={boxIcon} alt="box" style={{ width: '32px', height: '32px' }} />
-                </div>
-                <div className="type-option-label">박스</div>
-              </div>
-              <div
-                className={`type-option ${type === 'item' ? 'active' : ''}`}
-                onClick={() => setType('item')}
-              >
-                <div className="type-option-icon">
-                  <img src={tagIcon} alt="item" style={{ width: '32px', height: '32px' }} />
-                </div>
-                <div className="type-option-label">물품</div>
-              </div>
-            </div>
-
             {/* 이름 */}
             <div className="form-group">
               <label>이름 *</label>
@@ -164,7 +123,7 @@ function AddContainerModal(props) {
             </div>
 
             {/* 물품 전용 필드 */}
-            {type === 'item' && (
+            {isItem && (
               <>
                 <div className="form-group">
                   <label>수량</label>
@@ -172,7 +131,7 @@ function AddContainerModal(props) {
                     type="number"
                     value={quantity}
                     onChange={(e) => setQuantity(e.target.value)}
-                    min="1"
+                    min="0"
                     placeholder="1"
                   />
                 </div>
@@ -226,7 +185,7 @@ function AddContainerModal(props) {
               className="submit-btn"
               disabled={loading}
             >
-              {loading ? '추가 중...' : '추가'}
+              {loading ? '저장 중...' : '저장'}
             </button>
           </div>
         </form>
@@ -235,4 +194,4 @@ function AddContainerModal(props) {
   );
 }
 
-export default AddContainerModal;
+export default EditContainerModal;

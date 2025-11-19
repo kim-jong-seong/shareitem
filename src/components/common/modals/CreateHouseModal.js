@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { API_URL } from '../config';
-import '../styles/CreateHouseModal.css';
+import { API_URL } from '../../../config';
+import '../../../styles/CreateHouseModal.css';
 
 function CreateHouseModal({ onClose, onSuccess }) {
   const [houseName, setHouseName] = useState('');

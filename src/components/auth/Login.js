@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { API_URL } from '../config';
-import '../styles/Login.css';
-import boxIcon from '../assets/icons/box.svg';
+import { API_URL } from '../../config';
+import '../../styles/Login.css';
+import boxIcon from '../../assets/icons/box.svg';
 
 function Login(props) {
     const [formData, setFormData] = useState({
@@ -50,8 +50,6 @@ function Login(props) {
 
             if(response.ok) {
                 responseSuccess = true;
-                // setMessage("로그인 성공!");
-                // setMessageType('success');
                 localStorage.setItem('token', data.token);
                 
                 // 아이디 저장 처리

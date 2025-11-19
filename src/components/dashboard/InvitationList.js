@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-import { API_URL } from '../config';
-import inviteIcon from '../assets/icons/invite.svg';
-import sendIcon from '../assets/icons/send.svg';
-import '../styles/InvitationList.css';
+import { API_URL } from '../../config';
+import inviteIcon from '../../assets/icons/invite.svg';
+import sendIcon from '../../assets/icons/send.svg';
+import '../../styles/InvitationList.css';
 
 function InvitationList({ onInvitationUpdate }) {
   const [receivedInvitations, setReceivedInvitations] = useState([]);
@@ -55,8 +55,7 @@ function InvitationList({ onInvitationUpdate }) {
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      
-      // alert('초대를 수락했습니다');
+
       fetchInvitations(); // 목록 새로고침
       if (onInvitationUpdate) onInvitationUpdate(); // 부모 컴포넌트에 알림
     } catch (err) {
@@ -78,8 +77,7 @@ function InvitationList({ onInvitationUpdate }) {
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      
-      // alert('초대를 거절했습니다');
+
       fetchInvitations(); // 목록 새로고침
       if (onInvitationUpdate) onInvitationUpdate(); // 부모 컴포넌트에 알림
     } catch (err) {
@@ -101,8 +99,7 @@ function InvitationList({ onInvitationUpdate }) {
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      
-      // alert('초대를 취소했습니다');
+
       fetchInvitations(); // 목록 새로고침
     } catch (err) {
       alert('초대 취소에 실패했습니다: ' + (err.response?.data?.error || err.message));

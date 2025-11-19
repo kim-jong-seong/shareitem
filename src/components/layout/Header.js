@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import '../styles/ProfileCard.css';
-import boxIcon from '../assets/icons/box.svg';
-import logoutIcon from '../assets/icons/logout.svg';
+import '../../styles/ProfileCard.css';
+import boxIcon from '../../assets/icons/box.svg';
+import logoutIcon from '../../assets/icons/logout.svg';
 
 function ProfileCard({
   user,

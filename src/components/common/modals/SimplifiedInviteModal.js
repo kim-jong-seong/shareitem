@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { API_URL } from '../config';
-import '../styles/Modal.css';
+import { API_URL } from '../../../config';
+import '../../../styles/Modal.css';
 
 function SimplifiedInviteModal({ houseId, houseName, onClose, onSuccess }) {
   const [email, setEmail] = useState('');

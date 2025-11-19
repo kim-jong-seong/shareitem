@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import { API_URL } from '../config';
-import searchIcon from '../assets/icons/search.svg';
-import { getContainerIcon } from '../utils/iconUtils';
-import '../styles/SearchModal.css';
+import { API_URL } from '../../../config';
+import searchIcon from '../../../assets/icons/search.svg';
+import { getContainerIcon } from '../../../utils/iconUtils';
+import '../../../styles/SearchModal.css';
 
 function SearchModal(props) {
   const [query, setQuery] = useState('');
@@ -69,8 +69,7 @@ function SearchModal(props) {
         setStatus(`"${searchQuery}"에 대한 검색 결과가 없습니다`);
       }
     } catch (err) {
-      console.error('검색 실패:', err);
-      console.error('에러 응답:', err.response);
+      console.error('검색 실패:', err.response?.data || err);
       setResults([]);
       const errorMsg = err.response?.data?.error || err.message || '알 수 없는 오류';
       setStatus(`검색에 실패했습니다: ${errorMsg}`);

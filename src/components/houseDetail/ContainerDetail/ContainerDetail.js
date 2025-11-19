@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import BasicInfoTab from './BasicInfoTab';
 import HistoryTab from './HistoryTab';
-import { getContainerIcon } from '../../utils/iconUtils';
-import editIcon from '../../assets/icons/edit.svg';
-import deleteIcon from '../../assets/icons/delete.svg';
-import boxTempIcon from '../../assets/icons/box_temp.svg';
-import '../../styles/ContainerDetail.css';
+import { getContainerIcon } from '../../../utils/iconUtils';
+import editIcon from '../../../assets/icons/edit.svg';
+import deleteIcon from '../../../assets/icons/delete.svg';
+import boxTempIcon from '../../../assets/icons/box_temp.svg';
+import '../../../styles/ContainerDetail.css';
 
 function ContainerDetail(props) {
   const [activeTab, setActiveTab] = useState('basic');

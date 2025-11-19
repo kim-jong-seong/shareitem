@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-import { API_URL } from '../config';
+import { API_URL } from '../../../config';
 import SimplifiedInviteModal from './SimplifiedInviteModal';
-import userIcon from '../assets/icons/user.svg';
-import '../styles/MemberManagementModal.css';
+import userIcon from '../../../assets/icons/user.svg';
+import '../../../styles/MemberManagementModal.css';
 
 function MemberManagementModal({ houseId, houseName, onClose, onSuccess }) {
   const [members, setMembers] = useState([]);
