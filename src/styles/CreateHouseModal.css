@@ -1,82 +1,113 @@
+/************************************************************
+ * FILE: CreateHouseModal.css
+ * DESCRIPTION: 집 생성 모달 스타일
+ ************************************************************/
+
+/* ============================================================
+   집 생성 모달
+   ============================================================ */
+
+/* 모달 최대 너비 */
 .create-house-modal {
-    max-width: 450px;
+  max-width: 450px;
 }
 
+/* ============================================================
+   폼 그룹
+   ============================================================ */
+
+/* 폼 그룹 */
 .create-house-modal .form-group {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
+/* 폼 레이블 */
 .create-house-modal .form-group label {
-    display: block;
-    margin-bottom: 8px;
-    font-size: 14px;
-    font-weight: 500;
-    color: #333;
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
 }
 
+/* 폼 입력 필드 */
 .create-house-modal .form-group input {
-    width: 100%;
-    padding: 10px 12px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 14px;
-    box-sizing: border-box;
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  box-sizing: border-box;
 }
 
+/* 입력 필드 포커스 */
 .create-house-modal .form-group input:focus {
-    outline: none;
-    border-color: #1976d2;
+  border-color: #1976d2;
+  outline: none;
 }
 
+/* ============================================================
+   에러 메시지
+   ============================================================ */
+
+/* 에러 메시지 */
 .error-message {
-    padding: 12px;
-    background-color: #ffebee;
-    color: #c62828;
-    border-radius: 4px;
-    font-size: 14px;
-    margin-bottom: 20px;
-    border: 1px solid #ef9a9a;
+  margin-bottom: 20px;
+  padding: 12px;
+  background-color: #ffebee;
+  border: 1px solid #ef9a9a;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #c62828;
 }
 
+/* ============================================================
+   버튼
+   ============================================================ */
+
+/* 버튼 컨테이너 */
 .modal-buttons {
-    display: flex;
-    justify-content: flex-end;
-    gap: 8px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
 }
 
+/* 취소 버튼 */
 .cancel-button {
-    padding: 10px 20px;
-    background-color: white;
-    color: #666;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background-color 0.2s;
+  padding: 10px 20px;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #666;
+  cursor: pointer;
+  transition: background-color 0.2s;
 }
 
 .cancel-button:hover:not(:disabled) {
-    background-color: #f5f5f5;
+  background-color: #f5f5f5;
 }
 
+/* 제출 버튼 */
 .submit-button {
-    padding: 10px 20px;
-    background-color: #1976d2;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.2s;
+  padding: 10px 20px;
+  background-color: #1976d2;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s;
 }
 
 .submit-button:hover:not(:disabled) {
-    background-color: #1565c0;
+  background-color: #1565c0;
 }
 
+/* 비활성 버튼 */
 .submit-button:disabled,
 .cancel-button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
+  opacity: 0.6;
+  cursor: not-allowed;
 }

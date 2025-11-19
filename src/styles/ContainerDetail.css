@@ -1,3 +1,12 @@
+/************************************************************
+ * FILE: ContainerDetail.css
+ * DESCRIPTION: 컨테이너 상세 페이지 스타일 (상세 정보, 탭, 히스토리, 임시보관함)
+ ************************************************************/
+
+/* ============================================================
+   전체 레이아웃
+   ============================================================ */
+
 /* 컨테이너 디테일 전체 레이아웃 */
 .container-detail {
     display: flex;
@@ -6,21 +15,25 @@
     overflow: hidden;
 }
 
+/* ============================================================
+   헤더
+   ============================================================ */
+
 /* 상세 정보 헤더 - 고정 */
 .detail-header {
-    padding: 20px;
-    border-bottom: 1px solid #e0e0e0;
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
+    padding: 20px;
     background: white;
+    border-bottom: 1px solid #e0e0e0;
     flex-shrink: 0;
 }
 
 .detail-title-section {
     display: flex;
-    gap: 16px;
     align-items: flex-start;
+    gap: 16px;
     flex: 1;
 }
 
@@ -53,14 +66,19 @@
     flex-shrink: 0;
 }
 
+/* ============================================================
+   액션 버튼
+   ============================================================ */
+
+/* 액션 버튼 */
 .action-button {
     padding: 8px 16px;
     background: white;
-    color: #666;
     border: 1px solid #ddd;
     border-radius: 6px;
     font-size: 14px;
     font-weight: 600;
+    color: #666;
     cursor: pointer;
     transition: all 0.2s;
 }
@@ -71,8 +89,8 @@
 
 .action-button.primary {
     background: #1976d2;
-    color: white;
     border-color: #1976d2;
+    color: white;
 }
 
 .action-button.primary:hover {
@@ -81,35 +99,39 @@
 
 .action-button.delete {
     background: #ef5350;
-    color: white;
     border: none;
+    color: white;
 }
 
 .action-button.delete:hover {
     background: #e53935;
 }
 
+/* ============================================================
+   탭
+   ============================================================ */
+
 /* 탭 스타일 - 고정 */
 .detail-tabs {
     display: flex;
     gap: 20px;
     padding: 12px 20px;
-    border-bottom: 1px solid #e0e0e0;
     background: white;
+    border-bottom: 1px solid #e0e0e0;
     flex-shrink: 0;
 }
 
 .detail-tab {
+    position: relative;
     padding: 4px 0;
-    border: none;
     background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
     font-size: 13px;
     font-weight: 500;
     color: #666;
     cursor: pointer;
     transition: all 0.2s;
-    border-bottom: 2px solid transparent;
-    position: relative;
 }
 
 .detail-tab:hover {
@@ -117,17 +139,21 @@
 }
 
 .detail-tab.active {
-    color: #1976d2;
-    font-weight: 600;
     border-bottom-color: #1976d2;
+    font-weight: 600;
+    color: #1976d2;
 }
 
 /* 탭 콘텐츠 - 스크롤 영역 */
 .detail-tab-content {
     flex: 1;
-    overflow-y: auto;
     background: white;
+    overflow-y: auto;
 }
+
+/* ============================================================
+   상세 섹션
+   ============================================================ */
 
 /* 상세 섹션 */
 .detail-section {
@@ -158,9 +184,9 @@
 
 .detail-field-label {
     width: 100px;
-    flex-shrink: 0;
     font-size: 14px;
     color: #999;
+    flex-shrink: 0;
 }
 
 .detail-field-value {
@@ -168,6 +194,10 @@
     font-size: 14px;
     color: #333;
 }
+
+/* ============================================================
+   히스토리
+   ============================================================ */
 
 /* 히스토리 스타일 */
 .history-list {
@@ -177,9 +207,9 @@
 .history-item {
     padding: 16px 20px;
     border-bottom: 1px solid #e0e0e0;
-    transition: background 0.2s;
     opacity: 0;
     animation: slideInUp 0.4s ease-out forwards;
+    transition: background 0.2s;
 }
 
 .history-item:hover {
@@ -208,9 +238,9 @@
 }
 
 .history-action-name {
+    font-size: 14px;
     font-weight: 600;
     color: #333;
-    font-size: 14px;
 }
 
 .history-date {
@@ -219,11 +249,11 @@
 }
 
 .history-detail {
-    color: #666;
-    font-size: 13px;
     margin-bottom: 6px;
-    white-space: pre-line;
+    font-size: 13px;
+    color: #666;
     line-height: 1.5;
+    white-space: pre-line;
 }
 
 .history-user {
@@ -235,8 +265,8 @@
 .history-loading,
 .history-error {
     padding: 40px 20px;
-    text-align: center;
     color: #999;
+    text-align: center;
 }
 
 .history-error {
@@ -256,13 +286,17 @@
     font-size: 14px;
 }
 
+/* ============================================================
+   임시보관함
+   ============================================================ */
+
 /* 임시보관함 */
 .temp-storage {
+    margin: 20px;
+    padding: 16px;
     background: #fff3e0;
     border: 2px dashed #ff9800;
     border-radius: 8px;
-    padding: 16px;
-    margin: 20px;
 }
 
 .temp-storage-header {
@@ -283,14 +317,15 @@
     gap: 8px;
 }
 
+/* 전체 삭제 버튼 */
 .temp-clear-all-button {
     padding: 6px 12px;
     background: #ef5350;
-    color: white;
     border: none;
     border-radius: 6px;
     font-size: 12px;
     font-weight: 600;
+    color: white;
     cursor: pointer;
     transition: background 0.2s;
 }
@@ -299,14 +334,15 @@
     background: #e53935;
 }
 
+/* 전체 이동 버튼 */
 .temp-move-all-button {
     padding: 6px 12px;
     background: #ff9800;
-    color: white;
     border: none;
     border-radius: 6px;
     font-size: 12px;
     font-weight: 600;
+    color: white;
     cursor: pointer;
     transition: background 0.2s;
 }
@@ -315,11 +351,12 @@
     background: #f57c00;
 }
 
+/* 임시보관함 아이템 */
 .temp-item {
-    background: white;
-    padding: 8px 12px;
-    border-radius: 4px;
     margin-bottom: 8px;
+    padding: 8px 12px;
+    background: white;
+    border-radius: 4px;
     transition: background 0.2s;
 }
 
@@ -339,9 +376,9 @@
 }
 
 .temp-item-name {
+    margin-bottom: 4px;
     font-weight: 600;
     color: #333;
-    margin-bottom: 4px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -363,8 +400,8 @@
 /* 임시보관함 아이템 액션 버튼 영역 */
 .temp-item-actions {
     display: flex;
-    gap: 8px;
     align-items: center;
+    gap: 8px;
     opacity: 0;
     transition: opacity 0.2s;
 }
@@ -377,14 +414,14 @@
 .temp-move-btn {
     padding: 4px 10px;
     background: #1976d2;
-    color: white;
     border: none;
     border-radius: 4px;
     font-size: 12px;
     font-weight: 600;
+    color: white;
     cursor: pointer;
-    transition: background 0.2s;
     white-space: nowrap;
+    transition: background 0.2s;
 }
 
 .temp-move-btn:hover {
@@ -393,18 +430,22 @@
 
 /* 제거 버튼 */
 .temp-remove {
-    cursor: pointer;
-    color: #d32f2f;
+    padding: 4px;
     font-size: 16px;
     font-weight: bold;
+    color: #d32f2f;
+    cursor: pointer;
     opacity: 0.6;
     transition: opacity 0.2s;
-    padding: 4px;
 }
 
 .temp-remove:hover {
     opacity: 1;
 }
+
+/* ============================================================
+   애니메이션
+   ============================================================ */
 
 /* 하위 항목 미리보기 애니메이션 */
 .child-preview-section {
@@ -436,6 +477,10 @@
     }
 }
 
+/* ============================================================
+   모바일 전용 UI
+   ============================================================ */
+
 /* 모바일 전용 열기 버튼 영역 */
 .drill-down-section-mobile {
     padding: 16px 20px 8px 20px;
@@ -444,19 +489,19 @@
 }
 
 .drill-down-button-mobile {
-    width: 100%;
-    padding: 14px 20px;
-    background-color: #1976d2;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
+    width: 100%;
+    padding: 14px 20px;
+    background-color: #1976d2;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    color: white;
+    cursor: pointer;
     transition: background-color 0.2s;
 }
 
@@ -479,6 +524,9 @@
 }
 
 .action-button-mobile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     flex: 1;
     padding: 12px 20px;
     border: none;
@@ -487,15 +535,12 @@
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 .action-button-mobile.edit {
     background: white;
-    color: #666;
     border: 1px solid #ddd;
+    color: #666;
 }
 
 .action-button-mobile.edit:hover {
@@ -508,8 +553,8 @@
 
 .action-button-mobile.delete {
     background: #ef5350;
-    color: white;
     border: none;
+    color: white;
 }
 
 .action-button-mobile.delete:hover {

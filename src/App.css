@@ -1,4 +1,11 @@
-/* CSS Reset */
+/************************************************************
+ * FILE: App.css
+ * DESCRIPTION: 전역 스타일 및 리셋
+ ************************************************************/
+
+/* ============================================================
+   CSS Reset - 브라우저 기본 스타일 초기화
+   ============================================================ */
 * {
   margin: 0;
   padding: 0;
@@ -7,7 +14,7 @@
 
 html, body {
   height: 100%;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -35,52 +42,15 @@ ul, ol {
   list-style: none;
 }
 
-/* 기본 앱 스타일 */
+/* ============================================================
+   기본 레이아웃
+   ============================================================ */
+/* Root 컨테이너 */
 #root {
   height: 100%;
 }
 
-.App {
-  height: 100%;
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* App.css */
+/* 대시보드 Wrapper - Header 아래 컨텐츠 영역 */
 .dashboard-wrapper {
-  padding: 0 20px 40px;  /* 헤더는 제외하고 여백 */
+  padding: 0 20px 40px;
 }

@@ -1,190 +1,213 @@
+/************************************************************
+ * FILE: InvitationList.css
+ * DESCRIPTION: 초대 목록 페이지 스타일
+ ************************************************************/
+
+/* ============================================================
+   컨테이너
+   ============================================================ */
+
+/* 초대 페이지 컨테이너 */
 .invitation-container {
-    max-width: 1200px;
-    margin: 0 auto;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-/* 헤더 */
-.invitation-header {
-    margin-bottom: 30px;
-    padding-bottom: 20px;
-    border-bottom: 2px solid #e0e0e0;
-}
+/* ============================================================
+   섹션
+   ============================================================ */
 
-.invitation-header h2 {
-    margin: 0 0 8px 0;
-    font-size: 24px;
-    font-weight: 600;
-    color: #333;
-}
-
-.invitation-header p {
-    margin: 0;
-    font-size: 14px;
-    color: #666;
-}
-
-/* 섹션 */
+/* 초대 섹션 */
 .invitation-section {
-    margin-bottom: 40px;
+  margin-bottom: 40px;
 }
 
 .invitation-section:last-child {
-    margin-bottom: 0;
+  margin-bottom: 0;
 }
 
+/* 섹션 타이틀 */
 .section-title {
-    margin: 0 0 16px 0;
-    font-size: 18px;
-    font-weight: 600;
-    color: #333;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 16px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
 }
 
+/* 섹션 개수 */
 .section-count {
-    font-size: 16px;
-    color: #1976d2;
-    font-weight: 600;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1976d2;
 }
+
+/* ============================================================
+   초대 목록
+   ============================================================ */
 
 /* 초대 목록 */
 .invitation-list {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 /* 빈 상태 */
 .empty-invitation {
-    text-align: center;
-    padding: 60px 20px;
-    background-color: #fafafa;
-    border-radius: 8px;
-    border: 1px dashed #ddd;
+  padding: 60px 20px;
+  background-color: #fafafa;
+  border: 1px dashed #ddd;
+  border-radius: 8px;
+  text-align: center;
 }
 
 .empty-invitation p {
-    margin: 0;
-    font-size: 16px;
-    color: #999;
+  margin: 0;
+  font-size: 16px;
+  color: #999;
 }
+
+/* ============================================================
+   초대 카드
+   ============================================================ */
 
 /* 초대 카드 */
 .invitation-card {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 20px;
-    background-color: white;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  background-color: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  transition: all 0.2s;
 }
 
 .invitation-card:hover {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    border-color: #1976d2;
+  border-color: #1976d2;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* 아이콘 */
 .invitation-icon {
-    font-size: 32px;
-    flex-shrink: 0;
+  flex-shrink: 0;
+  font-size: 32px;
 }
 
 /* 내용 */
 .invitation-content {
-    flex: 1;
+  flex: 1;
 }
 
 .invitation-text {
-    margin: 0;
-    font-size: 15px;
-    color: #333;
-    line-height: 1.5;
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.5;
+  color: #333;
 }
 
 .invitation-text strong {
-    color: #1976d2;
-    font-weight: 600;
+  font-weight: 600;
+  color: #1976d2;
 }
 
 .invitation-email {
-    display: inline-block;
-    margin-left: 8px;
-    font-size: 13px;
-    color: #999;
+  display: inline-block;
+  margin-left: 8px;
+  font-size: 13px;
+  color: #999;
 }
 
-/* 액션 버튼 */
+/* ============================================================
+   액션 버튼
+   ============================================================ */
+
+/* 액션 버튼 컨테이너 */
 .invitation-actions {
-    display: flex;
-    gap: 10px;
-    flex-shrink: 0;
+  display: flex;
+  flex-shrink: 0;
+  gap: 10px;
 }
 
-.accept-button,
-.reject-button,
-.cancel-button-inv {
-    padding: 10px 24px;
-    border: none;
-    border-radius: 6px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-    min-width: 80px;
-}
-
+/* 수락 버튼 */
 .accept-button {
-    background-color: #1976d2;
-    color: white;
+  min-width: 80px;
+  padding: 10px 24px;
+  background-color: #1976d2;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
 }
 
 .accept-button:hover {
-    background-color: #1565c0;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 6px rgba(25, 118, 210, 0.3);
+  background-color: #1565c0;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(25, 118, 210, 0.3);
 }
 
+/* 거절 버튼 */
 .reject-button {
-    background-color: #ef5350;
-    color: white;
-    border: none;
+  min-width: 80px;
+  padding: 10px 24px;
+  background-color: #ef5350;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
 }
 
 .reject-button:hover {
-    background-color: #e53935;
-    transform: translateY(-1px);
+  background-color: #e53935;
+  transform: translateY(-1px);
 }
 
+/* 취소 버튼 */
 .cancel-button-inv {
-    background-color: #ff9800;
-    color: white;
-    border: none;
+  min-width: 80px;
+  padding: 10px 24px;
+  background-color: #ff9800;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
 }
 
 .cancel-button-inv:hover {
-    background-color: #f57c00;
-    transform: translateY(-1px);
+  background-color: #f57c00;
+  transform: translateY(-1px);
 }
 
-/* 반응형 */
+/* ============================================================
+   반응형 (모바일)
+   ============================================================ */
+
 @media (max-width: 768px) {
-    .invitation-card {
-        flex-direction: column;
-        align-items: flex-start;
-    }
+  .invitation-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 
-    .invitation-actions {
-        width: 100%;
-        justify-content: stretch;
-    }
+  .invitation-actions {
+    width: 100%;
+    justify-content: stretch;
+  }
 
-    .accept-button,
-    .reject-button,
-    .cancel-button-inv {
-        flex: 1;
-    }
+  .accept-button,
+  .reject-button,
+  .cancel-button-inv {
+    flex: 1;
+  }
 }

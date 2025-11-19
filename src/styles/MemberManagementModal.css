@@ -1,149 +1,178 @@
-/* 구성원 관리 모달 */
+/************************************************************
+ * FILE: MemberManagementModal.css
+ * DESCRIPTION: 구성원 관리 모달 스타일
+ ************************************************************/
+
+/* ============================================================
+   구성원 관리 모달
+   ============================================================ */
+
+/* 모달 크기 */
 .member-modal {
-    max-width: 600px;
-    max-height: 80vh;
+  max-width: 600px;
+  max-height: 80vh;
 }
 
 .member-modal .modal-body {
-    max-height: 500px;
-    overflow-y: auto;
+  max-height: 500px;
+  overflow-y: auto;
 }
+
+/* ============================================================
+   구성원 목록
+   ============================================================ */
 
 /* 구성원 목록 */
 .member-list {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
+
+/* ============================================================
+   구성원 카드
+   ============================================================ */
 
 /* 구성원 카드 */
 .member-card {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 16px;
-    background-color: white;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background-color: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  transition: all 0.2s;
 }
 
 .member-card:hover {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    border-color: #1976d2;
+  border-color: #1976d2;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* 아이콘 */
 .member-icon {
-    font-size: 32px;
-    flex-shrink: 0;
-    width: 40px;
+  flex-shrink: 0;
+  width: 40px;
+  font-size: 32px;
 }
 
 /* 정보 */
 .member-info {
-    flex: 1;
-    min-width: 0;
+  flex: 1;
+  min-width: 0;
 }
 
+/* 이름 */
 .member-name {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 4px;
-    font-size: 16px;
-    font-weight: 600;
-    color: #333;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
 }
 
+/* 역할 배지 */
 .role-badge {
-    padding: 2px 8px;
-    font-size: 12px;
-    font-weight: 600;
-    border-radius: 4px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
 }
 
 .role-badge.admin {
-    background-color: #1976d2;
-    color: white;
+  background-color: #1976d2;
+  color: white;
 }
 
 .role-badge.member {
-    background-color: #e0e0e0;
-    color: #666;
+  background-color: #e0e0e0;
+  color: #666;
 }
 
+/* 이메일 */
 .member-email {
-    margin-bottom: 4px;
-    font-size: 14px;
-    color: #666;
+  margin-bottom: 4px;
+  font-size: 14px;
+  color: #666;
 }
 
+/* 가입일 */
 .member-joined {
-    font-size: 12px;
-    color: #999;
+  font-size: 12px;
+  color: #999;
 }
 
-/* 액션 버튼 */
+/* ============================================================
+   액션 버튼
+   ============================================================ */
+
+/* 액션 영역 */
 .member-actions {
-    flex-shrink: 0;
+  flex-shrink: 0;
 }
 
+/* 추방 버튼 */
 .kick-button {
-    padding: 8px 20px;
-    background-color: white;
-    color: #d32f2f;
-    border: 2px solid #d32f2f;
-    border-radius: 6px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-    white-space: nowrap;
+  padding: 8px 20px;
+  background-color: white;
+  border: 2px solid #d32f2f;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #d32f2f;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.2s;
 }
 
 .kick-button:hover {
-    background-color: #ffebee;
-    transform: translateY(-1px);
+  background-color: #ffebee;
+  transform: translateY(-1px);
 }
 
 /* 초대 버튼 */
 .invite-button-modal {
-    width: 100%;
-    padding: 12px;
-    background-color: #1976d2;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
+  width: 100%;
+  padding: 12px;
+  background-color: #1976d2;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
 }
 
 .invite-button-modal:hover {
-    background-color: #1565c0;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 6px rgba(25, 118, 210, 0.3);
+  background-color: #1565c0;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(25, 118, 210, 0.3);
 }
 
-/* 반응형 */
+/* ============================================================
+   반응형 (모바일)
+   ============================================================ */
+
 @media (max-width: 768px) {
-    .member-modal {
-        max-width: 95%;
-        margin: 10px;
-    }
+  .member-modal {
+    max-width: 95%;
+    margin: 10px;
+  }
 
-    .member-card {
-        flex-direction: column;
-        align-items: flex-start;
-    }
+  .member-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 
-    .member-actions {
-        width: 100%;
-    }
+  .member-actions {
+    width: 100%;
+  }
 
-    .kick-button {
-        width: 100%;
-    }
+  .kick-button {
+    width: 100%;
+  }
 }

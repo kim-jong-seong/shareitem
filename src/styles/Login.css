@@ -1,22 +1,286 @@
+/************************************************************
+ * FILE: Login.css
+ * DESCRIPTION: 로그인 및 회원가입 페이지 스타일
+ ************************************************************/
+
+/* ============================================================
+   메인 컨테이너
+   ============================================================ */
+
+/* 인증 페이지 전체 컨테이너 */
 .auth-container {
-  min-height: 100vh;
   display: flex;
-  justify-content: center;
   align-items: center;
-  background: #4a90e2;
+  justify-content: center;
+  min-height: 100vh;
   padding: 0 20px;
+  background: #4a90e2;
 }
 
+/* 인증 카드 */
 .auth-card {
+  width: 100%;
+  max-width: 420px;
+  padding: 40px;
   background: white;
   border-radius: 12px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-  padding: 40px;
-  width: 100%;
-  max-width: 420px;
   animation: slideUp 0.4s ease-out;
 }
 
+/* ============================================================
+   헤더 영역
+   ============================================================ */
+
+/* 인증 헤더 */
+.auth-header {
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+/* 헤더 타이틀 */
+.auth-header h2 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  font-size: 28px;
+  font-weight: 700;
+  color: #1a202c;
+}
+
+/* 로고 아이콘 */
+.login-logo-icon {
+  width: 32px;
+  height: 32px;
+}
+
+/* 헤더 설명 텍스트 */
+.auth-header p {
+  font-size: 14px;
+  color: #718096;
+}
+
+/* ============================================================
+   폼 영역
+   ============================================================ */
+
+/* 인증 폼 */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+}
+
+/* 폼 그룹 */
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+/* 폼 레이블 */
+.form-group label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+/* 폼 입력 필드 */
+.form-group input {
+  padding: 12px 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.2s;
+}
+
+/* 입력 필드 포커스 */
+.form-group input:focus {
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+}
+
+/* 플레이스홀더 */
+.form-group input::placeholder {
+  color: #a0aec0;
+}
+
+/* ============================================================
+   체크박스 영역
+   ============================================================ */
+
+/* 아이디 저장 체크박스 박스 */
+.save-email-box {
+  margin-bottom: 8px;
+}
+
+/* 체크박스 레이블 */
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #2d3748;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* 체크박스 입력 */
+.checkbox-label input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: #4a90e2;
+}
+
+/* 체크박스 텍스트 */
+.checkbox-label span {
+  font-weight: 500;
+}
+
+/* ============================================================
+   메시지 박스
+   ============================================================ */
+
+/* 메시지 박스 */
+.message-box {
+  margin-top: 15px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  text-align: center;
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* 성공 메시지 */
+.message-box.success {
+  background-color: #c6f6d5;
+  border: 1px solid #9ae6b4;
+  color: #22543d;
+}
+
+/* 에러 메시지 */
+.message-box.error {
+  background-color: #fed7d7;
+  border: 1px solid #fc8181;
+  color: #742a2a;
+}
+
+/* ============================================================
+   버튼 영역
+   ============================================================ */
+
+/* 버튼 컨테이너 */
+.auth-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+/* 기본 버튼 */
+.btn {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s;
+}
+
+/* 주요 버튼 */
+.btn-primary {
+  background: #4a90e2;
+  color: white;
+  box-shadow: 0 4px 12px rgba(74, 144, 226, 0.4);
+}
+
+/* 주요 버튼 호버 */
+.btn-primary:hover:not(:disabled) {
+  background: #3a7bc8;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(74, 144, 226, 0.5);
+}
+
+/* 주요 버튼 활성 */
+.btn-primary:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+/* 보조 버튼 */
+.btn-secondary {
+  background: white;
+  border: 2px solid #4a90e2;
+  color: #4a90e2;
+}
+
+/* 보조 버튼 호버 */
+.btn-secondary:hover:not(:disabled) {
+  background: #f7fafc;
+}
+
+/* 비활성 버튼 */
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* 로딩 버튼 */
+.btn.loading {
+  position: relative;
+  color: transparent;
+}
+
+/* 로딩 스피너 */
+.btn.loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 16px;
+  height: 16px;
+  margin-top: -8px;
+  margin-left: -8px;
+  border: 2px solid transparent;
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+/* ============================================================
+   푸터 영역
+   ============================================================ */
+
+/* 인증 푸터 */
+.auth-footer {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #e2e8f0;
+  font-size: 14px;
+  color: #718096;
+  text-align: center;
+}
+
+/* 푸터 링크 */
+.auth-footer a {
+  font-weight: 600;
+  color: #4a90e2;
+  text-decoration: none;
+}
+
+/* 푸터 링크 호버 */
+.auth-footer a:hover {
+  text-decoration: underline;
+}
+
+/* ============================================================
+   애니메이션
+   ============================================================ */
+
+/* 슬라이드 업 애니메이션 */
 @keyframes slideUp {
   from {
     opacity: 0;
@@ -28,215 +292,21 @@
   }
 }
 
-.auth-header {
-  text-align: center;
-  margin-bottom: 24px;
-}
-
-.auth-header h2 {
-  font-size: 28px;
-  font-weight: 700;
-  color: #1a202c;
-  margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-}
-
-.login-logo-icon {
-  width: 32px;
-  height: 32px;
-}
-
-.auth-header p {
-  font-size: 14px;
-  color: #718096;
-}
-
-.auth-form {
-  display: flex;
-  flex-direction: column;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-}
-
-.form-group label {
-  font-size: 14px;
-  font-weight: 600;
-  color: #2d3748;
-}
-
-.form-group input {
-  padding: 12px 16px;
-  border: 2px solid #e2e8f0;
-  border-radius: 8px;
-  font-size: 14px;
-  transition: all 0.2s;
-  outline: none;
-}
-
-.form-group input:focus {
-  border-color: #4a90e2;
-  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
-}
-
-.form-group input::placeholder {
-  color: #a0aec0;
-}
-
-/* 메시지 박스 */
-.message-box {
-  padding: 8px 16px;
-  margin-top: 15px;
-  border-radius: 8px;
-  font-size: 14px;
-  text-align: center;
-  animation: fadeIn 0.3s ease-out;
-}
-
-.message-box.success {
-  background-color: #c6f6d5;
-  color: #22543d;
-  border: 1px solid #9ae6b4;
-}
-
-.message-box.error {
-  background-color: #fed7d7;
-  color: #742a2a;
-  border: 1px solid #fc8181;
-}
-
+/* 페이드인 애니메이션 */
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
 }
 
-/* 버튼 스타일 */
-.auth-buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 4px;
-}
-
-.btn {
-  padding: 12px 20px;
-  border: none;
-  border-radius: 8px;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-  outline: none;
-}
-
-.btn-primary {
-  background: #4a90e2;
-  color: white;
-  box-shadow: 0 4px 12px rgba(74, 144, 226, 0.4);
-}
-
-.btn-primary:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(74, 144, 226, 0.5);
-  background: #3a7bc8;
-}
-
-.btn-primary:active:not(:disabled) {
-  transform: translateY(0);
-}
-
-.btn-secondary {
-  background: white;
-  color: #4a90e2;
-  border: 2px solid #4a90e2;
-}
-
-.btn-secondary:hover:not(:disabled) {
-  background: #f7fafc;
-}
-
-.btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-/* 로딩 스피너 */
-.btn.loading {
-  position: relative;
-  color: transparent;
-}
-
-.btn.loading::after {
-  content: '';
-  position: absolute;
-  width: 16px;
-  height: 16px;
-  top: 50%;
-  left: 50%;
-  margin-left: -8px;
-  margin-top: -8px;
-  border: 2px solid transparent;
-  border-top-color: white;
-  border-radius: 50%;
-  animation: spin 0.6s linear infinite;
-}
-
+/* 스핀 애니메이션 */
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
 
-/* 푸터 텍스트 */
-.auth-footer {
-  text-align: center;
-  margin-top: 24px;
-  padding-top: 24px;
-  border-top: 1px solid #e2e8f0;
-  font-size: 14px;
-  color: #718096;
-}
+/* ============================================================
+   반응형 (모바일)
+   ============================================================ */
 
-.auth-footer a {
-  color: #4a90e2;
-  font-weight: 600;
-  text-decoration: none;
-}
-
-.auth-footer a:hover {
-  text-decoration: underline;
-}
-
-/* 아이디 저장 체크박스 */
-.save-email-box {
-  margin-bottom: 8px;
-}
-
-.checkbox-label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 14px;
-  color: #2d3748;
-  cursor: pointer;
-  user-select: none;
-}
-
-.checkbox-label input[type="checkbox"] {
-  width: 16px;
-  height: 16px;
-  cursor: pointer;
-  accent-color: #4a90e2;
-}
-
-.checkbox-label span {
-  font-weight: 500;
-}
-
-/* 반응형 */
 @media (max-width: 480px) {
   .auth-card {
     padding: 28px 24px;

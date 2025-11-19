@@ -1,8 +1,18 @@
+/************************************************************
+ * FILE: HouseHistoryModal.css
+ * DESCRIPTION: 집 히스토리 모달 스타일
+ ************************************************************/
+
+/* ============================================================
+   히스토리 모달
+   ============================================================ */
+
+/* 히스토리 모달 */
 .house-history-modal {
-  max-width: 800px;
-  width: 90%;
-  max-height: 80vh;
   position: relative;
+  width: 90%;
+  max-width: 800px;
+  max-height: 80vh;
 }
 
 .house-history-modal .modal-body {
@@ -10,22 +20,33 @@
   overflow-y: auto;
 }
 
-/* 모달 내부 스타일만 적용 (기존 HistoryTab에 영향 안 주도록) */
+/* ============================================================
+   히스토리 상태
+   ============================================================ */
+
+/* 로딩/에러/빈 상태 */
 .house-history-modal .history-loading,
 .house-history-modal .history-error,
 .house-history-modal .history-empty {
-  text-align: center;
   padding: 40px 20px;
   color: #666;
+  text-align: center;
 }
 
+/* ============================================================
+   히스토리 목록
+   ============================================================ */
+
+/* 히스토리 목록 */
 .house-history-modal .history-list {
   padding: 0;
 }
 
+/* 히스토리 아이템 */
 .house-history-modal .history-item {
   padding: 16px 20px;
   border-bottom: 1px solid #e0e0e0;
+  opacity: 0;
   transition: background 0.2s;
   animation: slideInUp 0.4s ease-out forwards;
 }
@@ -46,6 +67,160 @@
   border-bottom: none;
 }
 
+/* ============================================================
+   히스토리 아이템 내용
+   ============================================================ */
+
+/* 히스토리 헤더 */
+.house-history-modal .history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+/* 히스토리 타이틀 */
+.house-history-modal .history-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
+}
+
+/* 타입 아이콘 */
+.house-history-modal .history-type-icon {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  opacity: 0.7;
+}
+
+/* 컨테이너 이름 */
+.house-history-modal .history-container-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+/* 구분자 */
+.house-history-modal .history-separator {
+  flex-shrink: 0;
+  margin: 0 2px;
+  font-weight: 400;
+  color: #999;
+}
+
+/* 액션 아이콘 */
+.house-history-modal .history-icon {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 액션 이름 */
+.house-history-modal .history-action-name {
+  flex-shrink: 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: #555;
+  white-space: nowrap;
+}
+
+/* 상세 정보 */
+.house-history-modal .history-detail {
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: #666;
+}
+
+/* 날짜 (PC) */
+.house-history-modal .history-date {
+  flex-shrink: 0;
+  font-size: 12px;
+  color: #999;
+}
+
+/* ============================================================
+   히스토리 푸터
+   ============================================================ */
+
+/* 히스토리 푸터 */
+.house-history-modal .history-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* 사용자 정보 */
+.house-history-modal .history-user {
+  font-size: 13px;
+  color: #999;
+}
+
+/* 날짜 (모바일 - 기본 숨김) */
+.house-history-modal .history-date-mobile {
+  display: none;
+  font-size: 12px;
+  color: #999;
+}
+
+/* 삭제된 배지 */
+.house-history-modal .deleted-badge {
+  margin-left: 4px;
+  font-size: 11px;
+  font-weight: 400;
+  color: #999;
+}
+
+/* ============================================================
+   로딩 오버레이
+   ============================================================ */
+
+/* 로딩 오버레이 */
+.history-loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+}
+
+/* 로딩 컨텐츠 */
+.history-loading-content {
+  text-align: center;
+}
+
+/* 로딩 스피너 */
+.history-loading-spinner {
+  width: 50px;
+  height: 50px;
+  margin: 0 auto 16px;
+  border: 4px solid #e0e0e0;
+  border-top: 4px solid #1976d2;
+  border-radius: 50%;
+  animation: historySpinner 1s linear infinite;
+}
+
+/* 로딩 텍스트 */
+.history-loading-text {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+/* ============================================================
+   애니메이션
+   ============================================================ */
+
 @keyframes slideInUp {
   from {
     opacity: 0;
@@ -57,135 +232,15 @@
   }
 }
 
-.house-history-modal .history-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 8px;
-}
-
-.house-history-modal .history-title {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex: 1;
-  min-width: 0;
-}
-
-.house-history-modal .history-type-icon {
-  width: 18px;
-  height: 18px;
-  opacity: 0.7;
-  flex-shrink: 0;
-}
-
-.house-history-modal .history-container-name {
-  font-weight: 600;
-  color: #333;
-  font-size: 16px;
-}
-
-.house-history-modal .history-separator {
-  color: #999;
-  font-weight: 400;
-  margin: 0 2px;
-  flex-shrink: 0;
-}
-
-.house-history-modal .history-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.house-history-modal .history-action-name {
-  font-weight: 500;
-  color: #555;
-  font-size: 14px;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-
-.house-history-modal .history-detail {
-  font-size: 14px;
-  color: #666;
-  margin-bottom: 6px;
-}
-
-.house-history-modal .history-date {
-  font-size: 12px;
-  color: #999;
-  flex-shrink: 0;
-}
-
-.house-history-modal .history-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.house-history-modal .history-user {
-  font-size: 13px;
-  color: #999;
-}
-
-/* 모바일 전용 날짜 (기본 숨김) */
-.house-history-modal .history-date-mobile {
-  display: none;
-  font-size: 12px;
-  color: #999;
-}
-
-.house-history-modal .deleted-badge {
-  font-size: 11px;
-  color: #999;
-  margin-left: 4px;
-  font-weight: 400;
-}
-
-/* 로딩 오버레이 */
-.history-loading-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(255, 255, 255, 0.95);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  border-radius: 12px;
-}
-
-.history-loading-content {
-  text-align: center;
-}
-
-.history-loading-spinner {
-  width: 50px;
-  height: 50px;
-  border: 4px solid #e0e0e0;
-  border-top: 4px solid #1976d2;
-  border-radius: 50%;
-  animation: historySpinner 1s linear infinite;
-  margin: 0 auto 16px;
-}
-
-.history-loading-text {
-  font-size: 16px;
-  font-weight: 600;
-  color: #333;
-}
-
 @keyframes historySpinner {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
 
-/* 모바일 반응형 */
+/* ============================================================
+   반응형 (모바일)
+   ============================================================ */
+
 @media (max-width: 768px) {
   /* PC용 날짜 숨김 */
   .house-history-modal .history-date {

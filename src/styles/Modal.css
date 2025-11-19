@@ -1,312 +1,374 @@
+/************************************************************
+ * FILE: Modal.css
+ * DESCRIPTION: 공통 모달 스타일
+ ************************************************************/
+
+/* ============================================================
+   모달 오버레이
+   ============================================================ */
+
 /* 모달 오버레이 */
 .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    animation: fadeIn 0.2s ease-in;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  animation: fadeIn 0.2s ease-in;
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
+/* ============================================================
+   모달 컨텐츠
+   ============================================================ */
 
 /* 모달 컨텐츠 */
 .modal-content {
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-    width: 90%;
-    max-width: 500px;
-    max-height: 90vh;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    animation: slideUp 0.3s ease-out;
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  animation: slideUp 0.3s ease-out;
 }
 
-/* form-modal에 대한 max-width 설정 */
+/* 폼 모달 최대 너비 */
 .form-modal .modal-content {
-    max-width: 500px;
+  max-width: 500px;
 }
 
-@keyframes slideUp {
-    from {
-        transform: translateY(20px);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
+/* ============================================================
+   모달 헤더
+   ============================================================ */
 
 /* 모달 헤더 */
 .modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 24px;
-    border-bottom: 2px solid #e0e0e0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 2px solid #e0e0e0;
 }
 
+/* 헤더 타이틀 */
 .modal-header h2,
 .modal-header h3 {
-    margin: 0;
-    font-size: 20px;
-    font-weight: 600;
-    color: #333;
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #333;
 }
 
+/* 닫기 버튼 */
 .modal-close {
-    background: none;
-    border: none;
-    font-size: 24px;
-    color: #999;
-    cursor: pointer;
-    padding: 0;
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  background: none;
+  border: none;
+  border-radius: 50%;
+  font-size: 24px;
+  color: #999;
+  cursor: pointer;
+  transition: all 0.2s;
 }
 
 .modal-close:hover {
-    background-color: #f5f5f5;
-    color: #333;
+  background-color: #f5f5f5;
+  color: #333;
 }
+
+/* ============================================================
+   모달 바디
+   ============================================================ */
 
 /* 모달 바디 */
 .modal-body {
-    padding: 20px 24px;
-    flex: 1;
-    overflow-y: auto;
-    max-height: 65vh;
+  flex: 1;
+  max-height: 65vh;
+  padding: 20px 24px;
+  overflow-y: auto;
 }
+
+/* ============================================================
+   모달 푸터
+   ============================================================ */
 
 /* 모달 푸터 */
 .modal-footer {
-    padding: 14px 24px;
-    border-top: 1px solid #e0e0e0;
-    display: flex;
-    justify-content: flex-end;
-    gap: 12px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 14px 24px;
+  border-top: 1px solid #e0e0e0;
 }
+
+/* ============================================================
+   폼 그룹
+   ============================================================ */
 
 /* 폼 그룹 */
 .form-group {
-    margin-bottom: 16px;
+  margin-bottom: 16px;
 }
 
 .form-group:last-child {
-    margin-bottom: 0;
+  margin-bottom: 0;
 }
 
+/* 폼 레이블 */
 .form-group label {
-    display: block;
-    margin-bottom: 6px;
-    font-size: 14px;
-    font-weight: 600;
-    color: #333;
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
 }
 
+/* 폼 입력 필드 */
 .form-group input,
 .form-group select,
 .form-group textarea {
-    width: 100%;
-    padding: 8px 12px;
-    border: 2px solid #e0e0e0;
-    border-radius: 6px;
-    font-size: 14px;
-    transition: all 0.2s;
-    box-sizing: border-box;
+  width: 100%;
+  padding: 8px 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 14px;
+  box-sizing: border-box;
+  transition: all 0.2s;
 }
 
+/* 셀렉트 박스 */
 .form-group select {
-    padding-right: 32px;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
-    background-position: right 12px center;
-    background-repeat: no-repeat;
-    background-size: 12px;
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    cursor: pointer;
+  padding-right: 32px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-position: right 12px center;
+  background-repeat: no-repeat;
+  background-size: 12px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
 }
 
+/* 입력 필드 포커스 */
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
-    outline: none;
-    border-color: #1976d2;
+  border-color: #1976d2;
+  outline: none;
 }
 
+/* 입력 필드 비활성 */
 .form-group input:disabled,
 .form-group select:disabled,
 .form-group textarea:disabled {
-    background-color: #f5f5f5;
-    cursor: not-allowed;
+  background-color: #f5f5f5;
+  cursor: not-allowed;
 }
 
+/* 텍스트 영역 */
 .form-group textarea {
-    resize: vertical;
-    min-height: 60px;
+  min-height: 60px;
+  resize: vertical;
 }
 
+/* 폼 힌트 */
 .form-hint {
-    margin-top: 6px;
-    font-size: 12px;
-    color: #999;
+  margin-top: 6px;
+  font-size: 12px;
+  color: #999;
 }
 
-/* 타입 선택 */
+/* ============================================================
+   타입 선택
+   ============================================================ */
+
+/* 타입 선택 컨테이너 */
 .type-selector {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 16px;
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
 }
 
+/* 타입 옵션 */
 .type-option {
-    flex: 1;
-    padding: 10px 14px;
-    border: 2px solid #e0e0e0;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.2s;
-    background: white;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  padding: 10px 14px;
+  background: white;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
 }
 
 .type-option:hover {
-    border-color: #1976d2;
-    background: #f5f5f5;
+  background: #f5f5f5;
+  border-color: #1976d2;
 }
 
 .type-option.active {
-    border-color: #1976d2;
-    background: #e3f2fd;
+  background: #e3f2fd;
+  border-color: #1976d2;
 }
 
+/* 타입 아이콘 */
 .type-option-icon {
-    font-size: 20px;
-    flex-shrink: 0;
+  flex-shrink: 0;
+  font-size: 20px;
 }
 
+/* 타입 레이블 */
 .type-option-label {
-    font-size: 13px;
-    font-weight: 600;
-    color: #333;
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
 }
 
-/* 버튼 */
-.cancel-btn,
-.submit-btn,
-.cancel-button,
-.submit-button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 6px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-}
+/* ============================================================
+   버튼
+   ============================================================ */
 
+/* 취소 버튼 */
 .cancel-btn,
 .cancel-button {
-    background: white;
-    color: #666;
-    border: 2px solid #e0e0e0;
+  padding: 10px 20px;
+  background: white;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.2s;
 }
 
 .cancel-btn:hover:not(:disabled),
 .cancel-button:hover:not(:disabled) {
-    background: #f5f5f5;
+  background: #f5f5f5;
 }
 
+/* 제출 버튼 */
 .submit-btn,
 .submit-button {
-    background: #1976d2;
-    color: white;
+  padding: 10px 20px;
+  background: #1976d2;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
 }
 
 .submit-btn:hover:not(:disabled),
 .submit-button:hover:not(:disabled) {
-    background: #1565c0;
+  background: #1565c0;
 }
 
+/* 비활성 버튼 */
 .submit-btn:disabled,
 .submit-button:disabled,
 .cancel-btn:disabled,
 .cancel-button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
+  opacity: 0.6;
+  cursor: not-allowed;
 }
+
+/* ============================================================
+   상태 박스
+   ============================================================ */
 
 /* 에러 박스 */
 .error-box {
-    padding: 12px;
-    background-color: #ffebee;
-    border: 1px solid #ef5350;
-    border-radius: 6px;
-    color: #c62828;
-    font-size: 14px;
-    margin-bottom: 16px;
+  margin-bottom: 16px;
+  padding: 12px;
+  background-color: #ffebee;
+  border: 1px solid #ef5350;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #c62828;
 }
 
 /* 로딩 박스 */
 .loading-box {
-    padding: 40px;
-    text-align: center;
-    color: #666;
-    font-size: 14px;
+  padding: 40px;
+  font-size: 14px;
+  color: #666;
+  text-align: center;
 }
 
-/* 반응형 */
+/* ============================================================
+   애니메이션
+   ============================================================ */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================================
+   반응형 (모바일)
+   ============================================================ */
+
 @media (max-width: 768px) {
-    .modal-content {
-        width: 95%;
-        max-height: 95vh;
-    }
+  .modal-content {
+    width: 95%;
+    max-height: 95vh;
+  }
 
-    .modal-header {
-        padding: 16px 20px;
-    }
+  .modal-header {
+    padding: 16px 20px;
+  }
 
-    .modal-header h2,
-    .modal-header h3 {
-        font-size: 18px;
-    }
+  .modal-header h2,
+  .modal-header h3 {
+    font-size: 18px;
+  }
 
-    .modal-body {
-        padding: 20px;
-    }
+  .modal-body {
+    padding: 20px;
+  }
 
-    .modal-footer {
-        padding: 12px 20px;
-        flex-direction: column-reverse;
-    }
+  .modal-footer {
+    flex-direction: column-reverse;
+    padding: 12px 20px;
+  }
 
-    .cancel-btn,
-    .submit-btn,
-    .cancel-button,
-    .submit-button {
-        width: 100%;
-    }
+  .cancel-btn,
+  .submit-btn,
+  .cancel-button,
+  .submit-button {
+    width: 100%;
+  }
 }

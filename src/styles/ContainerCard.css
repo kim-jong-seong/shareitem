@@ -1,139 +1,152 @@
+/************************************************************
+ * FILE: ContainerCard.css
+ * DESCRIPTION: 컨테이너/아이템 카드 스타일
+ ************************************************************/
+
+/* ============================================================
+   아이템 카드
+   ============================================================ */
+
 /* 아이템 카드 */
 .item-card {
-    padding: 12px 16px;
-    margin-bottom: 8px;
-    border: 1px solid #e0e0e0;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    background: white;
-    position: relative;
-    user-select: none;
-    opacity: 0;
-    animation: slideInUp 0.4s ease-out forwards;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+  padding: 12px 16px;
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  opacity: 0;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s;
+  animation: slideInUp 0.4s ease-out forwards;
 }
 
 .item-card:hover {
-    background: #f5f5f5;
-    border-color: #1976d2;
+  background: #f5f5f5;
+  border-color: #1976d2;
 }
 
 .item-card.active {
-    background: #e3f2fd;
-    border-color: #1976d2;
+  background: #e3f2fd;
+  border-color: #1976d2;
 }
 
+/* ============================================================
+   카드 내용
+   ============================================================ */
+
+/* 아이템 아이콘 */
 .item-icon {
-    font-size: 24px;
-    flex-shrink: 0;
+  flex-shrink: 0;
+  font-size: 24px;
 }
 
+/* 아이템 정보 */
 .item-info {
-    flex: 1;
-    min-width: 0;
+  flex: 1;
+  min-width: 0;
 }
 
+/* 아이템 이름 */
 .item-name {
-    font-size: 15px;
-    font-weight: 600;
-    color: #333;
-    margin-bottom: 4px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+  margin-bottom: 4px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #333;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
+/* 아이템 메타 정보 */
 .item-meta {
-    display: flex;
-    gap: 8px;
-    font-size: 13px;
-    color: #999;
-    flex-wrap: wrap;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 13px;
+  color: #999;
 }
 
 .item-meta span {
-    white-space: nowrap;
+  white-space: nowrap;
 }
 
+/* ============================================================
+   배지
+   ============================================================ */
+
+/* 아이템 배지 */
 .item-badge {
-    display: inline-block;
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-size: 12px;
-    font-weight: 600;
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
 }
 
+/* 소유자 배지 */
 .item-badge.owner {
-    background: #e3f2fd;
-    color: #1976d2;
+  background: #e3f2fd;
+  color: #1976d2;
 }
 
-/* 호버 시 액션 버튼 */
+/* ============================================================
+   액션 버튼
+   ============================================================ */
+
+/* 액션 버튼 컨테이너 */
 .item-card-actions {
-    position: absolute;
-    right: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    display: none;
-    gap: 6px;
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  display: none;
+  gap: 6px;
+  transform: translateY(-50%);
 }
 
 .item-card:hover .item-card-actions {
-    display: flex;
+  display: flex;
 }
 
+/* 액션 버튼 */
 .item-action-btn {
-    padding: 8px 10px;
-    border: none;
-    border-radius: 4px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.2s, border-color 0.2s;
-    font-weight: 600;
-    line-height: 1;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
 }
 
-.edit-btn {
-    background: #e3f2fd;
-    color: #1976d2;
-    border: 1px solid #1976d2;
-}
-
-.edit-btn:hover {
-    background: #bbdefb;
-}
-
+/* 임시보관 버튼 */
 .temp-btn {
-    background: #fff3e0;
-    color: #f57c00;
-    border: 1px solid #ff9800;
+  background: #fff3e0;
+  border: 1px solid #ff9800;
+  color: #f57c00;
 }
 
 .temp-btn:hover {
-    background: #ffe0b2;
+  background: #ffe0b2;
 }
 
-.delete-btn {
-    background: #ffebee;
-    color: #d32f2f;
-    border: 1px solid #d32f2f;
-}
-
-.delete-btn:hover {
-    background: #ffcdd2;
-}
+/* ============================================================
+   애니메이션
+   ============================================================ */
 
 /* 슬라이드 업 애니메이션 */
 @keyframes slideInUp {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
